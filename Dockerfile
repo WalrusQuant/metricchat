@@ -62,6 +62,11 @@ WORKDIR /app/frontend
 
 # Install frontend dependencies and build the project
 RUN yarn install --frozen-lockfile
+
+# Download vendored JS libraries for airgapped artifact rendering
+COPY ./scripts/download-vendor-libs.sh /app/scripts/download-vendor-libs.sh
+RUN bash /app/scripts/download-vendor-libs.sh /app/frontend/public/libs
+
 RUN yarn build
 
 FROM ubuntu:24.04
@@ -112,6 +117,9 @@ COPY --from=frontend-builder --chown=app:app /app/frontend/.output /app/frontend
 
 # Copy sandbox HTML for artifact validation (used by headless browser)
 COPY --from=frontend-builder --chown=app:app /app/frontend/public/artifact-sandbox.html /app/frontend/public/artifact-sandbox.html
+
+# Copy vendored JS libs for backend headless browser rendering (airgapped support)
+COPY --from=frontend-builder --chown=app:app /app/frontend/public/libs /app/frontend/public/libs
 
 # Copy runtime configs and scripts
 COPY --chown=app:app ./backend/requirements_versioned.txt /app/backend/

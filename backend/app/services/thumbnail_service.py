@@ -6,6 +6,8 @@ import logging
 from pathlib import Path
 from typing import Optional
 
+from app.services.artifact_libs import get_inline_scripts
+
 logger = logging.getLogger(__name__)
 
 
@@ -262,12 +264,15 @@ class ThumbnailService:
         }
         data_json = json.dumps(artifact_data, default=str)
 
+        slides_scripts = get_inline_scripts(mode="slides")
+        page_scripts = get_inline_scripts(mode="page")
+
         if mode == "slides":
             return f"""<!DOCTYPE html>
 <html>
 <head>
   <meta charset="UTF-8">
-  <script src="https://cdn.tailwindcss.com"></script>
+  {slides_scripts}
 </head>
 <body class="bg-slate-900">
   <script>window.ARTIFACT_DATA = {data_json};</script>
@@ -280,11 +285,7 @@ class ThumbnailService:
 <html>
 <head>
   <meta charset="UTF-8">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
-  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+  {page_scripts}
   <style>html, body, #root {{ height: 100%; margin: 0; padding: 0; }}</style>
 </head>
 <body>

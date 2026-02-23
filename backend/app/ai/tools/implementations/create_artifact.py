@@ -38,6 +38,7 @@ from app.models.artifact import Artifact
 from app.models.visualization import Visualization
 from app.dependencies import async_session_maker
 from app.services.thumbnail_service import ThumbnailService
+from app.services.artifact_libs import get_inline_scripts
 from app.ai.code_execution.pptx_executor import PptxCodeExecutor, PptxPreviewService
 from sqlalchemy import desc
 
@@ -227,12 +228,13 @@ class CreateArtifactTool(Tool):
         # Slides mode: pure HTML + Tailwind (no React/Babel)
         # Use string replacement instead of f-string to avoid JSON escaping issues
         if mode == "slides":
+            slides_scripts = get_inline_scripts(mode="slides")
             slides_template = """<!DOCTYPE html>
 <html>
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script src="https://cdn.tailwindcss.com"></script>
+  __SLIDES_SCRIPTS__
   <style>
     html, body { height: 100%; margin: 0; padding: 0; }
     body { font-family: system-ui, -apple-system, sans-serif; }
@@ -268,7 +270,7 @@ class CreateArtifactTool(Tool):
   __LLM_GENERATED_CODE__
 </body>
 </html>"""
-            return slides_template.replace("__ARTIFACT_DATA_JSON__", data_json).replace("__LLM_GENERATED_CODE__", code)
+            return slides_template.replace("__SLIDES_SCRIPTS__", slides_scripts).replace("__ARTIFACT_DATA_JSON__", data_json).replace("__LLM_GENERATED_CODE__", code)
 
         # Page mode: Read the sandbox HTML file for React/Babel
         try:
@@ -276,6 +278,17 @@ class CreateArtifactTool(Tool):
         except FileNotFoundError:
             logger.error(f"Sandbox HTML not found at {self.SANDBOX_HTML_PATH}")
             raise
+
+        # Replace local /libs/... script tags with inline scripts for headless browser
+        # (page.set_content renders at about:blank where relative paths don't resolve)
+        import re
+        page_scripts = get_inline_scripts(mode="page")
+        sandbox_html = re.sub(
+            r'<script[^>]*src="/libs/[^"]*"[^>]*></script>\s*',
+            '',
+            sandbox_html,
+        )
+        sandbox_html = sandbox_html.replace('</head>', f'{page_scripts}\n</head>')
 
         # Prepare the validation script with data injected
         validation_script = self.VALIDATION_SCRIPT.replace("__ARTIFACT_DATA_JSON__", data_json)
