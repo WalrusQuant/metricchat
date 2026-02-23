@@ -346,6 +346,7 @@ REGISTRY: Dict[str, DataSourceRegistryEntry] = {
             "pat": AuthVariant(title="Personal Access Token", schema=TableauPATCredentials, scopes=["system", "user"])  
         }),
         client_path="app.data_sources.clients.tableau_client.TableauClient",
+        requires_license="enterprise",
     ),
     "duckdb": DataSourceRegistryEntry(
         type="duckdb",

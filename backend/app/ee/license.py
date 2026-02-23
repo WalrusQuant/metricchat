@@ -26,7 +26,7 @@ TIER_FEATURES = {
 }
 
 # Data sources that require an enterprise license
-ENTERPRISE_DATASOURCES = ["powerbi", "qvd", "sybase"]
+ENTERPRISE_DATASOURCES = ["powerbi", "qvd", "sybase", "tableau"]
 
 # Public key for license verification (RS256)
 # This key is used to verify license signatures without exposing the private key
