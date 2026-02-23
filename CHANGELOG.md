@@ -1,5 +1,11 @@
 # Release Notes
 
+## Version 0.0.320 (February 22, 2026)
+- Support deployment in airgapped systems
+- Improve PowerBI integration
+- Improve Thumbnail generatio for Artifacts
+
+
 ## Version 0.0.319 (February 22, 2026)
 - Fixed edit connection "Test Connection" to validate new credentials instead of using saved ones
 - Credentials in edit mode are now locked by default with a "Change" button to explicitly unlock
