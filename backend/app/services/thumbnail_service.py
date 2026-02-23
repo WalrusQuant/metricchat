@@ -52,17 +52,25 @@ class ThumbnailService:
 
                 await page.set_content(html_content, wait_until="networkidle")
 
-                # Wait for render to complete
+                # Wait for React to mount content and loading spinners to disappear
                 try:
-                    await page.wait_for_function(
-                        "window.__ARTIFACT_RENDER_COMPLETE__ === true",
-                        timeout=10000,
-                    )
+                    await page.wait_for_function("""
+                        () => {
+                            const root = document.getElementById('root');
+                            if (!root || root.children.length === 0) return false;
+                            const spinners = root.querySelectorAll('svg animateTransform');
+                            for (let i = 0; i < spinners.length; i++) {
+                                const svg = spinners[i].closest('svg');
+                                if (svg && svg.offsetWidth > 0 && svg.offsetHeight > 0) return false;
+                            }
+                            return true;
+                        }
+                    """, timeout=15000)
                 except Exception:
                     pass  # Timeout is acceptable for thumbnails
 
-                # Give time for charts/React to fully render
-                await asyncio.sleep(3)
+                # Wait for ECharts animations to complete
+                await asyncio.sleep(2)
 
                 # Take screenshot
                 screenshot_bytes = await page.screenshot(
@@ -293,7 +301,38 @@ class ThumbnailService:
   <script>
     window.ARTIFACT_DATA = {data_json};
     window.useArtifactData = function() {{ return window.ARTIFACT_DATA; }};
+    window.__ARTIFACT_RENDER_COMPLETE__ = false;
   </script>
   {artifact_code}
+  <script>
+    (function detectRenderComplete() {{
+      var startTime = Date.now();
+      var MAX_WAIT = 15000;
+      function check() {{
+        if (Date.now() - startTime > MAX_WAIT) {{
+          window.__ARTIFACT_RENDER_COMPLETE__ = true;
+          return;
+        }}
+        var root = document.getElementById('root');
+        if (!root || root.children.length === 0) {{
+          setTimeout(check, 200);
+          return;
+        }}
+        var spinners = root.querySelectorAll('svg animateTransform');
+        for (var i = 0; i < spinners.length; i++) {{
+          var svg = spinners[i].closest('svg');
+          if (svg && svg.offsetWidth > 0 && svg.offsetHeight > 0) {{
+            setTimeout(check, 200);
+            return;
+          }}
+        }}
+        var hasCharts = root.querySelectorAll('canvas').length > 0;
+        setTimeout(function() {{
+          window.__ARTIFACT_RENDER_COMPLETE__ = true;
+        }}, hasCharts ? 1500 : 300);
+      }}
+      setTimeout(check, 200);
+    }})();
+  </script>
 </body>
 </html>"""

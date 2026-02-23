@@ -299,13 +299,44 @@ class CreateArtifactTool(Tool):
         # Replace the LLM_GENERATED_CODE placeholder with actual code
         html = html.replace("<!-- LLM_GENERATED_CODE -->", code)
 
-        # Add render complete signal at the end
+        # Smart render detection: polls DOM until React mounts and spinners disappear
         render_complete_script = """
     <script>
-      // Mark render complete after a short delay to allow React to mount
-      setTimeout(function() {
-        window.__ARTIFACT_RENDER_COMPLETE__ = true;
-      }, 100);
+      (function detectRenderComplete() {
+        var startTime = Date.now();
+        var MAX_WAIT = 15000;
+
+        function check() {
+          if (Date.now() - startTime > MAX_WAIT) {
+            window.__ARTIFACT_RENDER_COMPLETE__ = true;
+            return;
+          }
+
+          var root = document.getElementById('root');
+          if (!root || root.children.length === 0) {
+            setTimeout(check, 200);
+            return;
+          }
+
+          // Check for visible loading spinners (LoadingSpinner uses animateTransform)
+          var spinners = root.querySelectorAll('svg animateTransform');
+          for (var i = 0; i < spinners.length; i++) {
+            var svg = spinners[i].closest('svg');
+            if (svg && svg.offsetWidth > 0 && svg.offsetHeight > 0) {
+              setTimeout(check, 200);
+              return;
+            }
+          }
+
+          // Content rendered, no spinners. Wait for ECharts animations to complete.
+          var hasCharts = root.querySelectorAll('canvas').length > 0;
+          setTimeout(function() {
+            window.__ARTIFACT_RENDER_COMPLETE__ = true;
+          }, hasCharts ? 1500 : 300);
+        }
+
+        setTimeout(check, 200);
+      })();
     </script>
     """
         html = html.replace("</body>", f"{render_complete_script}</body>")
@@ -378,17 +409,17 @@ class CreateArtifactTool(Tool):
                 # Load the HTML content directly (no network request needed)
                 await page.set_content(html, wait_until="networkidle")
 
-                # Wait for render to complete (with timeout)
+                # Wait for smart render detection to signal completion
                 try:
                     await page.wait_for_function(
                         "window.__ARTIFACT_RENDER_COMPLETE__ === true",
-                        timeout=10000
+                        timeout=20000
                     )
                 except Exception as e:
                     errors.append(f"Render timeout: {str(e)}")
 
-                # Give React/ECharts a bit more time to fully render
-                await asyncio.sleep(1.0)
+                # Small buffer for any final paint
+                await asyncio.sleep(0.5)
 
                 # Collect any errors captured by our error handlers
                 captured_errors = await page.evaluate("window.__ARTIFACT_ERRORS__")
