@@ -163,16 +163,34 @@ class PowerBIClient(DataSourceClient):
                 "serializerSettings": {"includeNulls": True},
             }
             resp = self._http.post(url, json=body, headers=headers, timeout=30)
-            if resp.status_code == 401:
+            if resp.status_code >= 300:
+                # Extract the detail message from Power BI's error response
+                detail_msg = ""
+                try:
+                    err = resp.json().get("error", {})
+                    pbi_err = err.get("pbi.error", {})
+                    for d in pbi_err.get("details", []):
+                        val = (d.get("detail") or {}).get("value", "")
+                        if val:
+                            detail_msg = val
+                            break
+                except Exception:
+                    pass
+
+                if not detail_msg:
+                    detail_msg = f"HTTP {resp.status_code} on dataset '{first_ds_name}'. Ensure the service principal is added as a Member or Contributor in your Power BI workspaces, and that the workspace is on Premium/PPU/Embedded capacity."
+
                 return {
                     "success": False,
-                    "message": f"Connected but cannot query datasets (HTTP 401). Ensure the service principal is added as a Member or Contributor in your Power BI workspaces.",
+                    "message": f"Connected but cannot query datasets: {detail_msg}",
                     "connectivity": True,
                 }
-            elif resp.status_code >= 300:
-                logging.warning(f"Power BI DAX test query failed on dataset '{first_ds_name}': HTTP {resp.status_code} {resp.text}")
         except Exception as e:
-            logging.warning(f"Power BI DAX test query failed on dataset '{first_ds_name}': {e}")
+            return {
+                "success": False,
+                "message": f"Connected but cannot query dataset '{first_ds_name}': {e}",
+                "connectivity": True,
+            }
 
         return {
             "success": True,

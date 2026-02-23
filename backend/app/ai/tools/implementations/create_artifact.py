@@ -38,6 +38,7 @@ from app.models.artifact import Artifact
 from app.models.visualization import Visualization
 from app.dependencies import async_session_maker
 from app.services.thumbnail_service import ThumbnailService
+from app.services.artifact_libs import get_inline_scripts
 from app.ai.code_execution.pptx_executor import PptxCodeExecutor, PptxPreviewService
 from sqlalchemy import desc
 
@@ -227,12 +228,13 @@ class CreateArtifactTool(Tool):
         # Slides mode: pure HTML + Tailwind (no React/Babel)
         # Use string replacement instead of f-string to avoid JSON escaping issues
         if mode == "slides":
+            slides_scripts = get_inline_scripts(mode="slides")
             slides_template = """<!DOCTYPE html>
 <html>
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script src="https://cdn.tailwindcss.com"></script>
+  __SLIDES_SCRIPTS__
   <style>
     html, body { height: 100%; margin: 0; padding: 0; }
     body { font-family: system-ui, -apple-system, sans-serif; }
@@ -268,7 +270,7 @@ class CreateArtifactTool(Tool):
   __LLM_GENERATED_CODE__
 </body>
 </html>"""
-            return slides_template.replace("__ARTIFACT_DATA_JSON__", data_json).replace("__LLM_GENERATED_CODE__", code)
+            return slides_template.replace("__SLIDES_SCRIPTS__", slides_scripts).replace("__ARTIFACT_DATA_JSON__", data_json).replace("__LLM_GENERATED_CODE__", code)
 
         # Page mode: Read the sandbox HTML file for React/Babel
         try:
@@ -276,6 +278,17 @@ class CreateArtifactTool(Tool):
         except FileNotFoundError:
             logger.error(f"Sandbox HTML not found at {self.SANDBOX_HTML_PATH}")
             raise
+
+        # Replace local /libs/... script tags with inline scripts for headless browser
+        # (page.set_content renders at about:blank where relative paths don't resolve)
+        import re
+        page_scripts = get_inline_scripts(mode="page")
+        sandbox_html = re.sub(
+            r'<script[^>]*src="/libs/[^"]*"[^>]*></script>\s*',
+            '',
+            sandbox_html,
+        )
+        sandbox_html = sandbox_html.replace('</head>', f'{page_scripts}\n</head>')
 
         # Prepare the validation script with data injected
         validation_script = self.VALIDATION_SCRIPT.replace("__ARTIFACT_DATA_JSON__", data_json)
@@ -286,13 +299,44 @@ class CreateArtifactTool(Tool):
         # Replace the LLM_GENERATED_CODE placeholder with actual code
         html = html.replace("<!-- LLM_GENERATED_CODE -->", code)
 
-        # Add render complete signal at the end
+        # Smart render detection: polls DOM until React mounts and spinners disappear
         render_complete_script = """
     <script>
-      // Mark render complete after a short delay to allow React to mount
-      setTimeout(function() {
-        window.__ARTIFACT_RENDER_COMPLETE__ = true;
-      }, 100);
+      (function detectRenderComplete() {
+        var startTime = Date.now();
+        var MAX_WAIT = 15000;
+
+        function check() {
+          if (Date.now() - startTime > MAX_WAIT) {
+            window.__ARTIFACT_RENDER_COMPLETE__ = true;
+            return;
+          }
+
+          var root = document.getElementById('root');
+          if (!root || root.children.length === 0) {
+            setTimeout(check, 200);
+            return;
+          }
+
+          // Check for visible loading spinners (LoadingSpinner uses animateTransform)
+          var spinners = root.querySelectorAll('svg animateTransform');
+          for (var i = 0; i < spinners.length; i++) {
+            var svg = spinners[i].closest('svg');
+            if (svg && svg.offsetWidth > 0 && svg.offsetHeight > 0) {
+              setTimeout(check, 200);
+              return;
+            }
+          }
+
+          // Content rendered, no spinners. Wait for ECharts animations to complete.
+          var hasCharts = root.querySelectorAll('canvas').length > 0;
+          setTimeout(function() {
+            window.__ARTIFACT_RENDER_COMPLETE__ = true;
+          }, hasCharts ? 1500 : 300);
+        }
+
+        setTimeout(check, 200);
+      })();
     </script>
     """
         html = html.replace("</body>", f"{render_complete_script}</body>")
@@ -365,17 +409,17 @@ class CreateArtifactTool(Tool):
                 # Load the HTML content directly (no network request needed)
                 await page.set_content(html, wait_until="networkidle")
 
-                # Wait for render to complete (with timeout)
+                # Wait for smart render detection to signal completion
                 try:
                     await page.wait_for_function(
                         "window.__ARTIFACT_RENDER_COMPLETE__ === true",
-                        timeout=10000
+                        timeout=20000
                     )
                 except Exception as e:
                     errors.append(f"Render timeout: {str(e)}")
 
-                # Give React/ECharts a bit more time to fully render
-                await asyncio.sleep(1.0)
+                # Small buffer for any final paint
+                await asyncio.sleep(0.5)
 
                 # Collect any errors captured by our error handlers
                 captured_errors = await page.evaluate("window.__ARTIFACT_ERRORS__")

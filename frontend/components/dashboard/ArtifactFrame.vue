@@ -944,7 +944,7 @@ const iframeSrcdoc = computed(() => {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script src="https://cdn.tailwindcss.com">${SC}
+  <script src="/libs/tailwindcss-3.4.16.js">${SC}
   <style>
     html, body { height: 100%; margin: 0; padding: 0; }
     body { font-family: system-ui, -apple-system, sans-serif; }
@@ -968,11 +968,11 @@ const iframeSrcdoc = computed(() => {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script src="https://cdn.tailwindcss.com">${SC}
-  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js">${SC}
-  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js">${SC}
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js">${SC}
-  <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js">${SC}
+  <script src="/libs/tailwindcss-3.4.16.js">${SC}
+  <script crossorigin src="/libs/react-18.production.min.js">${SC}
+  <script crossorigin src="/libs/react-dom-18.production.min.js">${SC}
+  <script src="/libs/babel-standalone.min.js">${SC}
+  <script src="/libs/echarts-5.min.js">${SC}
   <style>
     html, body, #root { height: 100%; margin: 0; padding: 0; }
     body { font-family: system-ui, -apple-system, sans-serif; }
