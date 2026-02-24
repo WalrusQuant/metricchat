@@ -73,6 +73,7 @@ from app.routes import (
     build,
     connection,
     artifact,
+    oauth_server,
 )
 from app.routes.oidc_auth import router as oidc_auth_router
 from app.ee.routes import router as enterprise_router
@@ -199,6 +200,8 @@ app.include_router(user_data_source_credentials.router, prefix="/api")
 app.include_router(mentions.router, prefix="/api")
 app.include_router(api_key.router, prefix="/api")
 app.include_router(mcp.router, prefix="/api")
+app.include_router(oauth_server.well_known_router)  # /.well-known/* at root
+app.include_router(oauth_server.router, prefix="/api")  # /api/oauth/*
 app.include_router(connection.router, prefix="/api")
 app.include_router(artifact.router, prefix="/api")
 app.include_router(enterprise_router, prefix="/api")

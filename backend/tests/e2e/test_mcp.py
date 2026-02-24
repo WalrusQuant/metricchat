@@ -14,26 +14,26 @@ CHINOOK_DB_PATH = (Path(__file__).resolve().parent.parent.parent / "demo-datasou
 
 @pytest.mark.e2e
 def test_mcp_requires_api_key(test_client, create_user, login_user):
-    """Verify MCP endpoints reject requests without valid API key."""
+    """Verify MCP endpoints reject requests without valid auth with 401 + WWW-Authenticate."""
     # Setup user to ensure DB is populated
     user = create_user()
     login_user(user["email"], user["password"])
 
-    # Without any API key, get 400 (org ID missing - checked before auth)
+    # Without any API key, get 401 with WWW-Authenticate header
     response = test_client.get("/api/mcp")
-    assert response.status_code == 400
-    assert "organization" in response.json()["detail"].lower()
+    assert response.status_code == 401
+    assert "www-authenticate" in {k.lower(): v for k, v in response.headers.items()}
 
     # POST endpoint without API key
     response = test_client.post(
         "/api/mcp",
         json={"jsonrpc": "2.0", "id": 1, "method": "initialize"}
     )
-    assert response.status_code == 400
+    assert response.status_code == 401
 
     # REST tools endpoint without API key
     response = test_client.get("/api/mcp/tools")
-    assert response.status_code == 400
+    assert response.status_code == 401
 
 
 @pytest.mark.e2e
@@ -211,7 +211,7 @@ def test_mcp_get_server_info(
     assert data["jsonrpc"] == "2.0"
     assert "result" in data
     result = data["result"]
-    assert result["protocolVersion"] == "2024-11-05"
+    assert result["protocolVersion"] == "2025-06-18"
     assert result["serverInfo"]["name"] == "bagofwords"
     assert result["serverInfo"]["version"] == "1.0.0"
     assert "capabilities" in result
@@ -250,7 +250,7 @@ def test_mcp_initialize(
     assert data["id"] == 42
     assert "result" in data
     result = data["result"]
-    assert result["protocolVersion"] == "2024-11-05"
+    assert result["protocolVersion"] == "2025-06-18"
     assert result["serverInfo"]["name"] == "bagofwords"
     assert "capabilities" in result
 

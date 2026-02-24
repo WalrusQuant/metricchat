@@ -3,30 +3,123 @@
 Provides a JSON-RPC 2.0 endpoint for Claude, Cursor, and other MCP-compatible clients.
 Based on the MCP Streamable HTTP transport specification.
 
-Authentication via Authorization: Bearer <api_key> or X-API-Key header.
-Organization is derived from the API key.
+Authentication:
+  - API key: Authorization: Bearer bow_<key> or X-API-Key header (Claude Code, Cursor)
+  - OAuth 2.1: Authorization: Bearer bow_oauth_<token> (Claude Web)
+Organization is derived from the API key or OAuth token.
 """
 
 import json
 import logging
+from typing import Any, Optional, Union, Tuple
+
 from fastapi import APIRouter, Depends, Request, HTTPException
 from fastapi.responses import JSONResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 from pydantic import BaseModel
-from typing import Any, Optional, Union
 
-from app.core.auth import current_user
-from app.dependencies import get_async_db, require_mcp_enabled
+from app.core.auth import current_user, _jwt_current_user, api_key_header
+from app.dependencies import get_async_db, require_mcp_enabled, get_current_organization
 from app.models.user import User
 from app.models.organization import Organization
 from app.ai.tools.mcp import get_mcp_tool, list_mcp_tools
+from app.settings.config import settings
 
 logger = logging.getLogger(__name__)
 
-router = APIRouter(
-    tags=["mcp"],
-    dependencies=[Depends(require_mcp_enabled)]
-)
+MCP_PROTOCOL_VERSION = "2025-06-18"
+
+
+def _resource_metadata_url(request: Request) -> str:
+    """Build the well-known URL for the WWW-Authenticate header."""
+    configured = settings.bow_config.base_url
+    if configured and configured != "http://0.0.0.0:3000":
+        base = configured.rstrip("/")
+    else:
+        base = f"{request.url.scheme}://{request.url.netloc}"
+    return f"{base}/.well-known/oauth-protected-resource"
+
+
+async def mcp_auth(
+    request: Request,
+    jwt_user: Optional[User] = Depends(_jwt_current_user),
+    api_key: Optional[str] = Depends(api_key_header),
+    db: AsyncSession = Depends(get_async_db),
+) -> Tuple[User, Organization]:
+    """Authenticate MCP requests via JWT, API key, or OAuth access token.
+
+    Returns (user, organization). On failure, raises 401 with WWW-Authenticate
+    header pointing to the OAuth protected resource metadata.
+    """
+    # 1. Try JWT
+    if jwt_user is not None:
+        try:
+            org = await get_current_organization(request, db)
+            return jwt_user, org
+        except HTTPException:
+            pass
+
+    # 2. Try API key from X-API-Key header
+    if api_key and api_key.startswith("bow_") and not api_key.startswith("bow_oauth_"):
+        from app.services.api_key_service import ApiKeyService
+        svc = ApiKeyService()
+        user = await svc.get_user_by_api_key(db, api_key)
+        if user:
+            org = await svc.get_organization_by_api_key(db, api_key)
+            if org:
+                return user, org
+
+    # 3. Try Bearer token from Authorization header
+    auth_header = request.headers.get("Authorization", "")
+    if auth_header.startswith("Bearer "):
+        token = auth_header[7:]
+
+        # 3a. OAuth access token
+        if token.startswith("bow_oauth_"):
+            from app.services.oauth_server_service import OAuthServerService
+            svc = OAuthServerService()
+            result = await svc.validate_access_token(db, token)
+            if result:
+                return result  # (user, organization)
+
+        # 3b. API key via Bearer
+        if token.startswith("bow_") and not token.startswith("bow_oauth_"):
+            from app.services.api_key_service import ApiKeyService
+            svc = ApiKeyService()
+            user = await svc.get_user_by_api_key(db, token)
+            if user:
+                org = await svc.get_organization_by_api_key(db, token)
+                if org:
+                    return user, org
+
+    # No valid auth — return 401 with OAuth metadata
+    resource_url = _resource_metadata_url(request)
+    raise HTTPException(
+        status_code=401,
+        detail="Not authenticated",
+        headers={
+            "WWW-Authenticate": f'Bearer resource_metadata="{resource_url}"',
+        },
+    )
+
+
+def _check_mcp_enabled(organization: Organization):
+    """Raise 403 if MCP is not enabled for the organization."""
+    if not organization.settings:
+        raise HTTPException(status_code=403, detail="MCP integration is not enabled for this organization")
+    mcp_config = organization.settings.get_config("mcp_enabled")
+    if not mcp_config or not getattr(mcp_config, "value", False):
+        raise HTTPException(status_code=403, detail="MCP integration is not enabled for this organization")
+
+
+def _mcp_response(content: Any, status_code: int = 200) -> JSONResponse:
+    """Create a JSONResponse with MCP-Protocol-Version header."""
+    response = JSONResponse(content, status_code=status_code)
+    response.headers["MCP-Protocol-Version"] = MCP_PROTOCOL_VERSION
+    return response
+
+
+router = APIRouter(tags=["mcp"])
 
 
 class JsonRpcRequest(BaseModel):
@@ -46,13 +139,15 @@ def jsonrpc_error(id: Any, code: int, message: str) -> dict:
 
 @router.get("/mcp")
 async def mcp_get_endpoint(
-    user: User = Depends(current_user),
+    auth: Tuple[User, Organization] = Depends(mcp_auth),
 ):
     """MCP GET endpoint - returns server info."""
-    return JSONResponse({
+    _, organization = auth
+    _check_mcp_enabled(organization)
+    return _mcp_response({
         "jsonrpc": "2.0",
         "result": {
-            "protocolVersion": "2024-11-05",
+            "protocolVersion": MCP_PROTOCOL_VERSION,
             "serverInfo": {
                 "name": "bagofwords",
                 "version": "1.0.0",
@@ -67,35 +162,36 @@ async def mcp_get_endpoint(
 @router.post("/mcp")
 async def mcp_endpoint(
     raw_request: Request,
-    user: User = Depends(current_user),
-    organization: Organization = Depends(require_mcp_enabled),
+    auth: Tuple[User, Organization] = Depends(mcp_auth),
     db: AsyncSession = Depends(get_async_db),
 ):
     """MCP JSON-RPC endpoint.
-    
+
     Handles:
     - initialize: MCP initialization handshake
     - tools/list: List available tools
     - tools/call: Execute a tool
     """
+    user, organization = auth
+    _check_mcp_enabled(organization)
+
     # Parse raw body
     try:
         body = await raw_request.json()
         logger.info(f"MCP request body: {body}")
     except Exception as e:
         logger.error(f"Failed to parse MCP request: {e}")
-        return JSONResponse(jsonrpc_error(None, -32700, f"Parse error: {str(e)}"))
-    
+        return _mcp_response(jsonrpc_error(None, -32700, f"Parse error: {str(e)}"))
+
     try:
         request = JsonRpcRequest(**body)
     except Exception as e:
         logger.error(f"Invalid JSON-RPC request: {e}")
-        return JSONResponse(jsonrpc_error(None, -32600, f"Invalid request: {str(e)}"))
-    
+        return _mcp_response(jsonrpc_error(None, -32600, f"Invalid request: {str(e)}"))
+
     if request.method == "initialize":
-        # MCP initialization handshake
-        return JSONResponse(jsonrpc_response(request.id, {
-            "protocolVersion": "2024-11-05",
+        return _mcp_response(jsonrpc_response(request.id, {
+            "protocolVersion": MCP_PROTOCOL_VERSION,
             "serverInfo": {
                 "name": "bagofwords",
                 "version": "1.0.0",
@@ -104,10 +200,9 @@ async def mcp_endpoint(
                 "tools": {},
             },
         }))
-    
+
     elif request.method == "tools/list":
         tools = list_mcp_tools()
-        # Convert to MCP format (inputSchema instead of input_schema)
         mcp_tools = []
         for tool in tools:
             mcp_tools.append({
@@ -115,43 +210,44 @@ async def mcp_endpoint(
                 "description": tool["description"],
                 "inputSchema": tool["input_schema"],
             })
-        return JSONResponse(jsonrpc_response(request.id, {"tools": mcp_tools}))
-    
+        return _mcp_response(jsonrpc_response(request.id, {"tools": mcp_tools}))
+
     elif request.method == "tools/call":
         params = request.params or {}
         tool_name = params.get("name")
         arguments = params.get("arguments", {})
-        
+
         if not tool_name:
-            return JSONResponse(jsonrpc_error(request.id, -32602, "Missing tool name"))
-        
+            return _mcp_response(jsonrpc_error(request.id, -32602, "Missing tool name"))
+
         tool_class = get_mcp_tool(tool_name)
         if not tool_class:
-            return JSONResponse(jsonrpc_error(request.id, -32602, f"Unknown tool: {tool_name}"))
-        
+            return _mcp_response(jsonrpc_error(request.id, -32602, f"Unknown tool: {tool_name}"))
+
         tool = tool_class()
         try:
             result = await tool.execute(arguments, db, user, organization)
-            # MCP expects content array with type/text - use JSON for proper serialization
-            return JSONResponse(jsonrpc_response(request.id, {
+            return _mcp_response(jsonrpc_response(request.id, {
                 "content": [{"type": "text", "text": json.dumps(result)}],
                 "isError": False,
             }))
         except Exception as e:
             logger.exception(f"Tool execution error: {e}")
-            return JSONResponse(jsonrpc_response(request.id, {
+            return _mcp_response(jsonrpc_response(request.id, {
                 "content": [{"type": "text", "text": str(e)}],
                 "isError": True,
             }))
-    
+
     else:
-        return JSONResponse(jsonrpc_error(request.id, -32601, f"Method not found: {request.method}"))
+        return _mcp_response(jsonrpc_error(request.id, -32601, f"Method not found: {request.method}"))
 
 
 # REST endpoint for testing/debugging
 @router.get("/mcp/tools")
 async def get_tools_rest(
-    user: User = Depends(current_user),
+    auth: Tuple[User, Organization] = Depends(mcp_auth),
 ):
     """REST endpoint to list MCP tools (for testing/debugging)."""
+    _, organization = auth
+    _check_mcp_enabled(organization)
     return {"tools": list_mcp_tools()}
