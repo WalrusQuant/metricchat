@@ -3,7 +3,7 @@
     <div v-if="showGlobalOnboardingBanner" class="fixed top-0 left-0 right-0 z-[1000]">
       <div
         @click="router.push(showGlobalOnboardingBannerLink)"
-        class="mx-auto max-w-screen-2xl text-center cursor-pointer text-white text-sm bg-blue-500/95 hover:bg-blue-600/90 py-2 flex items-center justify-center shadow-md"
+        class="text-center cursor-pointer text-white text-sm bg-blue-500/95 hover:bg-blue-600/90 py-2 flex items-center justify-center shadow-md"
       >
         <UIcon name="i-heroicons-rocket-launch" class="h-5 mr-2" />
         <span>{{ showGlobalOnboardingBannerText }}</span>

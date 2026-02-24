@@ -1,9 +1,16 @@
 <template>
 
 	<!-- Loading until report and completions are fetched -->
-	<div v-if="(!reportLoaded || !completionsLoaded) && messages.length === 0" class="h-screen w-full flex items-center justify-center text-gray-500">
+	<div v-if="(!reportLoaded || !completionsLoaded) && messages.length === 0 && !reportNotFound" class="h-screen w-full flex items-center justify-center text-gray-500">
 		<Spinner class="w-5 h-5 mr-2" />
 		<span class="text-sm">Loading report…</span>
+	</div>
+
+	<!-- Report not found / no access -->
+	<div v-else-if="reportNotFound" class="h-screen w-full flex flex-col items-center justify-center text-gray-400">
+		<span class="text-5xl font-light">404</span>
+		<span class="mt-2 text-sm">Report not found</span>
+		<NuxtLink to="/reports" class="mt-4 text-sm text-blue-500 hover:underline">Back to reports</NuxtLink>
 	</div>
 
 	<SplitScreenLayout v-else
@@ -533,6 +540,7 @@ const selectedCompletionForTrace = ref<string | null>(null)
 
 // Report and Dashboard state
 const reportLoaded = ref(false)
+const reportNotFound = ref(false)
 const completionsLoaded = ref(false)
 const report = ref<any | null>(null)
 const visualizations = ref<any[]>([])
@@ -1673,10 +1681,14 @@ function onScroll() {
 }
 
 async function loadReport() {
-	const { data } = await useMyFetch(`/api/reports/${report_id}`)
+	const { data, error } = await useMyFetch(`/api/reports/${report_id}`)
+	if (error.value || !data.value) {
+		reportNotFound.value = true
+		reportLoaded.value = true
+		return
+	}
 	report.value = data.value
 	reportLoaded.value = true
-	
 }
 
 async function loadVisualizations() {

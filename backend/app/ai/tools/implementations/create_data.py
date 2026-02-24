@@ -555,31 +555,23 @@ Do NOT use generic placeholders like "value" unless that's the actual column nam
         
         resolved: List[Dict[str, Any]] = []
         warnings: List[str] = []
-        
-        # Detect special regex characters
-        special_chars = re.compile(r"[\^\$\.\*\+\?\[\]\(\)\{\}\|]")
-        
+
         for group in tables_by_source:
             ds_id = str(group.data_source_id) if getattr(group, "data_source_id", None) else None
             input_tables = getattr(group, "tables", []) or []
-            
+
             if not input_tables:
                 continue
-            
-            # Build name_patterns from table names/patterns
+
+            # Build name_patterns from table names (always escaped as literal)
             name_patterns: List[str] = []
             for name in input_tables:
                 if not isinstance(name, str) or not name.strip():
                     continue
                 name = name.strip()
-                
-                if special_chars.search(name):
-                    # Already contains regex chars - use as-is (make case-insensitive)
-                    name_patterns.append(f"(?i){name}")
-                else:
-                    # Literal name - escape and allow optional schema prefix
-                    esc = re.escape(name)
-                    name_patterns.append(f"(?i)(?:^|\\.){esc}$")
+                # Always escape - table names are concrete references, not regex patterns
+                esc = re.escape(name)
+                name_patterns.append(f"(?i)(?:^|[./]){esc}$")
             
             if not name_patterns:
                 continue
