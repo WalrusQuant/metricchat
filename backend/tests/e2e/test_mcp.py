@@ -49,7 +49,7 @@ def test_mcp_rejects_invalid_api_key(test_client, create_user, login_user):
         headers={"X-API-Key": "bow_invalid_key_that_does_not_exist"}
     )
     assert response.status_code == 401
-    assert "invalid" in response.json()["detail"].lower() or "expired" in response.json()["detail"].lower()
+    assert "not authenticated" in response.json()["detail"].lower()
 
 
 @pytest.mark.e2e
