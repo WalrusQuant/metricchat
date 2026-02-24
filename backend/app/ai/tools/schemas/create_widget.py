@@ -8,10 +8,9 @@ class TablesBySource(BaseModel):
     """Per-source table filters to focus schema loading.
 
     - data_source_id: scope to a specific data source (UUID). If omitted/null, applies across all sources.
-    - tables: list of table identifiers or lightweight patterns. Items are interpreted as:
-        * literal names (e.g., "film", "public.inventory").
-        * regex patterns if they contain special chars (e.g., ".*_list$").
-      Matching is case-insensitive and simple names match with or without a schema prefix.
+    - tables: list of table names. Names are always treated as literal (escaped).
+      Matching is case-insensitive and names match with or without a schema/dataset prefix (. or / separator).
+      Examples: "film", "public.inventory", "Regional Sales Sample (2)/Opportunities".
     """
 
     data_source_id: Optional[str] = Field(
@@ -19,7 +18,7 @@ class TablesBySource(BaseModel):
         description="UUID of the data source to scope these tables. If null, applies to all sources.",
     )
     tables: List[str] = Field(
-        ..., description="Table names or patterns (regex allowed). Case-insensitive; schema prefix optional."
+        ..., description="Table names (literal, case-insensitive). Schema or dataset prefix (. or /) is optional."
     )
 
 

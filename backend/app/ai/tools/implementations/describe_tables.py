@@ -61,36 +61,25 @@ class DescribeTablesTool(Tool):
         context_view = runtime_ctx.get("context_view")
         errors: list[str] = []
 
-        # Resolve queries into exact names vs regex patterns
+        # Resolve queries into name patterns (always escaped literal + optional raw regex)
         yield ToolProgressEvent(type="tool.progress", payload={"stage": "resolving_patterns"})
         queries = data.query if isinstance(data.query, list) else [data.query]
-        table_names: list[str] = []
         name_patterns: list[str] = []
         special = re.compile(r"[\^\$\.\*\+\?\[\]\(\)\{\}\|]")
         for q in queries:
             if not isinstance(q, str):
                 continue
-            try:
-                if special.search(q or ""):
-                    # Treat as regex pattern
-                    name_patterns.append(q)
-                else:
-                    # Treat as exact name match
-                    table_names.append(q)
-            except Exception:
-                name_patterns.append(q)
+            # Always add escaped literal version (handles names with special chars like parens)
+            esc = re.escape(q)
+            name_patterns.append(f"(?i)(?:^|[./]){esc}$")
 
-        # Broaden simple names to allow optional schema prefix and case-insensitive match
-        # e.g., "staff" should match "public.staff" and case variants
-        try:
-            broadened = []
-            for tn in table_names:
-                esc = re.escape(tn)
-                broadened.append(f"(?i)(?:^|\\.){esc}$")
-            if broadened:
-                name_patterns.extend(broadened)
-        except Exception:
-            pass
+            # Also add as raw regex if it contains special chars (for intentional patterns like .*Opportunities.*)
+            if special.search(q or ""):
+                try:
+                    re.compile(q)  # validate it's a valid regex
+                    name_patterns.append(f"(?i){q}")
+                except re.error:
+                    pass  # invalid regex, skip
 
         # Build filtered schema context via the same builder used by the agent
         schemas_excerpt = ""
@@ -110,7 +99,6 @@ class DescribeTablesTool(Tool):
                 ctx = await builder.build(
                     with_stats=True,
                     data_source_ids=data.data_source_ids,
-                    table_names=table_names or None,
                     name_patterns=name_patterns or None,
                 )
                 # Compute counts before render limits
