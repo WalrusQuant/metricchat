@@ -45,6 +45,7 @@ def test_well_known_authorization_server(test_client, create_user, login_user):
     data = response.json()
     assert "issuer" in data
     assert "authorization_endpoint" in data
+    assert data["authorization_endpoint"].endswith("/authorize")
     assert "token_endpoint" in data
     assert data["response_types_supported"] == ["code"]
     assert "authorization_code" in data["grant_types_supported"]

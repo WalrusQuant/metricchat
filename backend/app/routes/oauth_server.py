@@ -46,7 +46,7 @@ async def protected_resource_metadata(request: Request):
     return JSONResponse({
         "resource": f"{base}/api/mcp",
         "authorization_servers": [base],
-        "scopes_supported": ["mcp"],
+        "scopes_supported": ["mcp", "claudeai"],
     })
 
 
@@ -56,13 +56,13 @@ async def authorization_server_metadata(request: Request):
     base = _base_url(request)
     return JSONResponse({
         "issuer": base,
-        "authorization_endpoint": f"{base}/api/oauth/authorize",
+        "authorization_endpoint": f"{base}/authorize",
         "token_endpoint": f"{base}/api/oauth/token",
         "response_types_supported": ["code"],
         "grant_types_supported": ["authorization_code", "refresh_token"],
         "code_challenge_methods_supported": ["S256"],
         "token_endpoint_auth_methods_supported": ["client_secret_post", "none"],
-        "scopes_supported": ["mcp"],
+        "scopes_supported": ["mcp", "claudeai"],
     })
 
 
@@ -108,7 +108,7 @@ async def authorize_redirect(
     if code_challenge_method:
         params["code_challenge_method"] = code_challenge_method
 
-    consent_url = f"{base}/oauth/authorize?{urlencode(params)}"
+    consent_url = f"{base}/authorize?{urlencode(params)}"
     return RedirectResponse(url=consent_url, status_code=302)
 
 

@@ -140,7 +140,7 @@ async function approve() {
   try {
     const { organization } = useOrganization()
     const headers: Record<string, string> = {
-      Authorization: `${rawToken.value}`,
+      Authorization: `Bearer ${rawToken.value}`,
     }
     if (organization.value?.id) {
       headers['X-Organization-Id'] = organization.value.id
