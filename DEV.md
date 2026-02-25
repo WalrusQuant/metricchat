@@ -30,10 +30,6 @@ yarn dev      # Regular mode
 
 - OpenAPI docs: http://localhost:8000/docs
 
-## Links
-
-- Website: https://bagofwords.com
-- Docs: https://docs.bagofwords.com
-
 ## License
-AGPL-3.0
+
+AGPL-3.0 — Built on [Bag of Words](https://github.com/bagofwords1/bagofwords).

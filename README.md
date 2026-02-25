@@ -1,176 +1,191 @@
-<div>
+<div align="center">
 
-<div>
-  <img src="./media/logo-128.png" style="width:128px;" />
+# MetricChat
+
+**Your data team's AI analyst — ask questions, get answers, build dashboards.**
+
+An agentic analytics platform that connects to your data warehouse, learns your business context over time, and delivers trusted, observable results.
+
+[Quick Start](#quick-start) &middot; [Features](#why-metricchat) &middot; [Integrations](#integrations) &middot; [Enterprise](#enterprise) &middot; [Development](#development)
+
 </div>
-
-## The open-source agentic analytics platform
-
-
-
-Chat, visualize, and run deep analysis on your data - with memory, rules management, and observability built in.
-
-[![Website](https://img.shields.io/badge/Website-bagofwords.com-blue)](https://bagofwords.com)
-[![Docs](https://img.shields.io/badge/Docs-Documentation-blue)](https://docs.bagofwords.com)
-[![Docker](https://img.shields.io/badge/Docker-Hub-2496ED?logo=docker&logoColor=white)](https://hub.docker.com/r/bagofwords/bagofwords)
-[![e2e tests](https://github.com/bagofwords1/bagofwords/actions/workflows/e2e-tests.yml/badge.svg)](https://github.com/bagofwords1/bagofwords/actions/workflows/e2e-tests.yml)
-</div>
-
-**Features:**
-
-- **Memory:** Stores context, preferences, and usage patterns down to table/column level. AI learns over time and surfaces semantic-layer updates, review-gated.
-
-- **Rules:** Define instructions, terms, and guardrails with versioning and approval workflows. Git sync with auto-indexing of dbt, markdown, code, and more.
-
-- **Observability:** Full visibility into agent traces, plans, guardrails, LLM judges, evals, and feedback — debug and improve the loop.
-
-- **Dashboards & sharing:** Build and share dashboards instantly. Share conversations, saved queries, and analysis with your team.
-
-- **Any LLM ↔ Any warehouse:** OpenAI, Anthropic, Gemini, Ollama ↔ Snowflake, BigQuery, Postgres, Redshift. Swap or mix without breaking workflows.
-
-- **MCP:** Use from Cursor, Claude Desktop, and other AI clients while reliably tracking requests and data operations.
-
-[Deploy anywhere](https://docs.bagofwords.com/install)
-
-[![Demo](./media/hero3.png)](https://bagofwords.com/demos/hero4.mp4)
 
 ---
 
-## Quick Start 🚀
+## Why MetricChat?
+
+Most AI analytics tools are glorified SQL generators. MetricChat is a full analytics agent — it remembers your data, follows your rules, and shows its work.
+
+<table>
+<tr>
+<td width="50%">
+
+### Memory & Context
+
+The agent builds a semantic understanding of your data down to the table and column level. It learns terminology, business logic, and usage patterns over time — so queries get smarter with every conversation.
+
+</td>
+<td width="50%">
+
+### Rules & Guardrails
+
+Define instructions, approved terms, and constraints with versioning and approval workflows. Sync rules from git to auto-index dbt models, markdown docs, and code — so the AI always stays within bounds.
+
+</td>
+</tr>
+<tr>
+<td width="50%">
+
+### Full Observability
+
+Every agent decision is traced — plans, tool calls, guardrail checks, LLM judge evaluations, and user feedback. Debug any answer. Improve the loop continuously.
+
+</td>
+<td width="50%">
+
+### Dashboards & Sharing
+
+Build and share dashboards from conversations. Save queries to a searchable catalog. Give your team a single place for trusted, reusable analytics.
+
+</td>
+</tr>
+<tr>
+<td width="50%">
+
+### Any LLM, Any Warehouse
+
+OpenAI, Anthropic, Gemini, Ollama — connected to Snowflake, BigQuery, Postgres, Redshift, and 20+ more. Swap or combine providers without breaking workflows.
+
+</td>
+<td width="50%">
+
+### MCP Support
+
+Use MetricChat from Cursor, Claude Desktop, and other AI clients via the Model Context Protocol — while reliably tracking every request and data operation.
+
+</td>
+</tr>
+</table>
+
+---
+
+## Quick Start
+
+Get running in 30 seconds:
 
 ```bash
-# runs with SQLite (default)
 docker run -p 3000:3000 bagofwords/bagofwords
 ```
 
-### Or, run with a ready PostgreSQL instance
+Then open [http://localhost:3000](http://localhost:3000) and connect your first data source.
+
+<details>
+<summary><strong>Run with PostgreSQL (recommended for production)</strong></summary>
+
 ```bash
 docker run -p 3000:3000 \
-  -e BOW_DATABASE_URL=postgresql://user:password@localhost:5432/dbname \
+  -e BOW_DATABASE_URL=postgresql://user:password@host:5432/dbname \
   bagofwords/bagofwords
 ```
 
-#### Other deployment options
-docker compose and Kubernete deployments are also available (and recommended for servers). See the [docs](https://docs.bagofwords.com/install).
+</details>
 
-## Product Overview
+<details>
+<summary><strong>Docker Compose</strong></summary>
 
-### Chat with any data
-Create reports, deep analysis or quick visuals with an AI interface powered by an agentic-loop with tools, reasoning and reflection built in. 
-<div style="text-align: center; margin: 20px 0;">
-    <img src="./media/chat.png" alt="Bag of words" style="width: 100%; max-width: 1200px;">
-    <i></i>
-</div>
+```bash
+# Production (Postgres + Caddy SSL)
+docker compose up -d
 
-### Instructions Registry
-Manage AI rules and instructions with review process, full versioning and tracking. Sync with git to auto-index dbt, Tableau, AGENTS.md and more.
-<div style="text-align: center; margin: 20px 0;">
-    <img src="./media/instructions-table.png" alt="Bag of words" style="width: 100%; max-width: 1200px;">
-    <i></i>
-</div>
+# Development (no SSL)
+docker compose -f docker-compose.dev.yaml up -d
+```
 
-### Save data and queries to the Catalog
-Leverage the catalog to store, share, and explore reusable queries and datasets. This feature also improves discoverability and searchability for AI, contributing to smarter AI decisions.
-<div style="text-align: center; margin: 20px 0;">
-    <img src="./media/catalog.png" alt="Bag of words" style="width: 100%; max-width: 1200px;">
-</div>
+</details>
 
-### Monitor AI and data operations
-Full observability into queries, feedback, and context — powering self-learning and high quality AI results
-<div style="text-align: center; margin: 20px 0;">
-    <img src="./media/monitoring.png" alt="Bag of words" style="width: 100%; max-width: 1200px;">
-</div>
+<details>
+<summary><strong>Kubernetes</strong></summary>
 
+Helm chart included. See [`k8s/README.md`](./k8s/README.md) for setup instructions.
 
-## Architecture
+</details>
 
-Bag of words acts as a **context-aware analytics layer** that connects to any database or service, works with any LLM, and enriches queries with docs, BI models, or code.
-
-The architecture is fully flexible: plug in any data source, any model, and any interface — giving your team maximum freedom of choice, without sacrificing governance or reliability.
-
-<div style="text-align: center; margin: 20px 0;">
-    <img src="./media/arch.png" alt="Bag of words" style="width: 100%; max-width: 1200px;">
-</div>
+---
 
 ## Integrations
 
-### Supported LLM Integrations
+### LLM Providers
 
-Bag of words supports a wide range of LLM providers out of the box. You can bring your own API key for any of the following:
-
-| Provider         | Supported Models / APIs         | Notes                                                                 |
-|------------------|---------------------------------|-----------------------------------------------------------------------|
-| **OpenAI**       | GPT models, o-models, etc.    | Any OpenAI-compatible endpoint (including self-hosted, vLLM, etc.)    |
-| **Azure OpenAI** | GPT models, o-models, etc.            | Azure resource/endpoint support, including model deployment names      |
-| **Google Gemini**| Gemini, Flash versions, etc.    | Requires Google Cloud API key                                         |
-| **Anthropic**    | Claude, Sonnet, Haiku    | Just provide the API key          |
-| **Any OpenAI-compatible** | vLLM, LM Studio, Ollama, etc. | Just provide the base URL and API key                                 |
-
-> **Tip:** You can configure multiple providers and models, set defaults, and more.
+| Provider | Models | Notes |
+|:---|:---|:---|
+| **OpenAI** | GPT-4o, o1, o3, etc. | Any OpenAI-compatible endpoint (vLLM, LM Studio, etc.) |
+| **Azure OpenAI** | GPT-4o, o1, o3, etc. | Azure resource/endpoint support with deployment names |
+| **Anthropic** | Claude Opus, Sonnet, Haiku | Direct API key |
+| **Google Gemini** | Gemini Pro, Flash | Google Cloud API key |
+| **Ollama / Self-hosted** | Any model | Point to any OpenAI-compatible base URL |
 
 ### Data Sources
 
+<details>
+<summary><strong>26 supported databases, warehouses, and services</strong></summary>
 
-#### Supported Data Sources
+**Databases & Warehouses**
 
-Below is a list of all data sources supported by Bag of words, as defined in the data source registry. Each entry is marked as either a **Database/Warehouse** or a **Service**.
+PostgreSQL &middot; Snowflake &middot; BigQuery &middot; Databricks SQL &middot; Microsoft Fabric &middot; MySQL &middot; AWS Athena &middot; MariaDB &middot; DuckDB &middot; Microsoft SQL Server &middot; ClickHouse &middot; Azure Data Explorer &middot; Vertica &middot; AWS Redshift &middot; Presto &middot; Apache Pinot &middot; Oracle DB &middot; MongoDB &middot; Sybase SQL Anywhere
 
-| Title                    | Kind                |
-|--------------------------|---------------------|
-| PostgreSQL               | Database/Warehouse  |
-| Snowflake                | Database/Warehouse  |
-| Google BigQuery          | Database/Warehouse  |
-| Databricks SQL           | Database/Warehouse  |
-| Microsoft Fabric         | Database/Warehouse  |
-| NetSuite                 | Service             |
-| MySQL                    | Database/Warehouse  |
-| AWS Athena               | Database/Warehouse  |
-| MariaDB                  | Database/Warehouse  |
-| DuckDB                   | Database/Warehouse  |
-| Salesforce               | Service             |
-| Microsoft SQL Server     | Database/Warehouse  |
-| ClickHouse               | Database/Warehouse  |
-| Azure Data Explorer      | Database/Warehouse  |
-| AWS Cost Explorer        | Service             |
-| Vertica                  | Database/Warehouse  |
-| AWS Redshift             | Database/Warehouse  |
-| Tableau                  | Service             |
-| Presto                   | Database/Warehouse  |
-| Apache Pinot             | Database/Warehouse  |
-| Oracle DB                | Database/Warehouse  |
-| MongoDB                  | Database/Warehouse  |
-| PostHog                  | Service             |
-| PowerBI                  | Service             |
-| QlikView                 | Service             |
-| Sybase SQL Anywhere      | Database/Warehouse  |
+**Services & Platforms**
 
-> **Note:** Some data sources (like NetSuite) may be marked as inactive or beta in the registry. "Service" refers to APIs or SaaS platforms, while "Database/Warehouse" refers to systems that store and query structured data.
+Salesforce &middot; NetSuite &middot; Tableau &middot; PowerBI &middot; QlikView &middot; AWS Cost Explorer &middot; PostHog
+
+</details>
+
+---
+
+## How It Works
+
+```
+You ask a question
+  -> MetricChat agent plans an approach
+    -> Pulls relevant context (memory, rules, schema)
+    -> Writes and executes SQL against your warehouse
+    -> Validates results against guardrails
+    -> Returns an answer with full trace
+      -> Builds memory for next time
+```
+
+Every step is observable. Every decision is logged. Nothing is a black box.
+
+---
 
 ## Enterprise
 
-For teams requiring advanced security, compliance, and governance:
+For teams that need more:
 
-- **SSO:** Google Workspace and OIDC-compatible identity providers
-- **Self-hosted:** Deploy on your own infrastructure with full data control
-- **RBAC:** Role-based access control for fine-grained permissions
+| | |
+|:---|:---|
+| **SSO** | Google Workspace, OIDC-compatible identity providers |
+| **RBAC** | Role-based access control with fine-grained permissions |
+| **Self-hosted** | Deploy on your own infrastructure with full data control |
+| **Audit logs** | Complete trail of every query, access, and configuration change |
 
-## 🔒 Security & Privacy
-We take data security and privacy seriously.  
+---
 
-### Telemetry
-By default, Bag of words captures basic usage stats of self-hosted instances to a centralized server. The data helps us improve the product.
+## Development
 
-You can disable by setting in `bow-config.yaml`
+See [DEV.md](./DEV.md) for local development setup (Python 3.12+, Node 18+, Yarn).
 
-```yaml
-telemetry
-  enabled: false
+```bash
+# Backend
+cd backend && python main.py       # http://localhost:8000
+
+# Frontend
+cd frontend && yarn dev            # http://localhost:3000
 ```
 
-You can also disable the Intercom chat for support
+---
 
-```yaml
-intercom
-  enabled: false
-```
+## License
 
+AGPL-3.0 — see [LICENSE](./LICENSE).
+
+MetricChat is built on [Bag of Words](https://github.com/bagofwords1/bagofwords), an open-source agentic analytics platform.
