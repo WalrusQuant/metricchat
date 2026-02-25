@@ -90,6 +90,7 @@ def pytest_addoption(parser):
 def pytest_configure(config):
     """Configure pytest markers."""
     config.addinivalue_line("markers", "e2e: marks tests as end-to-end tests")
+    config.addinivalue_line("markers", "unit: marks tests as unit tests")
 
 @pytest.fixture(scope="session", autouse=True)
 def disable_telemetry_for_tests():

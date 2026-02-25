@@ -50,7 +50,7 @@ def create_llm_provider_and_models(test_client):
         openai_api_key = os.getenv("OPENAI_API_KEY_TEST", "")
 
         if not openai_api_key:
-            pytest.fail("OPENAI_API_KEY_TEST is not set")
+            pytest.skip("OPENAI_API_KEY_TEST is not set")
         headers = {}
         if user_token:
             headers["Authorization"] = f"Bearer {user_token}"
@@ -112,7 +112,7 @@ def create_openai_provider_with_base_url(test_client):
         openai_api_key = os.getenv("OPENAI_API_KEY_TEST", "")
 
         if not openai_api_key:
-            pytest.fail("OPENAI_API_KEY_TEST is not set")
+            pytest.skip("OPENAI_API_KEY_TEST is not set")
         
         headers = {}
         if user_token:

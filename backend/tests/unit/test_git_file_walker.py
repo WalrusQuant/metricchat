@@ -22,6 +22,7 @@ from app.core.git_file_walker import (
 # ============================================================================
 
 
+@pytest.mark.unit
 class TestExtractRepoName:
     def test_https_url(self):
         assert extract_repo_name("https://github.com/owner/my-repo.git") == "my-repo"
@@ -47,6 +48,7 @@ class TestExtractRepoName:
 # ============================================================================
 
 
+@pytest.mark.unit
 class TestClassifyFile:
     def test_lkml_extension(self):
         assert classify_file(".lkml", "", False) == "lookml_view"
@@ -104,6 +106,7 @@ class TestClassifyFile:
 # ============================================================================
 
 
+@pytest.mark.unit
 class TestWalkRepoFiles:
     def _make_repo(self, tmp_path, files, dbt=False):
         """Create a fake repo directory structure."""

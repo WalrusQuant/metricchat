@@ -7,7 +7,7 @@ from .app_config import AppConfig
 
 class Settings(BaseSettings):
     PROJECT_NAME: str = "MetricChat"
-    PROJECT_VERSION: str = open("../VERSION").read().strip()
+    PROJECT_VERSION: str = open("../VERSION").read().strip() if os.path.exists("../VERSION") else "0.0.321"
     API_PREFIX: str = "/api"
     DEBUG: bool = True
     TESTING: bool = False
