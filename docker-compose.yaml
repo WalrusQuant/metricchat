@@ -43,7 +43,7 @@ services:
       - metricchat-network
 
   app:
-    image: metricchat/metricchat:latest
+    image: walrusquant/metricchat:latest
     pull_policy: always
     container_name: metricchat-app
     restart: unless-stopped
