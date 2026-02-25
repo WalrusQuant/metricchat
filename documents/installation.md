@@ -3,10 +3,10 @@
 ## Quick Start
 ```bash
 # Build the Docker image
-docker build -t bow .
+docker build -t metricchat .
 
 # Run the container
-docker run -p 3000:3000 bow 
+docker run -p 3000:3000 metricchat
 ```
 ## Dockerfile Overview
 
@@ -38,7 +38,7 @@ This multi-stage Dockerfile builds a full-stack application:
 ## Requirements
 - Docker installed on your system
 - Source code with:
-  - ./bow-config.yaml
+  - ./metricchat-config.yaml
   - ./backend/
   - ./frontend/
   - ./VERSION
@@ -51,7 +51,7 @@ odbcinst -q -d -n "ODBC Driver 18 for SQL Server"
 ```
 
 ```yaml
-  ## Bow Config:
+  ## MetricChat Config:
   # Deployment Configuration
 deployment:
   type: "saas"  # Options: "saas" or "self_hosted"
@@ -71,12 +71,12 @@ google_oauth:
   client_secret: "YOUR_CLIENT_SECRET"
 
 default_llm:
-  - provider_type: "bow"
-    provider_name: "Bow"
+  - provider_type: "metricchat"
+    provider_name: "MetricChat"
     api_key: "YOUR_API_KEY"
     models:
       - model_id: "gpt-4o-mini"
-        model_name: "bow-small"
+        model_name: "metricchat-small"
         is_default: true
         is_enabled: true
 #  - provider_type: "anthropic"

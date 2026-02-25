@@ -199,7 +199,7 @@ class CreateArtifactMCPTool(MCPTool):
 
         # Build URL
         from app.settings.config import settings
-        base_url = settings.bow_config.base_url
+        base_url = settings.app_config.base_url
         url = f"{base_url}/reports/{report.id}?artifact={artifact.id}"
 
         return MCPCreateArtifactOutput(

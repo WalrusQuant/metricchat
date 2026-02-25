@@ -1,7 +1,7 @@
-image: bagofwords/bagofwords:latest
-host: app.bagofwords.com
+image: metricchat/metricchat:latest
+host: app.metricchat.io
 registry:
-  name: bow-app-registry
+  name: mc-app-registry
   url: docker.io
 postgresql:
   auth:
@@ -19,8 +19,8 @@ ingress:
   tls: true
   clusterIssuerName: prod-cluster-issuer
 serviceAccount:
-  name: bowapp
-  imagePullSecret: bowapp-pull-secret
+  name: metricchatapp
+  imagePullSecret: metricchatapp-pull-secret
   annotations: {}
 config:
   secretRef: ""
@@ -40,8 +40,8 @@ config:
   #   - name: okta
   #     enabled: true
   #     issuer: https://YOUR_OKTA_DOMAIN.okta.com/oauth2/default
-  #     clientId: "${BOW_OIDC_OKTA_CLIENT_ID}"   # or plain value
-  #     clientSecret: "${BOW_OIDC_OKTA_CLIENT_SECRET}" # or plain value
+  #     clientId: "${MC_OIDC_OKTA_CLIENT_ID}"   # or plain value
+  #     clientSecret: "${MC_OIDC_OKTA_CLIENT_SECRET}" # or plain value
   #     scopes: ["openid", "profile", "email"]
   #     pkce: true
   #     clientAuthMethod: basic   # or post

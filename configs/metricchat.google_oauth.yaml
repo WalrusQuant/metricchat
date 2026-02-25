@@ -6,24 +6,21 @@ base_url: http://localhost:3000
   
 features:
   allow_uninvited_signups: true
-  allow_multiple_organizations: true
+  allow_multiple_organizations: false
   verify_emails: false
 
 google_oauth:
-  enabled: false
-  client_id: ${BOW_GOOGLE_CLIENT_ID}
-  client_secret: ${BOW_GOOGLE_CLIENT_SECRET}
+  enabled: true
+  client_id: 'asdf'
+  client_secret: 'asdfsdafdsaf'
 
 smtp_settings:
   host: "smtp.resend.com"
   port: 587
   username: "resend"
-  password: ${BOW_SMTP_PASSWORD}
+  password: ${MC_SMTP_PASSWORD}
 
-encryption_key: ${BOW_ENCRYPTION_KEY}
+encryption_key: ${MC_ENCRYPTION_KEY}
 
 intercom:
-  enabled: true
-
-database:
-  url: ${BOW_DATABASE_URL}
+  enabled: false

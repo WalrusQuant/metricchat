@@ -1,80 +1,80 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: bowapp
+  name: metricchatapp
   namespace: {{.Release.Namespace}}
 data:
   # Database URL - only set if not using existing secret
   {{- if (empty .Values.postgresql.auth.existingSecret) }}
-  BOW_DATABASE_URL: postgresql://{{.Values.postgresql.auth.username}}:{{.Values.postgresql.auth.password}}@{{.Release.Name}}-postgresql:5432/{{.Values.postgresql.auth.database}}
+  MC_DATABASE_URL: postgresql://{{.Values.postgresql.auth.username}}:{{.Values.postgresql.auth.password}}@{{.Release.Name}}-postgresql:5432/{{.Values.postgresql.auth.database}}
   {{- end }}
   
   # Application configuration - always include these
-  BOW_BASE_URL: {{.Values.config.baseUrl | quote}}
-  BOW_ENCRYPTION_KEY: {{.Values.config.encryptionKey | quote}}
-  BOW_AUTH_MODE: {{ .Values.config.authMode | quote }}
-  BOW_GOOGLE_CLIENT_ID: {{.Values.config.googleClientId | quote}}
-  BOW_GOOGLE_CLIENT_SECRET: {{.Values.config.googleClientSecret | quote}}
-  BOW_GOOGLE_AUTH_ENABLED: {{.Values.config.googleOauthEnabled | quote}}
-  BOW_SMTP_HOST: {{.Values.config.smtp.host | quote}}
-  BOW_SMTP_PORT: {{.Values.config.smtp.port | quote}}
-  BOW_SMTP_USERNAME: {{.Values.config.smtp.username | quote}}
-  BOW_SMTP_PASSWORD: {{.Values.config.smtp.password | quote}}
-  BOW_SMTP_FROM_NAME: {{.Values.config.smtp.from_name | quote}}
-  BOW_SMTP_FROM_EMAIL: {{.Values.config.smtp.from_email | quote}}
-  BOW_SMTP_USE_TLS: {{.Values.config.smtp.use_tls | quote}}
-  BOW_SMTP_USE_SSL: {{.Values.config.smtp.use_ssl | quote}}
-  BOW_SMTP_USE_CREDENTIALS: {{.Values.config.smtp.use_credentials | quote}}
-  BOW_SMTP_VALIDATE_CERTS: {{.Values.config.smtp.validate_certs | quote}}
-  BOW_INTERCOM_ENABLED: {{.Values.config.intercomEnabled | quote}}
-  BOW_ALLOW_UNINVITED_SIGNUPS: {{.Values.config.allowUninvitedSignups | quote}}
-  BOW_ALLOW_MULTIPLE_ORGANIZATIONS: {{.Values.config.allowMultipleOrganizations | quote}}
-  BOW_VERIFY_EMAILS: {{.Values.config.verifyEmails | quote}}
+  MC_BASE_URL: {{.Values.config.baseUrl | quote}}
+  MC_ENCRYPTION_KEY: {{.Values.config.encryptionKey | quote}}
+  MC_AUTH_MODE: {{ .Values.config.authMode | quote }}
+  MC_GOOGLE_CLIENT_ID: {{.Values.config.googleClientId | quote}}
+  MC_GOOGLE_CLIENT_SECRET: {{.Values.config.googleClientSecret | quote}}
+  MC_GOOGLE_AUTH_ENABLED: {{.Values.config.googleOauthEnabled | quote}}
+  MC_SMTP_HOST: {{.Values.config.smtp.host | quote}}
+  MC_SMTP_PORT: {{.Values.config.smtp.port | quote}}
+  MC_SMTP_USERNAME: {{.Values.config.smtp.username | quote}}
+  MC_SMTP_PASSWORD: {{.Values.config.smtp.password | quote}}
+  MC_SMTP_FROM_NAME: {{.Values.config.smtp.from_name | quote}}
+  MC_SMTP_FROM_EMAIL: {{.Values.config.smtp.from_email | quote}}
+  MC_SMTP_USE_TLS: {{.Values.config.smtp.use_tls | quote}}
+  MC_SMTP_USE_SSL: {{.Values.config.smtp.use_ssl | quote}}
+  MC_SMTP_USE_CREDENTIALS: {{.Values.config.smtp.use_credentials | quote}}
+  MC_SMTP_VALIDATE_CERTS: {{.Values.config.smtp.validate_certs | quote}}
+  MC_INTERCOM_ENABLED: {{.Values.config.intercomEnabled | quote}}
+  MC_ALLOW_UNINVITED_SIGNUPS: {{.Values.config.allowUninvitedSignups | quote}}
+  MC_ALLOW_MULTIPLE_ORGANIZATIONS: {{.Values.config.allowMultipleOrganizations | quote}}
+  MC_VERIFY_EMAILS: {{.Values.config.verifyEmails | quote}}
   # OIDC providers rendered as YAML inside the config file
-  BOW_OIDC_JSON: {{ .Values.config.oidcProviders | toJson | quote }}
+  MC_OIDC_JSON: {{ .Values.config.oidcProviders | toJson | quote }}
   # Enterprise license key (optional - prefer using secretRef for security)
   {{- if .Values.config.licenseKey }}
-  BOW_LICENSE_KEY: {{.Values.config.licenseKey | quote}}
+  MC_LICENSE_KEY: {{.Values.config.licenseKey | quote}}
   {{- end }}
   
-  bowConfig: |
+  metricchatConfig: |
     # Deployment Configuration
-    base_url: ${BOW_BASE_URL}
+    base_url: ${MC_BASE_URL}
 
     # Feature Flags
     features:
-      allow_uninvited_signups: ${BOW_ALLOW_UNINVITED_SIGNUPS}
-      allow_multiple_organizations: ${BOW_ALLOW_MULTIPLE_ORGANIZATIONS}
-      verify_emails: ${BOW_VERIFY_EMAILS}
+      allow_uninvited_signups: ${MC_ALLOW_UNINVITED_SIGNUPS}
+      allow_multiple_organizations: ${MC_ALLOW_MULTIPLE_ORGANIZATIONS}
+      verify_emails: ${MC_VERIFY_EMAILS}
 
     google_oauth:
-      enabled: ${BOW_GOOGLE_AUTH_ENABLED}
-      client_id: ${BOW_GOOGLE_CLIENT_ID}
-      client_secret: ${BOW_GOOGLE_CLIENT_SECRET}
+      enabled: ${MC_GOOGLE_AUTH_ENABLED}
+      client_id: ${MC_GOOGLE_CLIENT_ID}
+      client_secret: ${MC_GOOGLE_CLIENT_SECRET}
 
-    encryption_key: ${BOW_ENCRYPTION_KEY}
+    encryption_key: ${MC_ENCRYPTION_KEY}
     
     smtp_settings:
-      host: ${BOW_SMTP_HOST}
-      port: ${BOW_SMTP_PORT}
-      username: ${BOW_SMTP_USERNAME}
-      password: ${BOW_SMTP_PASSWORD}
-      from_name: ${BOW_SMTP_FROM_NAME}
-      from_email: ${BOW_SMTP_FROM_EMAIL}
-      use_tls: ${BOW_SMTP_USE_TLS}
-      use_ssl: ${BOW_SMTP_USE_SSL}
-      use_credentials: ${BOW_SMTP_USE_CREDENTIALS}
-      validate_certs: ${BOW_SMTP_VALIDATE_CERTS}
+      host: ${MC_SMTP_HOST}
+      port: ${MC_SMTP_PORT}
+      username: ${MC_SMTP_USERNAME}
+      password: ${MC_SMTP_PASSWORD}
+      from_name: ${MC_SMTP_FROM_NAME}
+      from_email: ${MC_SMTP_FROM_EMAIL}
+      use_tls: ${MC_SMTP_USE_TLS}
+      use_ssl: ${MC_SMTP_USE_SSL}
+      use_credentials: ${MC_SMTP_USE_CREDENTIALS}
+      validate_certs: ${MC_SMTP_VALIDATE_CERTS}
 
     intercom:
-      enabled: ${BOW_INTERCOM_ENABLED}
+      enabled: ${MC_INTERCOM_ENABLED}
 
     license:
-      key: ${BOW_LICENSE_KEY}
+      key: ${MC_LICENSE_KEY}
 
     features:
       auth:
-        mode: ${BOW_AUTH_MODE}
+        mode: ${MC_AUTH_MODE}
 
     # OpenID Connect providers
     oidc_providers:

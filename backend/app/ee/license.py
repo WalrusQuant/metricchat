@@ -31,13 +31,13 @@ ENTERPRISE_DATASOURCES = ["powerbi", "qvd", "sybase", "tableau"]
 # Public key for license verification (RS256)
 # This key is used to verify license signatures without exposing the private key
 LICENSE_PUBLIC_KEY = """-----BEGIN PUBLIC KEY-----
-MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAxmmTEMSxkicmKkQY1fmR
-reBzCRZqxD6Pj2B4f33yo0zIOZ/uZy+hbN2MX1HN/NSErgxeBc2Cc4V0jVn3ElZY
-xqbJ0s+Yx86ycwczkn2Lv7PTxBDjcMKI9duBjrR6A2C38PI1ij1LwRLbERtpCJ0I
-8+B8/Act9FTVM/xs/L4ZFiT4gM9C04QBWB5pBsxXkrIp2kPEU2Djfx7U8KlwBsCC
-/A4ARnvXMlXvakY7m3D377ZMFKQ+qjgn6ILGwpYPq2LtH2/V6/sHTzu0Q8Xv8PH4
-VLPjN9mwZy0QlE26rUXElbaPSMmlhk3RPXCmmwHRrPFZXQmPV4HBJAleA7U9MswG
-PwIDAQAB
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAyTamiBOZxEFY1x8DoFY9
+n/P+6UgI097wQ+R5OahRdmSoIoKp7BD9UhUxVhHiGcM04lCPq+6cZZnijIrKlEuS
+K12VtlT9UoBVC8n8V3aMjT3gEzzz/jgMXXiZUa0qvsi1O3Ke9AsMA48gYV8idEXd
+ZaBVfzqldxuJYojcrh0R1UtdgKnVAntLpJzU1g9Y5YKKp89DGkZXYedQNpV6RBNg
+TWPqyPDZ7hW7+xHttra0xKsLfvxjefvsV5nAQYehCCHA05mQdyHKNeZPfNEauxbG
+mEs+OLMPOQK6yt6dnRZwCpG21MN6LLFsUq+YLzyz0KZ143NAFsrNQ7kjZLxMEAd0
+xQIDAQAB
 -----END PUBLIC KEY-----"""
 
 
@@ -60,7 +60,7 @@ def _get_license_key() -> Optional[str]:
     """Get license key from configuration"""
     from app.settings.config import settings
 
-    license_config = getattr(settings.bow_config, 'license', None)
+    license_config = getattr(settings.app_config, 'license', None)
     if license_config and license_config.key:
         key = license_config.key
         # Handle unresolved env var placeholder
@@ -73,8 +73,10 @@ def _get_license_key() -> Optional[str]:
 def _validate_license_key(key: str) -> LicenseInfo:
     """Validate a license key and return license info"""
     try:
-        # Remove bow_lic_ prefix if present
-        if key.startswith("bow_lic_"):
+        # Remove mc_lic_ prefix if present (also support legacy bow_lic_)
+        if key.startswith("mc_lic_"):
+            key = key[7:]
+        elif key.startswith("bow_lic_"):
             key = key[8:]
 
         # Decode and verify JWT (disable exp validation to check manually)
@@ -89,7 +91,7 @@ def _validate_license_key(key: str) -> LicenseInfo:
         )
 
         # Check issuer
-        if payload.get("iss") != "bagofwords.com":
+        if payload.get("iss") not in ("metricchat.io", "bagofwords.com"):
             logger.warning("Invalid license issuer")
             return LicenseInfo(licensed=False, tier="community")
 
@@ -227,7 +229,7 @@ def require_enterprise(feature: Optional[str] = None):
                     )
                 raise HTTPException(
                     status_code=402,
-                    detail="This feature requires an enterprise license. Set BOW_LICENSE_KEY to enable."
+                    detail="This feature requires an enterprise license. Set MC_LICENSE_KEY to enable."
                 )
 
             if feature and not has_feature(feature):

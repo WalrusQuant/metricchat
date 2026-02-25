@@ -28,7 +28,7 @@ class ReportUpdate(BaseModel):
 class ReportSchema(ReportBase):
     class PublicGeneralSettings(BaseModel):
         ai_analyst_name: str = "AI Analyst"
-        bow_credit: bool = True
+        show_credit: bool = True
         icon_url: Optional[str] = None
 
     id: str

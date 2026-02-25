@@ -460,7 +460,7 @@ class ReportService:
                 general = settings.config.get("general", {}) or {}
                 schema.general = ReportSchema.PublicGeneralSettings(
                     ai_analyst_name=general.get("ai_analyst_name", "AI Analyst"),
-                    bow_credit=general.get("bow_credit", True),
+                    show_credit=general.get("show_credit", general.get("bow_credit", True)),
                     icon_url=general.get("icon_url")
                 )
         except Exception:

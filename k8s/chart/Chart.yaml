@@ -1,6 +1,6 @@
 apiVersion: v2
-name: bagofwords
-description: Bag of words - a new ai data tool
+name: metricchat
+description: MetricChat - AI-powered analytics agent for your data stack
 type: application
 version: 1.0.7
 appVersion: 1.0.1

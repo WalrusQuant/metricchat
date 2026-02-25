@@ -19,7 +19,7 @@ from app.core.auth import get_jwt_strategy
 
 
 def _cookie_secure() -> bool:
-    base_url = (settings.bow_config.base_url or "").lower()
+    base_url = (settings.app_config.base_url or "").lower()
     return base_url.startswith("https://")
 
 
@@ -29,7 +29,7 @@ def _get_scopes(scopes: Optional[list]) -> list:
 
 def _get_redirect_uri(provider: str, redirect_path: Optional[str] = None) -> str:
     path = redirect_path or f"/api/auth/{provider}/callback"
-    return f"{settings.bow_config.base_url}{path}"
+    return f"{settings.app_config.base_url}{path}"
 
 
 def _issue_state_cookie(provider: str, response: JSONResponse, state: str) -> None:
@@ -74,7 +74,7 @@ def _generate_pkce_pair() -> Tuple[str, str]:
 
 
 def _get_oidc_config(provider_name: str):
-    providers = getattr(settings.bow_config, "oidc_providers", []) or []
+    providers = getattr(settings.app_config, "oidc_providers", []) or []
     for p in providers:
         if p.name == provider_name:
             return p
@@ -84,7 +84,7 @@ def _get_oidc_config(provider_name: str):
 async def build_authorize_url(provider: str, request: Request) -> JSONResponse:
     # Google
     if provider == "google":
-        g = settings.bow_config.google_oauth
+        g = settings.app_config.google_oauth
         if not g or not g.enabled:
             raise HTTPException(status_code=404, detail="Google OAuth not enabled")
         if not (g.client_id and g.client_secret):
@@ -144,7 +144,7 @@ async def handle_callback(provider: str, request: Request, code: Optional[str], 
 
     # Google
     if provider == "google":
-        g = settings.bow_config.google_oauth
+        g = settings.app_config.google_oauth
         if not g or not g.enabled:
             raise HTTPException(status_code=404, detail="Google OAuth not enabled")
         client = GoogleOAuth2(g.client_id, g.client_secret)
@@ -182,12 +182,12 @@ async def handle_callback(provider: str, request: Request, code: Optional[str], 
         except HTTPException as e:
             if isinstance(e.detail, dict) and e.detail.get("code") == "invitation_required":
                 msg = urllib.parse.quote(e.detail.get("message") or "You must be invited to create an account.")
-                return RedirectResponse(f"{settings.bow_config.base_url}/users/sign-in?error={msg}", status_code=303)
+                return RedirectResponse(f"{settings.app_config.base_url}/users/sign-in?error={msg}", status_code=303)
             raise
 
         strategy = get_jwt_strategy()
         jwt_token = await strategy.write_token(user)
-        return RedirectResponse(f"{settings.bow_config.base_url}/users/sign-in?access_token={jwt_token}&email={user.email}", status_code=303)
+        return RedirectResponse(f"{settings.app_config.base_url}/users/sign-in?access_token={jwt_token}&email={user.email}", status_code=303)
 
     # OIDC providers
     cfg = _get_oidc_config(provider)
@@ -258,12 +258,12 @@ async def handle_callback(provider: str, request: Request, code: Optional[str], 
     except HTTPException as e:
         if isinstance(e.detail, dict) and e.detail.get("code") == "invitation_required":
             msg = urllib.parse.quote(e.detail.get("message") or "You must be invited to create an account.")
-            return RedirectResponse(f"{settings.bow_config.base_url}/users/sign-in?error={msg}", status_code=303)
+            return RedirectResponse(f"{settings.app_config.base_url}/users/sign-in?error={msg}", status_code=303)
         raise
 
     strategy = get_jwt_strategy()
     jwt_token = await strategy.write_token(user)
-    return RedirectResponse(f"{settings.bow_config.base_url}/users/sign-in?access_token={jwt_token}&email={user.email}", status_code=303)
+    return RedirectResponse(f"{settings.app_config.base_url}/users/sign-in?access_token={jwt_token}&email={user.email}", status_code=303)
 
 
 async def _discover_endpoints(openid_cfg_endpoint: str) -> Dict[str, str]:

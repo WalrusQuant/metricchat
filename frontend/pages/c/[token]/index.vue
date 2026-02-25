@@ -160,8 +160,8 @@
 
             <!-- Footer -->
             <footer class="flex-none border-t border-gray-100 py-2 text-center bg-white z-10">
-                <a href="https://bagofwords.com" target="_blank" class="text-[10px] text-gray-300 hover:text-gray-400 transition-colors">
-                    Powered by Bag of Words
+                <a href="https://metricchat.io" target="_blank" class="text-[10px] text-gray-300 hover:text-gray-400 transition-colors">
+                    Powered by MetricChat
                 </a>
             </footer>
         </template>

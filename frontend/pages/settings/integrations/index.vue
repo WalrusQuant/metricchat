@@ -76,7 +76,7 @@
       <div class="flex items-center">
         <McpIcon class="w-8 h-8 mr-4 text-gray-700" />
         <div>
-          <div class="font-medium">BOW MCP Server</div>
+          <div class="font-medium">MetricChat MCP Server</div>
           <div class="text-sm text-gray-500">
             <span>
               Enable MCP endpoint for integration with AI assistants like Cursor, Claude, or others

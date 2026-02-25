@@ -51,7 +51,7 @@ def test_update_organization_settings_general(
     new_config = {
         "general": {
             "ai_analyst_name": "Custom AI Assistant",
-            "bow_credit": False
+            "show_credit": False
         }
     }
     
@@ -63,12 +63,12 @@ def test_update_organization_settings_general(
     
     assert updated_settings is not None
     assert updated_settings["config"]["general"]["ai_analyst_name"] == "Custom AI Assistant"
-    assert updated_settings["config"]["general"]["bow_credit"] is False
+    assert updated_settings["config"]["general"]["show_credit"] is False
     
     # Verify settings persisted
     fetched_settings = get_organization_settings(user_token=user_token, org_id=org_id)
     assert fetched_settings["config"]["general"]["ai_analyst_name"] == "Custom AI Assistant"
-    assert fetched_settings["config"]["general"]["bow_credit"] is False
+    assert fetched_settings["config"]["general"]["show_credit"] is False
 
 
 @pytest.mark.e2e
@@ -166,7 +166,7 @@ def test_update_organization_settings_full_workflow(
     initial_config = {
         "general": {
             "ai_analyst_name": "Data Bot",
-            "bow_credit": True
+            "show_credit": True
         }
     }
     result = update_organization_settings(config=initial_config, user_token=user_token, org_id=org_id)
@@ -187,7 +187,7 @@ def test_update_organization_settings_full_workflow(
     updated_config = {
         "general": {
             "ai_analyst_name": "Analytics Assistant",
-            "bow_credit": False,
+            "show_credit": False,
             "icon_key": icon_key,
             "icon_url": icon_url
         }
@@ -203,7 +203,7 @@ def test_update_organization_settings_full_workflow(
     # 5. Verify final state
     final_settings = get_organization_settings(user_token=user_token, org_id=org_id)
     assert final_settings["config"]["general"]["ai_analyst_name"] == "Analytics Assistant"
-    assert final_settings["config"]["general"]["bow_credit"] is False
+    assert final_settings["config"]["general"]["show_credit"] is False
     assert final_settings["config"]["general"]["icon_key"] is None
 
 

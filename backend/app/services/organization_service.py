@@ -35,7 +35,7 @@ class OrganizationService:
 
         total_orgs = await db.execute(select(Organization))
         total_orgs = total_orgs.scalars().all().__len__()
-        if total_orgs > 0 and not settings.bow_config.features.allow_multiple_organizations:
+        if total_orgs > 0 and not settings.app_config.features.allow_multiple_organizations:
             raise HTTPException(status_code=400, detail="You cannot create more than one organization")
         
         organization = Organization(**organization_data.dict())
@@ -240,12 +240,12 @@ class OrganizationService:
         return len(admin_members)
     
     async def _send_invitation_email(self, membership: Membership, email: str):
-        sign_up_url = settings.bow_config.base_url + "/users/sign-up?email=" + email
+        sign_up_url = settings.app_config.base_url + "/users/sign-up?email=" + email
 
         message = MessageSchema(
-            subject="You are invited to Bag of words",
+            subject="You are invited to MetricChat",
             recipients=[email],
-            body=f"You have been invited to join an organization on Bag of words. Click to sign up: <br /> {sign_up_url}",
+            body=f"You have been invited to join an organization on MetricChat. Click to sign up: <br /> {sign_up_url}",
             subtype="html")
         fm = settings.email_client
         logger.info(f"Using email client: {fm}")

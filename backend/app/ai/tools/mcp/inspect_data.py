@@ -207,7 +207,7 @@ class InspectDataMCPTool(MCPTool):
         )
         
         from app.settings.config import settings
-        base_url = settings.bow_config.base_url
+        base_url = settings.app_config.base_url
         
         output = MCPInspectDataOutput(
             report_id=str(report.id),

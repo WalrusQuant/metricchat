@@ -1,7 +1,7 @@
 <template>
   <UContainer class="page text-center px-6 py-16">
     <div class="max-w-xl w-full mx-auto">
-      <img src="/public/assets/logo-128.png" alt="BOW" class="logo mx-auto mb-8" />
+      <img src="/public/assets/logo-128.png" alt="MetricChat" class="logo mx-auto mb-8" />
 
       <div v-if="error?.statusCode === 404" class="space-y-3">
         <h1 class="text-5xl font-semibold tracking-tight">404</h1>

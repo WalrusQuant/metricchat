@@ -52,7 +52,7 @@ WORKDIR /app
 
 # Copy the VERSION and config file first so they can be used by Nuxt
 COPY ./VERSION /app/VERSION
-COPY ./bow-config.yaml /app/bow-config.yaml
+COPY ./metricchat.yaml /app/metricchat.yaml
 
 # Copy the frontend directory contents
 COPY ./frontend /app/frontend
@@ -132,7 +132,7 @@ WORKDIR /app
 
 COPY --chown=app:app ./VERSION /app/VERSION
 COPY --chown=app:app ./start.sh /app/start.sh
-COPY --chown=app:app ./bow-config.yaml /app/bow-config.yaml
+COPY --chown=app:app ./metricchat.yaml /app/metricchat.yaml
 
 # Set executable permissions for start.sh
 RUN chmod +x /app/start.sh

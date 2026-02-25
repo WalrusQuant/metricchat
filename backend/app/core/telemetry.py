@@ -79,7 +79,7 @@ class Telemetry:
             # Disable telemetry in test mode
             if settings.TESTING:
                 return False
-            return bool(getattr(settings.bow_config, "telemetry", None) and settings.bow_config.telemetry.enabled)
+            return bool(getattr(settings.app_config, "telemetry", None) and settings.app_config.telemetry.enabled)
         except Exception:
             return False
 

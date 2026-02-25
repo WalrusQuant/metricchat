@@ -1,6 +1,6 @@
 # Language Models
 
-Bag of words allows users to integrate to a variety of language models. 
+MetricChat allows users to integrate to a variety of language models. 
 
 ## Overview
 
@@ -42,7 +42,7 @@ graph TD
 ### Core Components
 
 #### LLM Provider (`llm_provider.py`)
-- Base database model for LLM service providers (OpenAI, Anthropic, Google, BOW)
+- Base database model for LLM service providers (OpenAI, Anthropic, Google, MetricChat)
 - Handles encrypted credentials and provider-specific configs
 - Links to organization and models
 
@@ -52,7 +52,7 @@ graph TD
   - OpenAI: GPT-5, GPT-4.1, GPT-4.1 Mini
   - Anthropic: Claude 4.5 Sonnet, Claude 4 Sonnet, Claude 4 Opus
   - Google: Gemini 2.5 Pro, Gemini 2.5 Flash
-  - BOW: BOW Small
+  - MetricChat: MetricChat Small
 - Links to provider and organization
 
 #### LLM Schemas (`llm_schema.py`)

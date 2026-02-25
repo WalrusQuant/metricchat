@@ -74,7 +74,7 @@ Use MetricChat from Cursor, Claude Desktop, and other AI clients via the Model C
 Get running in 30 seconds:
 
 ```bash
-docker run -p 3000:3000 bagofwords/bagofwords
+docker run -p 3000:3000 metricchat/metricchat
 ```
 
 Then open [http://localhost:3000](http://localhost:3000) and connect your first data source.
@@ -84,8 +84,8 @@ Then open [http://localhost:3000](http://localhost:3000) and connect your first 
 
 ```bash
 docker run -p 3000:3000 \
-  -e BOW_DATABASE_URL=postgresql://user:password@host:5432/dbname \
-  bagofwords/bagofwords
+  -e MC_DATABASE_URL=postgresql://user:password@host:5432/dbname \
+  metricchat/metricchat
 ```
 
 </details>
@@ -188,4 +188,4 @@ cd frontend && yarn dev            # http://localhost:3000
 
 AGPL-3.0 — see [LICENSE](./LICENSE).
 
-MetricChat is built on [Bag of Words](https://github.com/bagofwords1/bagofwords), an open-source agentic analytics platform.
+MetricChat is forked from [Bag of Words](https://github.com/bagofwords1/bagofwords), an open-source agentic analytics platform.

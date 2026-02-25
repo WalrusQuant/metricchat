@@ -325,7 +325,7 @@ class ExternalPlatformManager:
             )
 
             if created:
-                report_url = f"{settings.bow_config.base_url}/reports/{report.id}"
+                report_url = f"{settings.app_config.base_url}/reports/{report.id}"
                 # Send the "new report" message in the thread
                 # For channel mentions, respond in the channel; for DMs, open a DM
                 # Slack DMs: None (adapter opens DM by user_id)

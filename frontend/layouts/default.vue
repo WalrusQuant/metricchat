@@ -39,7 +39,7 @@
       <ul class="font-normal text-sm">
         <li>
             <button @click="router.push('/')" class="flex items-center justify-center p-1 text-gray-700 group">
-              <img :src="workspaceIconUrl || '/assets/logo-128.png'" alt="Bag of words" :class="isCollapsed ? 'w-8 object-contain' : 'max-h-10 max-w-[120px] object-contain'" />
+              <img :src="workspaceIconUrl || '/assets/logo-128.png'" alt="MetricChat" :class="isCollapsed ? 'w-8 object-contain' : 'max-h-10 max-w-[120px] object-contain'" />
             </button>
         </li>
 
@@ -210,7 +210,7 @@
   const bottomNavItems = [
     { href: '/data', icon: 'heroicons-circle-stack', label: 'Data Agents' },
     { href: '/settings', icon: 'heroicons-cog-6-tooth', label: 'Settings' },
-    { href: 'https://docs.bagofwords.com', icon: 'heroicons-book-open', label: 'Documentation', external: true },
+    { href: '#', icon: 'heroicons-book-open', label: 'Documentation', external: true },
   ]
   
   // Domain management - use selectedDomainObjects for new report creation

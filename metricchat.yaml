@@ -19,8 +19,8 @@ google_oauth:
 #- name: okta
 #  enabled: false
 #  issuer: https://YOUR_OKTA_DOMAIN.okta.com/oauth2/default
-#  client_id: ${BOW_OKTA_CLIENT_ID}
-#  client_secret: ${BOW_OKTA_CLIENT_SECRET}
+#  client_id: ${MC_OKTA_CLIENT_ID}
+#  client_secret: ${MC_OKTA_CLIENT_SECRET}
 #  scopes: ["openid", "profile", "email"]
 #  pkce: true
 #  client_auth_method: basic
@@ -31,13 +31,13 @@ google_oauth:
  # extra_authorize_params: { prompt: login }
  # extra_token_params: {}
 
-encryption_key: ${BOW_ENCRYPTION_KEY}
+encryption_key: ${MC_ENCRYPTION_KEY}
 
 intercom:
-  enabled: true
+  enabled: false
 
 telemetry:
-  enabled: true
+  enabled: false
 
 # license:
-#    key: ${BOW_LICENSE_KEY}
+#    key: ${MC_LICENSE_KEY}

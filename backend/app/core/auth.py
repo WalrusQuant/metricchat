@@ -34,7 +34,7 @@ from app.services.organization_service import OrganizationService
 from app.schemas.organization_schema import OrganizationCreate
 from app.core.telemetry import telemetry
 
-SECRET = settings.bow_config.encryption_key
+SECRET = settings.app_config.encryption_key
 
 
 DEFAULT_ORG_NAME = "Main Org"
@@ -62,7 +62,7 @@ class UserManager(BaseUserManager[User, str]):
                 response_data = {}
             token = response_data.get('access_token')
             if token:
-                redirect_url = f"{settings.bow_config.base_url}/users/sign-in?access_token={token}&email={user.email}"
+                redirect_url = f"{settings.app_config.base_url}/users/sign-in?access_token={token}&email={user.email}"
                 raise HTTPException(status_code=303, headers={"Location": redirect_url})
 
     async def _attach_open_memberships(self, user: User, session: AsyncSession):
@@ -103,7 +103,7 @@ class UserManager(BaseUserManager[User, str]):
         async with self.user_db.session as session:
             await self._attach_open_memberships(user, session)
             
-            if not settings.bow_config.features.verify_emails:
+            if not settings.app_config.features.verify_emails:
                 user.is_verified = True
             
             await session.commit()
@@ -150,7 +150,7 @@ class UserManager(BaseUserManager[User, str]):
                 async with self.user_db.session as session:
                     # If uninvited signups are disabled and not first user, require invite
                     user_count = (await session.execute(select(User))).scalars().all().__len__()
-                    if user_count > 0 and not settings.bow_config.features.allow_uninvited_signups:
+                    if user_count > 0 and not settings.app_config.features.allow_uninvited_signups:
                         stmt = select(Membership).where(
                             and_(
                                 Membership.email == account_email,
@@ -254,14 +254,14 @@ class UserManager(BaseUserManager[User, str]):
     async def _send_reset_password_email(self, user: User, token: str, request: Optional[Request] = None):
         import asyncio
         
-        base_url = settings.bow_config.base_url
+        base_url = settings.app_config.base_url
             
         reset_url = f"{base_url}/users/reset-password?token={token}"
         
         message = MessageSchema(
             subject="Reset your password",
             recipients=[user.email],
-            body=f"Hello {user.name},<br /><br />You have requested to reset your password for Bag of words. Click the link below to reset your password:<br /><br /> <a href='{reset_url}'>{reset_url}</a><br /><br />If you didn't request this, please ignore this email.<br /><br />Best regards,<br />Bag of words team",
+            body=f"Hello {user.name},<br /><br />You have requested to reset your password for MetricChat. Click the link below to reset your password:<br /><br /> <a href='{reset_url}'>{reset_url}</a><br /><br />If you didn't request this, please ignore this email.<br /><br />Best regards,<br />MetricChat team",
             subtype="html"
         )
         fm = settings.email_client
@@ -283,14 +283,14 @@ class UserManager(BaseUserManager[User, str]):
     async def _send_verification_email(self, user: User, token: str, request: Optional[Request] = None):
         import asyncio
         
-        base_url = settings.bow_config.base_url
+        base_url = settings.app_config.base_url
             
         verification_url = f"{base_url}/users/verify?token={token}"
         
         message = MessageSchema(
             subject="Verify your email",
             recipients=[user.email],
-            body=f"Welcome to Bag of words! You are almost ready to start using our platform. Click to verify your email: <br /> {verification_url}",
+            body=f"Welcome to MetricChat! You are almost ready to start using our platform. Click to verify your email: <br /> {verification_url}",
             subtype="html"
         )
         fm = settings.email_client
@@ -325,7 +325,7 @@ class UserManager(BaseUserManager[User, str]):
             user_count = (await session.execute(select(User))).scalars().all().__len__()
             
             # If not first user and uninvited signups disabled, check for open membership
-            if user_count > 0 and not settings.bow_config.features.allow_uninvited_signups:
+            if user_count > 0 and not settings.app_config.features.allow_uninvited_signups:
                 # Check if user has an open membership invitation
                 stmt = select(Membership).where(
                     and_(

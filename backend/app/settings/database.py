@@ -29,10 +29,10 @@ def create_database_engine():
             return create_engine(database_url, poolclass=NullPool)
         return create_engine(database_url)
     else:
-        if "postgres" in settings.bow_config.database.url:
-            database_url = settings.bow_config.database.url.replace("postgres://", "postgresql://")
-        elif "sqlite" in settings.bow_config.database.url:
-            database_url = settings.bow_config.database.url
+        if "postgres" in settings.app_config.database.url:
+            database_url = settings.app_config.database.url.replace("postgres://", "postgresql://")
+        elif "sqlite" in settings.app_config.database.url:
+            database_url = settings.app_config.database.url
         else:
             database_url = "sqlite:///./app.db"  # Default fallback
         return create_engine(database_url)
@@ -75,8 +75,8 @@ def create_async_database_engine():
             # NullPool: no connection pooling - avoids stale connection issues with TestClient
             engine = create_async_engine(database_url, echo=False, future=True, poolclass=NullPool)
     else:
-        if "postgres" in settings.bow_config.database.url:
-            database_url = settings.bow_config.database.url.replace(
+        if "postgres" in settings.app_config.database.url:
+            database_url = settings.app_config.database.url.replace(
                 "postgres://", "postgresql+asyncpg://"
             ).replace(
                 "postgresql://", "postgresql+asyncpg://"
@@ -93,8 +93,8 @@ def create_async_database_engine():
             )
         else:
             # SQLite: no connection pooling supported
-            if "sqlite" in settings.bow_config.database.url:
-                database_url = settings.bow_config.database.url.replace(
+            if "sqlite" in settings.app_config.database.url:
+                database_url = settings.app_config.database.url.replace(
                     "sqlite://", "sqlite+aiosqlite://"
                 )
             else:

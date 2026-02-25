@@ -1,22 +1,22 @@
 ## Install with Kubernetes
 ---
-You can install Bag of words on a Kubernetes cluster. The following deployment will deploy the Bagofwords container alongside a postgres instance.
+You can install MetricChat on a Kubernetes cluster. The following deployment will deploy the MetricChat container alongside a postgres instance.
 
 ### 1. Add the Helm Repository
 
 ```bash
-helm repo add bow https://helm.bagofwords.com
+helm repo add metricchat https://helm.metricchat.io
 helm repo update
 ```
 
 ### 2. Install or Upgrade the Chart
 
-Here are a few examples of how to install or upgrade the Bag of words Helm chart:
+Here are a few examples of how to install or upgrade the MetricChat Helm chart:
 
 ### Deploy with a pg instance
 ```bash
 helm upgrade -i --create-namespace \
- -nbowapp-1 bowapp bow/bagofwords \
+ -nmcapp-1 mcapp metricchat/metricchat \
  --set postgresql.auth.username=<PG-USER> \
  --set postgresql.auth.password=<PG-PASS> \
  --set postgresql.auth.database=<PG-DB>
@@ -26,7 +26,7 @@ helm upgrade -i --create-namespace \
 ```bash
 # deploy without TLS with custom hostname
 helm upgrade -i --create-namespace \
- -nbowapp-1 bowapp bow/bagofwords \
+ -nmcapp-1 mcapp metricchat/metricchat \
   --set host=<HOST> \
  --set postgresql.auth.username=<PG-USER> \
  --set postgresql.auth.password=<PG-PASS> \
@@ -38,7 +38,7 @@ helm upgrade -i --create-namespace \
 ```bash
 # deploy with TLS, certs by cert manager and Googole oauth enabled 
 helm upgrade -i --create-namespace \
- -nbowapp-1 bowapp bow/bagofwords \
+ -nmcapp-1 mcapp metricchat/metricchat \
  --set host=<HOST> \
  --set postgresql.auth.username=<PG-USER> \
  --set postgresql.auth.password=<PG-PASS> \
@@ -63,39 +63,39 @@ metadata:
   namespace: <namespace>
 stringData:
   postgres-password: "<postgres-password>" 
-  BOW_DATABASE_URL: "postgresql://<postgres-user>:<postgres-password>@<postgres-host>:5432/<postgres-database>"
-  BOW_BASE_URL: "<base-url>"
-  BOW_ENCRYPTION_KEY: "<encryption-key>"
-  BOW_GOOGLE_AUTH_ENABLED: "false"
-  BOW_GOOGLE_CLIENT_ID: "<client-id>"
-  BOW_GOOGLE_CLIENT_SECRET: "<client-secret>"
-  BOW_ALLOW_UNINVITED_SIGNUPS: "false"
-  BOW_ALLOW_MULTIPLE_ORGANIZATIONS: "false"
-  BOW_VERIFY_EMAILS: "false"
-  BOW_INTERCOM_ENABLED: "false"
+  MC_DATABASE_URL: "postgresql://<postgres-user>:<postgres-password>@<postgres-host>:5432/<postgres-database>"
+  MC_BASE_URL: "<base-url>"
+  MC_ENCRYPTION_KEY: "<encryption-key>"
+  MC_GOOGLE_AUTH_ENABLED: "false"
+  MC_GOOGLE_CLIENT_ID: "<client-id>"
+  MC_GOOGLE_CLIENT_SECRET: "<client-secret>"
+  MC_ALLOW_UNINVITED_SIGNUPS: "false"
+  MC_ALLOW_MULTIPLE_ORGANIZATIONS: "false"
+  MC_VERIFY_EMAILS: "false"
+  MC_INTERCOM_ENABLED: "false"
   
   # SMTP Configuration
-  BOW_SMTP_HOST: "<smtp-host>"
-  BOW_SMTP_PORT: "<smtp-port>"
-  BOW_SMTP_USERNAME: "<smtp-username>"
-  BOW_SMTP_PASSWORD: "<smtp-password>"
-  BOW_SMTP_FROM_NAME: "<from-name>"
-  BOW_SMTP_FROM_EMAIL: "<from-email>"
-  BOW_SMTP_USE_TLS: "true"
-  BOW_SMTP_USE_SSL: "false"
-  BOW_SMTP_USE_CREDENTIALS: "true"
-  BOW_SMTP_VALIDATE_CERTS: "true"
+  MC_SMTP_HOST: "<smtp-host>"
+  MC_SMTP_PORT: "<smtp-port>"
+  MC_SMTP_USERNAME: "<smtp-username>"
+  MC_SMTP_PASSWORD: "<smtp-password>"
+  MC_SMTP_FROM_NAME: "<from-name>"
+  MC_SMTP_FROM_EMAIL: "<from-email>"
+  MC_SMTP_USE_TLS: "true"
+  MC_SMTP_USE_SSL: "false"
+  MC_SMTP_USE_CREDENTIALS: "true"
+  MC_SMTP_VALIDATE_CERTS: "true"
 ```
 
 **Note**: When using an existing secret, the values in the secret will override the default values from the ConfigMap. You only need to include the environment variables you want to override.
 
-3. Deploy BoW Application  
+3. Deploy MetricChat Application
 ```bash
 helm install \
-  bowapp ./chart \
- -n bowapp-1 \
- --set postgresql.auth.existingSecret=existing-bowapp-secret \
- --set config.secretRef=existing-bowapp-secret
+  mcapp ./chart \
+ -n mcapp-1 \
+ --set postgresql.auth.existingSecret=existing-mcapp-secret \
+ --set config.secretRef=existing-mcapp-secret
 ```
 
 
@@ -111,7 +111,7 @@ serviceAccount:
 ```
     
 ### Configure node selector 
-For adding a node selector to both the BowApp and the PostgreSQL instance set the following flag during `helm install` 
+For adding a node selector to both the MetricChat app and the PostgreSQL instance set the following flag during `helm install` 
 command ` --set postgresql.primary.nodeSelector.'kubernetes\.io/hostname'=kind-control-plane` 
 Otherwise, set node selector directly in values.yaml
 ```yaml

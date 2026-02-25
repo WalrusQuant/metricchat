@@ -70,8 +70,8 @@ class SMTPSettings(BaseModel):
     port: int = 587
     username: str = "resend"
     password: str
-    from_name: str = "Bag of words"
-    from_email: str = "hi@bagofwords.com"
+    from_name: str = "MetricChat"
+    from_email: str = "hi@metricchat.io"
     use_tls: bool = True
     use_ssl: bool = False
     use_credentials: bool = True
@@ -84,16 +84,16 @@ class Stripe(BaseModel):
 
 class LicenseConfig(BaseModel):
     """Enterprise license configuration"""
-    key: Optional[str] = Field(default=None, description="Enterprise license key (BOW_LICENSE_KEY)")
+    key: Optional[str] = Field(default=None, description="Enterprise license key (MC_LICENSE_KEY)")
 
     @validator('key', pre=True, always=True)
     def load_from_env(cls, v):
         """Auto-load license key from env var if not set or placeholder in config"""
         if not v:
             # No value set, fallback to default env var
-            return os.environ.get("BOW_LICENSE_KEY")
+            return os.environ.get("MC_LICENSE_KEY") or os.environ.get("BOW_LICENSE_KEY")
         if isinstance(v, str) and v.startswith("${") and v.endswith("}"):
-            # Parse env var name from placeholder like ${BOW_LICENSE_KEY2}
+            # Parse env var name from placeholder like ${MC_LICENSE_KEY}
             env_var_name = v[2:-1]
             return os.environ.get(env_var_name)
         return v
@@ -102,8 +102,8 @@ class LicenseConfig(BaseModel):
 class Database(BaseModel):
     url: str = Field(
         default_factory=lambda: os.getenv(
-            "BOW_DATABASE_URL", 
-            "sqlite:////app/backend/db/app.db"
+            "MC_DATABASE_URL",
+            os.getenv("BOW_DATABASE_URL", "sqlite:////app/backend/db/app.db")
         )
     )
 
@@ -112,7 +112,7 @@ def generate_fernet_key():
     key = secrets.token_bytes(32)
     return base64.urlsafe_b64encode(key).decode()
 
-class BowConfig(BaseModel):
+class AppConfig(BaseModel):
     deployment: DeploymentConfig = DeploymentConfig()
     base_url: Optional[str] = Field(default="http://0.0.0.0:3000")
     features: FeatureFlags = FeatureFlags()
@@ -124,7 +124,7 @@ class BowConfig(BaseModel):
     encryption_key: str = Field(
         default_factory=generate_fernet_key,
         description="Encryption key for sensitive data",
-        env="BOW_ENCRYPTION_KEY"
+        env="MC_ENCRYPTION_KEY"
     )
     stripe: Stripe = Stripe()
     database: Database = Database()
@@ -135,6 +135,6 @@ class BowConfig(BaseModel):
     @validator('encryption_key')
     def validate_encryption_key(cls, v):
         # If the value is empty or still the placeholder, generate a valid key:
-        if not v or v.strip() in {"", "${BOW_ENCRYPTION_KEY}"}:
+        if not v or v.strip() in {"", "${MC_ENCRYPTION_KEY}", "${BOW_ENCRYPTION_KEY}"}:
             return generate_fernet_key()
         return v

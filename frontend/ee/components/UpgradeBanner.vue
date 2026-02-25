@@ -29,7 +29,7 @@ const defaultDescription = 'This feature requires an enterprise license. Contact
         </p>
         <div class="mt-4">
           <a
-            href="https://bagofwords.com/pricing"
+            href="https://metricchat.io/pricing"
             target="_blank"
             rel="noopener noreferrer"
             class="inline-flex items-center gap-1 text-sm font-medium text-blue-600 hover:text-blue-800"

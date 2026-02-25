@@ -86,10 +86,18 @@ class OrganizationSettingsConfig(BaseModel):
     # General (workspace) settings
     class GeneralConfig(BaseModel):
         ai_analyst_name: str = "AI Analyst"
-        bow_credit: bool = True
+        show_credit: bool = True
         # Icon storage fields (disk/object storage)
         icon_key: Optional[str] = None
         icon_url: Optional[str] = None
+
+        def __init__(self, **data):
+            # Migrate legacy bow_credit field
+            if 'bow_credit' in data and 'show_credit' not in data:
+                data['show_credit'] = data.pop('bow_credit')
+            elif 'bow_credit' in data:
+                data.pop('bow_credit')
+            super().__init__(**data)
 
         @validator('ai_analyst_name')
         def validate_ai_name(cls, v: str) -> str:

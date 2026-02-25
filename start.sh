@@ -4,12 +4,12 @@
 export ENVIRONMENT=production
 export NODE_ENV=production
 
-# Generate BOW_ENCRYPTION_KEY if not provided (must happen BEFORE workers fork)
-if [ -z "$BOW_ENCRYPTION_KEY" ]; then
-    export BOW_ENCRYPTION_KEY=$(python3 -c "from cryptography.fernet import Fernet; print(Fernet.generate_key().decode())")
-    echo "⚠️  WARNING: No BOW_ENCRYPTION_KEY provided. Generated a temporary key."
+# Generate MC_ENCRYPTION_KEY if not provided (must happen BEFORE workers fork)
+if [ -z "$MC_ENCRYPTION_KEY" ]; then
+    export MC_ENCRYPTION_KEY=$(python3 -c "from cryptography.fernet import Fernet; print(Fernet.generate_key().decode())")
+    echo "⚠️  WARNING: No MC_ENCRYPTION_KEY provided. Generated a temporary key."
     echo "⚠️  Users will be logged out if the container restarts!"
-    echo "⚠️  For production, set: -e BOW_ENCRYPTION_KEY=<your-persistent-key>"
+    echo "⚠️  For production, set: -e MC_ENCRYPTION_KEY=<your-persistent-key>"
 fi
 
 # =============================================================================

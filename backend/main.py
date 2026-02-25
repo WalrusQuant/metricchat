@@ -16,7 +16,7 @@ args, _ = parser.parse_known_args()
 
 # Set environment variable for config path if specified
 if args.config:
-    os.environ['BOW_CONFIG_PATH'] = args.config
+    os.environ['MC_CONFIG_PATH'] = args.config
 
 from fastapi import FastAPI, Request, Depends
 from fastapi.responses import RedirectResponse
@@ -55,7 +55,7 @@ from app.routes import (
     organization_settings,
     branding,
     metadata_resource,
-    bow_settings,
+    app_settings,
     external_platform,
     external_user_mapping,
     slack_webhook,
@@ -84,9 +84,9 @@ loggers = setup_logging()
 logger = get_logger(__name__)
 
 # Read configuration
-enable_google_oauth = settings.bow_config.google_oauth.enabled
-google_client_id = settings.bow_config.google_oauth.client_id
-google_client_secret = settings.bow_config.google_oauth.client_secret
+enable_google_oauth = settings.app_config.google_oauth.enabled
+google_client_id = settings.app_config.google_oauth.client_id
+google_client_secret = settings.app_config.google_oauth.client_secret
 
 # Initialize FastAPI app
 app = FastAPI(
@@ -124,7 +124,7 @@ current_user = fastapi_users.current_user(active=True)
 app.include_router(user_profile.router, prefix="/api")
 
 # Determine auth mode
-auth_mode = getattr(settings.bow_config, 'auth').mode if hasattr(settings.bow_config, 'auth') else 'hybrid'
+auth_mode = getattr(settings.app_config, 'auth').mode if hasattr(settings.app_config, 'auth') else 'hybrid'
 enable_local = auth_mode in ("hybrid", "local_only")
 enable_sso = auth_mode in ("hybrid", "sso_only")
 
@@ -152,7 +152,7 @@ if enable_local:
         tags=["auth"],
     )
 
-    if settings.bow_config.features.verify_emails:
+    if settings.app_config.features.verify_emails:
         app.include_router(
             fastapi_users.get_verify_router(UserRead),
             prefix="/api/auth",
@@ -185,7 +185,7 @@ app.include_router(git.router, prefix="/api")
 app.include_router(organization_settings.router, prefix="/api")
 app.include_router(branding.router, prefix="/api")
 app.include_router(metadata_resource.router, prefix="/api")
-app.include_router(bow_settings.router, prefix="/api")
+app.include_router(app_settings.router, prefix="/api")
 app.include_router(external_platform.router, prefix="/api")
 app.include_router(external_user_mapping.router, prefix="/api")
 app.include_router(slack_webhook.router)
@@ -214,7 +214,7 @@ def custom_openapi():
     openapi_schema = get_openapi(
         title=settings.PROJECT_NAME,
         version=settings.PROJECT_VERSION,
-        description="Bag of Words API",
+        description="MetricChat API",
         routes=app.routes,
     )
 
@@ -293,8 +293,8 @@ async def startup_event():
             "environment": settings.ENVIRONMENT,
             "debug_mode": settings.DEBUG,
             "google_oauth": enable_google_oauth,
-            "email_verification": settings.bow_config.features.verify_emails,
-            "deployment_type": settings.bow_config.deployment.type,
+            "email_verification": settings.app_config.features.verify_emails,
+            "deployment_type": settings.app_config.deployment.type,
             "version": settings.PROJECT_VERSION
         }
     )
@@ -337,12 +337,12 @@ Starting server with configuration:
     - Environment: {settings.ENVIRONMENT}
     - Debug Mode: {settings.DEBUG}
     - Google OAuth: {'Enabled' if enable_google_oauth else 'Disabled'}
-    - Email Verification: {'Enabled' if settings.bow_config.features.verify_emails else 'Disabled'}
-    - Deployment Type: {settings.bow_config.deployment.type}
+    - Email Verification: {'Enabled' if settings.app_config.features.verify_emails else 'Disabled'}
+    - Deployment Type: {settings.app_config.deployment.type}
     - License: {license_status}
     - Version: {settings.PROJECT_VERSION}
 
-    You can now start using the app at {settings.bow_config.base_url}
+    You can now start using the app at {settings.app_config.base_url}
     """)
 
 @app.on_event("shutdown")

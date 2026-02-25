@@ -4,23 +4,23 @@ metadata:
   name: {{.Release.Name}}
   namespace: {{.Release.Namespace}}
   labels:
-    app: bowapp
+    app: metricchatapp
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: bowapp
+      app: metricchatapp
   template:
     metadata:
       labels:
-        app: bowapp
+        app: metricchatapp
     spec:
       {{- if .Values.postgresql.primary.nodeSelector }}
       nodeSelector: {{ .Values.postgresql.primary.nodeSelector | toJson }}
       {{- end }}
       serviceAccountName: {{ .Values.serviceAccount.name }}
       containers:
-      - name: bowapp
+      - name: metricchatapp
         image: {{.Values.image}}
         imagePullPolicy: Always
         ports:
@@ -29,7 +29,7 @@ spec:
           {{- toYaml .Values.resources | nindent 12 }}
         envFrom:
           - configMapRef:
-              name: bowapp
+              name: metricchatapp
           {{- if not (empty .Values.config.secretRef) }}
           - secretRef:
               name: {{ .Values.config.secretRef }}
@@ -54,11 +54,11 @@ spec:
           initialDelaySeconds: 15
           periodSeconds: 20
         volumeMounts:
-          - name: bow-config
-            mountPath: /app/bow-config.yaml
-            subPath: bowConfig
+          - name: metricchat-config
+            mountPath: /app/metricchat.yaml
+            subPath: metricchatConfig
       volumes:
-        - name: bow-config
+        - name: metricchat-config
           configMap:
-            name: bowapp
+            name: metricchatapp
 

@@ -32,4 +32,4 @@ yarn dev      # Regular mode
 
 ## License
 
-AGPL-3.0 — Built on [Bag of Words](https://github.com/bagofwords1/bagofwords).
+AGPL-3.0 — Forked from [Bag of Words](https://github.com/bagofwords1/bagofwords).

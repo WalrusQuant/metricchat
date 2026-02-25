@@ -2,7 +2,7 @@
   <div class="flex h-screen justify-center py-20 px-5 sm:px-0">
     <div class="w-full text-center sm:w-[420px]">
       <div>
-        <img src="/assets/logo-128.png" alt="Bag of Words" class="h-10 w-10 mx-auto" />
+        <img src="/assets/logo-128.png" alt="MetricChat" class="h-10 w-10 mx-auto" />
       </div>
 
       <!-- Loading -->
@@ -28,7 +28,7 @@
       <div v-else class="mt-4">
         <h1 class="font-medium text-2xl mb-2">Authorize Access</h1>
         <p class="text-sm text-gray-500 mb-6">
-          <strong>{{ clientName }}</strong> wants to access your Bag of Words account.
+          <strong>{{ clientName }}</strong> wants to access your MetricChat account.
         </p>
 
         <div class="px-6 py-5 border border-gray-200 rounded-xl shadow-sm bg-white text-left">

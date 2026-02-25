@@ -45,8 +45,8 @@ jobs:
     permissions:
       contents: read
     env:
-      HELM_REPO_URL: https://helm.bagofwords.com
-      S3_BUCKET: helm.bagofwords.com
+      HELM_REPO_URL: https://helm.metricchat.io
+      S3_BUCKET: helm.metricchat.io
       AWS_REGION: us-east-1
     steps:
       - uses: actions/download-artifact@v4

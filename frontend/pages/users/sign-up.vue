@@ -2,7 +2,7 @@
   <div class="flex h-screen justify-center py-20 px-5 sm:px-0" v-if="pageLoaded">
     <div class="w-full text-center sm:w-[400px]">
       <div>
-        <img src="/assets/logo-128.png" alt="Bag of Words" class="h-10 w-10 mx-auto" />
+        <img src="/assets/logo-128.png" alt="MetricChat" class="h-10 w-10 mx-auto" />
       </div>
       <h1 class="font-medium text-3xl mt-4 mb-5">Sign up</h1>
       <div class="px-10 py-6  border border-gray-200 rounded-xl shadow-sm bg-white">
@@ -79,8 +79,8 @@
 
       <div class="mt-3 block text-xs border-t border-gray-100 pt-3">
         By signing up, you agree to our 
-        <a href="https://bagofwords.com/terms" target="_blank" class="text-blue-400">Terms of Service</a> and 
-        <a href="https://bagofwords.com/privacy" target="_blank" class="text-blue-400">Privacy Policy</a>
+        <a href="https://metricchat.io/terms" target="_blank" class="text-blue-400">Terms of Service</a> and
+        <a href="https://metricchat.io/privacy" target="_blank" class="text-blue-400">Privacy Policy</a>
       </div>
     </div>
   </div>

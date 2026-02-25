@@ -46,11 +46,11 @@ LLM_PROVIDER_DETAILS = [
      }
 ]
 
-BOW_PROVIDER_DETAILS = {
+DEFAULT_PROVIDER_DETAILS = {
     "type": "bow",
-    "name": "BOW",
-    "description": "BOW's API for accessing their LLM models",
-    "config": "BowConfig",
+    "name": "MetricChat",
+    "description": "MetricChat's API for accessing LLM models",
+    "config": "AppConfig",
     "credentials": BowCredentials.schema()
 }
 
@@ -79,10 +79,10 @@ class LLMProvider(BaseSchema):
 
 
     def encrypt_credentials(self, api_key: str, api_secret: str):
-        fernet = Fernet(settings.bow_config.encryption_key)
+        fernet = Fernet(settings.app_config.encryption_key)
         self.api_key = fernet.encrypt(json.dumps(api_key).encode()).decode()
         self.api_secret = fernet.encrypt(json.dumps(api_secret).encode()).decode()
 
     def decrypt_credentials(self) -> dict:
-        fernet = Fernet(settings.bow_config.encryption_key)
+        fernet = Fernet(settings.app_config.encryption_key)
         return json.loads(fernet.decrypt(self.api_key.encode()).decode()), json.loads(fernet.decrypt(self.api_secret.encode()).decode())

@@ -104,12 +104,10 @@
           Unlock audit logs, advanced role-based access control, and data retention policies with an enterprise license.
         </p>
         <p class="text-xs text-gray-500 mb-3">
-          Set <code class="bg-gray-100 px-1 py-0.5 rounded text-xs">BOW_LICENSE_KEY</code> and restart to activate.
+          Set <code class="bg-gray-100 px-1 py-0.5 rounded text-xs">MC_LICENSE_KEY</code> and restart to activate.
         </p>
         <a
-          href="https://docs.bagofwords/enterprise"
-          target="_blank"
-          rel="noopener noreferrer"
+          href="#"
           class="text-xs text-blue-600 hover:text-blue-700"
         >
           Learn more →

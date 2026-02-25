@@ -86,7 +86,7 @@ def get_db_url():
     if settings.TESTING:
         return settings.TEST_DATABASE_URL
     else:
-        url = make_url(settings.bow_config.database.url)
+        url = make_url(settings.app_config.database.url)
         if url.drivername.startswith('postgres'):
             return url.set(drivername="postgresql")
         elif url.drivername.startswith('sqlite'):

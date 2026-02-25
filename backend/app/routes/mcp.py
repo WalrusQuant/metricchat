@@ -32,7 +32,7 @@ MCP_PROTOCOL_VERSION = "2025-06-18"
 
 def _resource_metadata_url(request: Request) -> str:
     """Build the well-known URL for the WWW-Authenticate header."""
-    configured = settings.bow_config.base_url
+    configured = settings.app_config.base_url
     if configured and configured != "http://0.0.0.0:3000":
         base = configured.rstrip("/")
     else:
@@ -149,7 +149,7 @@ async def mcp_get_endpoint(
         "result": {
             "protocolVersion": MCP_PROTOCOL_VERSION,
             "serverInfo": {
-                "name": "bagofwords",
+                "name": "metricchat",
                 "version": "1.0.0",
             },
             "capabilities": {
@@ -193,7 +193,7 @@ async def mcp_endpoint(
         return _mcp_response(jsonrpc_response(request.id, {
             "protocolVersion": MCP_PROTOCOL_VERSION,
             "serverInfo": {
-                "name": "bagofwords",
+                "name": "metricchat",
                 "version": "1.0.0",
             },
             "capabilities": {

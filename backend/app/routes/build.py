@@ -390,8 +390,8 @@ async def publish_build(
 
     Example:
     ```
-    curl -X POST "https://api.bagofwords.io/builds/{build_id}/publish" \\
-         -H "Authorization: Bearer $BOW_API_KEY" \\
+    curl -X POST "https://api.metricchat.io/builds/{build_id}/publish" \\
+         -H "Authorization: Bearer $MC_API_KEY" \\
          -H "Content-Type: application/json" \\
          -d '{"instruction_ids": ["id1", "id2"]}'
     ```

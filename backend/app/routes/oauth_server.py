@@ -32,7 +32,7 @@ well_known_router = APIRouter(tags=["oauth-metadata"])
 
 def _base_url(request: Request) -> str:
     """Derive the public base URL from config or request."""
-    configured = settings.bow_config.base_url
+    configured = settings.app_config.base_url
     if configured and configured != "http://0.0.0.0:3000":
         return configured.rstrip("/")
     # Fallback to request origin

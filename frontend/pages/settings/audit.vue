@@ -12,9 +12,7 @@
           Activity logging requires an enterprise license. Track all user actions, changes, and access events for compliance and security monitoring.
         </p>
         <a
-          href="https://docs.bagofwords.com/enterprise"
-          target="_blank"
-          rel="noopener noreferrer"
+          href="#"
           class="text-xs text-blue-600 hover:text-blue-700"
         >
           Learn more →

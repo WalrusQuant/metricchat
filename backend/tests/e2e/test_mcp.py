@@ -212,7 +212,7 @@ def test_mcp_get_server_info(
     assert "result" in data
     result = data["result"]
     assert result["protocolVersion"] == "2025-06-18"
-    assert result["serverInfo"]["name"] == "bagofwords"
+    assert result["serverInfo"]["name"] == "metricchat"
     assert result["serverInfo"]["version"] == "1.0.0"
     assert "capabilities" in result
     assert "tools" in result["capabilities"]
@@ -251,7 +251,7 @@ def test_mcp_initialize(
     assert "result" in data
     result = data["result"]
     assert result["protocolVersion"] == "2025-06-18"
-    assert result["serverInfo"]["name"] == "bagofwords"
+    assert result["serverInfo"]["name"] == "metricchat"
     assert "capabilities" in result
 
 

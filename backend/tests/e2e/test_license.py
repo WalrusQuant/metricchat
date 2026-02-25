@@ -56,7 +56,7 @@ def _create_test_license(
         exp = now + timedelta(days=expires_in_days)
 
     payload = {
-        "iss": "bagofwords.com",
+        "iss": "metricchat.io",
         "sub": f"lic_test_{org_name.lower().replace(' ', '_')}",
         "iat": int(now.timestamp()),
         "exp": int(exp.timestamp()),
@@ -66,7 +66,7 @@ def _create_test_license(
     }
 
     token = jwt.encode(payload, private_key, algorithm="RS256")
-    return f"bow_lic_{token}"
+    return f"mc_lic_{token}"
 
 
 @pytest.fixture
@@ -75,15 +75,15 @@ def license_env_cleanup():
     from app.ee.license import clear_license_cache
 
     # Store original value
-    original = os.environ.get("BOW_LICENSE_KEY")
+    original = os.environ.get("MC_LICENSE_KEY")
 
     yield
 
     # Restore original value
     if original:
-        os.environ["BOW_LICENSE_KEY"] = original
-    elif "BOW_LICENSE_KEY" in os.environ:
-        del os.environ["BOW_LICENSE_KEY"]
+        os.environ["MC_LICENSE_KEY"] = original
+    elif "MC_LICENSE_KEY" in os.environ:
+        del os.environ["MC_LICENSE_KEY"]
 
     # Clear cache
     clear_license_cache()
@@ -115,14 +115,14 @@ class TestLicenseValidation:
         from app.ee.license import get_license_info, clear_license_cache
 
         # Ensure no license key
-        if "BOW_LICENSE_KEY" in os.environ:
-            del os.environ["BOW_LICENSE_KEY"]
+        if "MC_LICENSE_KEY" in os.environ:
+            del os.environ["MC_LICENSE_KEY"]
         clear_license_cache()
 
-        # Also clear bow_config license
+        # Also clear app_config license
         from app.settings.config import settings
-        if hasattr(settings.bow_config, 'license') and settings.bow_config.license:
-            settings.bow_config.license.key = None
+        if hasattr(settings.app_config, 'license') and settings.app_config.license:
+            settings.app_config.license.key = None
 
         clear_license_cache()
 
@@ -144,12 +144,12 @@ class TestLicenseValidation:
             features=["audit_logs", "sso"],
         )
 
-        # Set in bow_config
-        if not hasattr(settings.bow_config, 'license') or not settings.bow_config.license:
-            from app.settings.bow_config import LicenseConfig
-            settings.bow_config.license = LicenseConfig(key=test_license)
+        # Set in app_config
+        if not hasattr(settings.app_config, 'license') or not settings.app_config.license:
+            from app.settings.app_config import LicenseConfig
+            settings.app_config.license = LicenseConfig(key=test_license)
         else:
-            settings.bow_config.license.key = test_license
+            settings.app_config.license.key = test_license
 
         clear_license_cache()
         info = get_license_info(force_refresh=True)
@@ -171,11 +171,11 @@ class TestLicenseValidation:
             expired=True,
         )
 
-        if not hasattr(settings.bow_config, 'license') or not settings.bow_config.license:
-            from app.settings.bow_config import LicenseConfig
-            settings.bow_config.license = LicenseConfig(key=test_license)
+        if not hasattr(settings.app_config, 'license') or not settings.app_config.license:
+            from app.settings.app_config import LicenseConfig
+            settings.app_config.license = LicenseConfig(key=test_license)
         else:
-            settings.bow_config.license.key = test_license
+            settings.app_config.license.key = test_license
 
         clear_license_cache()
         info = get_license_info(force_refresh=True)
@@ -196,11 +196,11 @@ class TestLicenseValidation:
             private_key=different_private,
         )
 
-        if not hasattr(settings.bow_config, 'license') or not settings.bow_config.license:
-            from app.settings.bow_config import LicenseConfig
-            settings.bow_config.license = LicenseConfig(key=test_license)
+        if not hasattr(settings.app_config, 'license') or not settings.app_config.license:
+            from app.settings.app_config import LicenseConfig
+            settings.app_config.license = LicenseConfig(key=test_license)
         else:
-            settings.bow_config.license.key = test_license
+            settings.app_config.license.key = test_license
 
         clear_license_cache()
         info = get_license_info(force_refresh=True)
@@ -215,11 +215,11 @@ class TestLicenseValidation:
         from app.settings.config import settings
 
         # Set malformed license
-        if not hasattr(settings.bow_config, 'license') or not settings.bow_config.license:
-            from app.settings.bow_config import LicenseConfig
-            settings.bow_config.license = LicenseConfig(key="bow_lic_not_a_valid_jwt")
+        if not hasattr(settings.app_config, 'license') or not settings.app_config.license:
+            from app.settings.app_config import LicenseConfig
+            settings.app_config.license = LicenseConfig(key="mc_lic_not_a_valid_jwt")
         else:
-            settings.bow_config.license.key = "bow_lic_not_a_valid_jwt"
+            settings.app_config.license.key = "mc_lic_not_a_valid_jwt"
 
         clear_license_cache()
         info = get_license_info(force_refresh=True)
@@ -244,11 +244,11 @@ class TestHasFeature:
             features=["audit_logs"],  # Only audit_logs, not sso
         )
 
-        if not hasattr(settings.bow_config, 'license') or not settings.bow_config.license:
-            from app.settings.bow_config import LicenseConfig
-            settings.bow_config.license = LicenseConfig(key=test_license)
+        if not hasattr(settings.app_config, 'license') or not settings.app_config.license:
+            from app.settings.app_config import LicenseConfig
+            settings.app_config.license = LicenseConfig(key=test_license)
         else:
-            settings.bow_config.license.key = test_license
+            settings.app_config.license.key = test_license
 
         clear_license_cache()
 
@@ -267,11 +267,11 @@ class TestHasFeature:
             features=[],  # Empty = use tier defaults
         )
 
-        if not hasattr(settings.bow_config, 'license') or not settings.bow_config.license:
-            from app.settings.bow_config import LicenseConfig
-            settings.bow_config.license = LicenseConfig(key=test_license)
+        if not hasattr(settings.app_config, 'license') or not settings.app_config.license:
+            from app.settings.app_config import LicenseConfig
+            settings.app_config.license = LicenseConfig(key=test_license)
         else:
-            settings.bow_config.license.key = test_license
+            settings.app_config.license.key = test_license
 
         clear_license_cache()
 
@@ -285,8 +285,8 @@ class TestHasFeature:
         from app.settings.config import settings
 
         # No license
-        if hasattr(settings.bow_config, 'license') and settings.bow_config.license:
-            settings.bow_config.license.key = None
+        if hasattr(settings.app_config, 'license') and settings.app_config.license:
+            settings.app_config.license.key = None
 
         clear_license_cache()
 
@@ -304,8 +304,8 @@ class TestLicenseAPIEndpoint:
         from app.settings.config import settings
 
         # Ensure no license
-        if hasattr(settings.bow_config, 'license') and settings.bow_config.license:
-            settings.bow_config.license.key = None
+        if hasattr(settings.app_config, 'license') and settings.app_config.license:
+            settings.app_config.license.key = None
 
         clear_license_cache()
 
@@ -326,11 +326,11 @@ class TestLicenseAPIEndpoint:
             tier="enterprise",
         )
 
-        if not hasattr(settings.bow_config, 'license') or not settings.bow_config.license:
-            from app.settings.bow_config import LicenseConfig
-            settings.bow_config.license = LicenseConfig(key=test_license)
+        if not hasattr(settings.app_config, 'license') or not settings.app_config.license:
+            from app.settings.app_config import LicenseConfig
+            settings.app_config.license = LicenseConfig(key=test_license)
         else:
-            settings.bow_config.license.key = test_license
+            settings.app_config.license.key = test_license
 
         clear_license_cache()
 
@@ -365,8 +365,8 @@ class TestAuditLogsGating:
         org_id = whoami(token)['organizations'][0]['id']
 
         # Ensure no license
-        if hasattr(settings.bow_config, 'license') and settings.bow_config.license:
-            settings.bow_config.license.key = None
+        if hasattr(settings.app_config, 'license') and settings.app_config.license:
+            settings.app_config.license.key = None
 
         clear_license_cache()
 
@@ -407,11 +407,11 @@ class TestAuditLogsGating:
             features=["audit_logs"],
         )
 
-        if not hasattr(settings.bow_config, 'license') or not settings.bow_config.license:
-            from app.settings.bow_config import LicenseConfig
-            settings.bow_config.license = LicenseConfig(key=test_license)
+        if not hasattr(settings.app_config, 'license') or not settings.app_config.license:
+            from app.settings.app_config import LicenseConfig
+            settings.app_config.license = LicenseConfig(key=test_license)
         else:
-            settings.bow_config.license.key = test_license
+            settings.app_config.license.key = test_license
 
         clear_license_cache()
 
@@ -441,10 +441,10 @@ class TestDataSourceLicensing:
         from app.settings.config import settings
 
         # Ensure no license
-        if "BOW_LICENSE_KEY" in os.environ:
-            del os.environ["BOW_LICENSE_KEY"]
-        if hasattr(settings.bow_config, 'license') and settings.bow_config.license:
-            settings.bow_config.license.key = None
+        if "MC_LICENSE_KEY" in os.environ:
+            del os.environ["MC_LICENSE_KEY"]
+        if hasattr(settings.app_config, 'license') and settings.app_config.license:
+            settings.app_config.license.key = None
         clear_license_cache()
 
         assert is_datasource_allowed("postgresql") is True
@@ -457,10 +457,10 @@ class TestDataSourceLicensing:
         from app.settings.config import settings
 
         # Ensure no license
-        if "BOW_LICENSE_KEY" in os.environ:
-            del os.environ["BOW_LICENSE_KEY"]
-        if hasattr(settings.bow_config, 'license') and settings.bow_config.license:
-            settings.bow_config.license.key = None
+        if "MC_LICENSE_KEY" in os.environ:
+            del os.environ["MC_LICENSE_KEY"]
+        if hasattr(settings.app_config, 'license') and settings.app_config.license:
+            settings.app_config.license.key = None
         clear_license_cache()
 
         assert is_datasource_allowed("powerbi") is False
@@ -470,17 +470,17 @@ class TestDataSourceLicensing:
         """Enterprise data sources allowed with valid license."""
         from app.ee.license import is_datasource_allowed, clear_license_cache
         from app.settings.config import settings
-        from app.settings.bow_config import LicenseConfig
+        from app.settings.app_config import LicenseConfig
 
         test_license = _create_test_license(
             org_name="Enterprise Corp",
             tier="enterprise",
         )
 
-        if not hasattr(settings.bow_config, 'license') or not settings.bow_config.license:
-            settings.bow_config.license = LicenseConfig(key=test_license)
+        if not hasattr(settings.app_config, 'license') or not settings.app_config.license:
+            settings.app_config.license = LicenseConfig(key=test_license)
         else:
-            settings.bow_config.license.key = test_license
+            settings.app_config.license.key = test_license
 
         clear_license_cache()
 
@@ -491,7 +491,7 @@ class TestDataSourceLicensing:
         """License with explicit ds_ features restricts to those only."""
         from app.ee.license import is_datasource_allowed, clear_license_cache
         from app.settings.config import settings
-        from app.settings.bow_config import LicenseConfig
+        from app.settings.app_config import LicenseConfig
 
         # License with only ds_powerbi feature
         test_license = _create_test_license(
@@ -500,10 +500,10 @@ class TestDataSourceLicensing:
             features=["ds_powerbi"],  # Only PowerBI allowed
         )
 
-        if not hasattr(settings.bow_config, 'license') or not settings.bow_config.license:
-            settings.bow_config.license = LicenseConfig(key=test_license)
+        if not hasattr(settings.app_config, 'license') or not settings.app_config.license:
+            settings.app_config.license = LicenseConfig(key=test_license)
         else:
-            settings.bow_config.license.key = test_license
+            settings.app_config.license.key = test_license
 
         clear_license_cache()
 
@@ -533,8 +533,8 @@ class TestUserAuthPolicyLicensing:
         org_id = whoami(token)['organizations'][0]['id']
 
         # Ensure no license
-        if hasattr(settings.bow_config, 'license') and settings.bow_config.license:
-            settings.bow_config.license.key = None
+        if hasattr(settings.app_config, 'license') and settings.app_config.license:
+            settings.app_config.license.key = None
         clear_license_cache()
 
         # Try to create connection with user_required auth policy
@@ -568,7 +568,7 @@ class TestUserAuthPolicyLicensing:
         """Creating connection with auth_policy=user_required allowed with license."""
         from app.ee.license import clear_license_cache
         from app.settings.config import settings
-        from app.settings.bow_config import LicenseConfig
+        from app.settings.app_config import LicenseConfig
 
         # Create user and login
         user = create_user()
@@ -581,10 +581,10 @@ class TestUserAuthPolicyLicensing:
             tier="enterprise",
         )
 
-        if not hasattr(settings.bow_config, 'license') or not settings.bow_config.license:
-            settings.bow_config.license = LicenseConfig(key=test_license)
+        if not hasattr(settings.app_config, 'license') or not settings.app_config.license:
+            settings.app_config.license = LicenseConfig(key=test_license)
         else:
-            settings.bow_config.license.key = test_license
+            settings.app_config.license.key = test_license
         clear_license_cache()
 
         # Try to create connection with user_required auth policy
@@ -627,8 +627,8 @@ class TestUserAuthPolicyLicensing:
         org_id = whoami(token)['organizations'][0]['id']
 
         # Ensure no license
-        if hasattr(settings.bow_config, 'license') and settings.bow_config.license:
-            settings.bow_config.license.key = None
+        if hasattr(settings.app_config, 'license') and settings.app_config.license:
+            settings.app_config.license.key = None
         clear_license_cache()
 
         # Try to create connection with system_only auth policy (default)

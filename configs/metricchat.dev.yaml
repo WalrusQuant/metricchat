@@ -6,7 +6,7 @@ base_url: http://localhost:3000
 
 database:
   # url: sqlite:///db/app.db
-  url: ${BOW_DATABASE_URL}
+  url: ${MC_DATABASE_URL}
   
 features:
   allow_uninvited_signups: false
@@ -18,8 +18,8 @@ auth:
 
 google_oauth:
   enabled: false
-  client_id: '${BOW_GOOGLE_CLIENT_ID}'
-  client_secret: '${BOW_GOOGLE_CLIENT_SECRET}'
+  client_id: '${MC_GOOGLE_CLIENT_ID}'
+  client_secret: '${MC_GOOGLE_CLIENT_SECRET}'
 
 oidc_providers:
 - name: okta
@@ -36,19 +36,19 @@ oidc_providers:
  # redirect_path: /api/auth/okta/callback
  # extra_authorize_params: { prompt: login }
  # extra_token_params: {}
-encryption_key: ${BOW_ENCRYPTION_KEY}
+encryption_key: ${MC_ENCRYPTION_KEY}
 
 smtp_settings:
   host: "smtp.resend.com"
   port: 587
   username: "resend"
-  password: ${BOW_SMTP_PASSWORD}
+  password: ${MC_SMTP_PASSWORD}
 
 intercom:
-  enabled: true
+  enabled: false
 
 telemetry:
   enabled: false
 
 license:
-  key: ${BOW_LICENSE_KEY}
+  key: ${MC_LICENSE_KEY}

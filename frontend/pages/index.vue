@@ -12,7 +12,7 @@
     <!-- Top bar -->
     <div class="flex justify-between items-center p-3">
         <div class="logo md:hidden">
-            <img src="/assets/logo.png" alt="Bag of words" class="h-7" />
+            <img src="/assets/logo.png" alt="MetricChat" class="h-7" />
         </div>
         <div class="flex items-center gap-4 ml-auto">
             <div class="hamburger md:hidden">
@@ -37,7 +37,7 @@
           <span class="flex items-center">Setup complete — you can now start asking questions in natural language.</span>
         </div>
       </div>
-      <img :src="orgIconUrl || '/assets/logo-128.png'" alt="Bag of words" class="max-h-12 max-w-[180px] object-contain mx-auto" />
+      <img :src="orgIconUrl || '/assets/logo-128.png'" alt="MetricChat" class="max-h-12 max-w-[180px] object-contain mx-auto" />
       <h1 class="text-5xl mt-5 font-bold">
         {{ orgAIAnalystName || 'AI Analyst' }}
       </h1>

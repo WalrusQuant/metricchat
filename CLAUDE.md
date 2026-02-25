@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-MetricChat — an AI-powered analytics agent for your data stack, built on Bag of Words (AGPL-3.0). Users chat with their data, build dashboards, manage AI rules/instructions, with memory and observability. Supports multiple LLMs (OpenAI, Anthropic, Gemini, Ollama) and data warehouses (Snowflake, BigQuery, Postgres, Redshift).
+MetricChat — an AI-powered analytics agent for your data stack (AGPL-3.0). Users chat with their data, build dashboards, manage AI rules/instructions, with memory and observability. Supports multiple LLMs (OpenAI, Anthropic, Gemini, Ollama) and data warehouses (Snowflake, BigQuery, Postgres, Redshift).
 
 ## Tech Stack
 
@@ -76,7 +76,7 @@ Key directories:
 - `ai/llm/clients/` — Provider-specific LLM clients behind unified `LLM` wrapper
 - `ai/context/` — ContextHub builds static + warm context sections per iteration
 - `core/` — Auth (fastapi-users/JWT), permissions (`@requires_permission`), parsers (dbt, LookML, Tableau)
-- `settings/` — Config management, `bow-config.yaml` schema, environment-specific settings
+- `settings/` — Config management, `metricchat-config.yaml` schema, environment-specific settings
 - `ee/` — Enterprise features (audit, licensing)
 
 ### Frontend (`frontend/`)
@@ -108,8 +108,8 @@ POST /api/reports/{id}/completions
 
 ## Key Environment Variables
 
-- `BOW_DATABASE_URL` — PostgreSQL or SQLite connection string
-- `BOW_ENCRYPTION_KEY` — Fernet key (generate: `python3 -c "from cryptography.fernet import Fernet; print(Fernet.generate_key().decode())"`)
+- `MC_DATABASE_URL` — PostgreSQL or SQLite connection string
+- `MC_ENCRYPTION_KEY` — Fernet key (generate: `python3 -c "from cryptography.fernet import Fernet; print(Fernet.generate_key().decode())"`)
 - `ENVIRONMENT` — development | staging | production
 - `TESTING=true` — set during tests
 - `OPENAI_API_KEY_TEST` — required for AI tests
@@ -120,5 +120,5 @@ POST /api/reports/{id}/completions
 - Tests use NullPool and `PRAGMA busy_timeout=30000` for SQLite concurrency
 - SQLite test DBs are isolated per process: `db/test_{pid}_{uuid}.db`
 - Frontend proxy: `/api/*` → `http://127.0.0.1:8000`, `/ws/api` → `ws://127.0.0.1:8000`
-- `BOW_ENCRYPTION_KEY` must be persistent in production (users logged out on container restart otherwise)
+- `MC_ENCRYPTION_KEY` must be persistent in production (users logged out on container restart otherwise)
 - Domain exceptions are raised in services and mapped to HTTP errors at the route layer

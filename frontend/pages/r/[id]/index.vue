@@ -66,12 +66,12 @@
             </div>
         </div>
 
-        <!-- Made with Bag of words badge -->
-        <a v-if="report.general?.bow_credit !== false"
-           href="https://bagofwords.com"
+        <!-- Made with MetricChat badge -->
+        <a v-if="report.general?.show_credit !== false"
+           href="https://metricchat.io"
            target="_blank"
            class="fixed z-[1000] bottom-5 right-5 block bg-black text-gray-200 font-light px-2 py-1 rounded-md text-xs hover:bg-gray-800 transition-colors">
-            Made with <span class="font-bold text-white">Bag of words</span>
+            Made with <span class="font-bold text-white">MetricChat</span>
         </a>
 
         <!-- Main Content Area -->

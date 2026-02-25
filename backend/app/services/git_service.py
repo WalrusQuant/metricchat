@@ -893,8 +893,8 @@ class GitService:
         if build.organization_id != organization.id:
             raise HTTPException(status_code=403, detail="Build does not belong to this organization")
 
-        # Generate branch name: BOW-<build_number>
-        branch_name = f"BOW-{build.build_number}"
+        # Generate branch name: MC-<build_number>
+        branch_name = f"MC-{build.build_number}"
         
         try:
             temp_dir = tempfile.mkdtemp()
@@ -938,7 +938,7 @@ class GitService:
                         source_branch=branch_name,
                         target_branch=repository.branch or "main",
                         title=pr_title,
-                        description=f"Automated PR from Bag of Words build #{build.build_number}",
+                        description=f"Automated PR from MetricChat build #{build.build_number}",
                     )
                     build.git_pr_url = pr_url
                 
@@ -1007,7 +1007,7 @@ class GitService:
         """Push a branch to the remote.
         
         Uses --force to allow updating existing branches. This is safe because:
-        - Branch names are unique per build (BOW-{build_number})
+        - Branch names are unique per build (MC-{build_number})
         - Re-pushing a build should update the branch with latest changes
         - These are feature branches, not protected branches
         """

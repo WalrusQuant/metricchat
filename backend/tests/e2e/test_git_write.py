@@ -318,7 +318,7 @@ def test_push_build_creates_branch(
     push_build_to_git,
     delete_git_repository,
 ):
-    """Test that push creates branch named BOW-{build_number}."""
+    """Test that push creates branch named MC-{build_number}."""
     creds = skip_without_git_write
     
     if not TEST_DB_PATH.exists():

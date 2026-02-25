@@ -47,8 +47,8 @@
 
             <!-- Credit toggle -->
             <div class="md:w-2/3 flex items-center justify-between">
-                <div class="text-sm text-gray-800">Show "Made with Bag of words" credit</div>
-                <UToggle v-model="form.bow_credit" />
+                <div class="text-sm text-gray-800">Show "Powered by MetricChat" credit</div>
+                <UToggle v-model="form.show_credit" />
             </div>
 
             <div class="md:w-2/3 pt-2">
@@ -64,7 +64,7 @@ import { useToast } from '#imports'
 
 interface GeneralConfig {
     ai_analyst_name: string
-    bow_credit: boolean
+    show_credit: boolean
     icon_url?: string | null
     icon_key?: string | null
 }
@@ -77,8 +77,8 @@ definePageMeta({ auth: true, permissions: ['manage_organization_settings'], layo
 
 const loading = ref(true)
 const error = ref('')
-const general = ref<GeneralConfig>({ ai_analyst_name: 'AI Analyst', bow_credit: true })
-const form = ref<{ organization_name?: string } & GeneralConfig>({ ai_analyst_name: 'AI Analyst', bow_credit: true })
+const general = ref<GeneralConfig>({ ai_analyst_name: 'AI Analyst', show_credit: true })
+const form = ref<{ organization_name?: string } & GeneralConfig>({ ai_analyst_name: 'AI Analyst', show_credit: true })
 const pendingIconFile = ref<File | null>(null)
 const removeIcon = ref(false)
 const saving = ref(false)
@@ -92,7 +92,7 @@ const fetchSettings = async () => {
         const response = await useMyFetch('/api/organization/settings')
         if (response.status.value !== 'success') throw new Error(response.error?.value?.data?.message || 'Failed to fetch settings')
         const cfg = (response.data.value as SettingsResponse)?.config
-        general.value = cfg?.general || { ai_analyst_name: 'AI Analyst', bow_credit: true }
+        general.value = cfg?.general || { ai_analyst_name: 'AI Analyst', show_credit: true }
         // Fetch current organization name from session if available
         const { organization } = useOrganization()
         form.value = { organization_name: organization.value?.name, ...general.value }
@@ -129,7 +129,7 @@ const saveAll = async () => {
         }
 
         // 3) Save textual and toggle settings
-        const payload = { config: { general: { ai_analyst_name: form.value.ai_analyst_name, bow_credit: form.value.bow_credit, icon_key: form.value.icon_key, icon_url: form.value.icon_url } } }
+        const payload = { config: { general: { ai_analyst_name: form.value.ai_analyst_name, show_credit: form.value.show_credit, icon_key: form.value.icon_key, icon_url: form.value.icon_url } } }
         const response = await useMyFetch('/api/organization/settings', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) })
         if (response.status.value !== 'success') throw new Error(response.error?.value?.data?.message || 'Failed to update settings')
 

@@ -3,17 +3,17 @@ import yaml
 from pydantic_settings import BaseSettings
 from dotenv import load_dotenv
 from fastapi_mail import FastMail, ConnectionConfig
-from .bow_config import BowConfig
+from .app_config import AppConfig
 
 class Settings(BaseSettings):
-    PROJECT_NAME: str = "Bag of words"
+    PROJECT_NAME: str = "MetricChat"
     PROJECT_VERSION: str = open("../VERSION").read().strip()
     API_PREFIX: str = "/api"
     DEBUG: bool = True
     TESTING: bool = False
     TEST_DATABASE_URL: str = "sqlite:///db/test_{}.db".format(os.getpid())
     ENVIRONMENT: str = os.environ.get("ENVIRONMENT", "development")
-    bow_config: BowConfig | None = None
+    app_config: AppConfig | None = None
     email_client: FastMail | None = None
 
     @property
@@ -36,12 +36,12 @@ class Settings(BaseSettings):
             print(f"Loading .env from: {dotenv_path}")
             load_dotenv(dotenv_path)
 
-        # Load and validate bow-config using Pydantic
-        yaml_path = os.environ.get('BOW_CONFIG_PATH')
+        # Load and validate config using Pydantic
+        yaml_path = os.environ.get('MC_CONFIG_PATH') or os.environ.get('BOW_CONFIG_PATH')
         if not yaml_path:
             yaml_path = os.path.join(
                 os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__)))),
-                "configs/bow-config.dev.yaml" if environment == "development" else "bow-config.yaml"
+                "configs/metricchat.dev.yaml" if environment == "development" else "metricchat.yaml"
             )
         
         print(f"Loading config from: {yaml_path}")
@@ -59,10 +59,10 @@ class Settings(BaseSettings):
                 if env_value:
                     return env_value
                 # If env var is not set and this is encryption key, generate one
-                if env_var_name == "BOW_ENCRYPTION_KEY":
-                    from .bow_config import generate_fernet_key
+                if env_var_name in ("MC_ENCRYPTION_KEY", "BOW_ENCRYPTION_KEY"):
+                    from .app_config import generate_fernet_key
                     new_key = generate_fernet_key()
-                    os.environ["BOW_ENCRYPTION_KEY"] = new_key  # Save for future use
+                    os.environ[env_var_name] = new_key  # Save for future use
                     return new_key
                 return config  # Keep placeholder for other env vars
             return config
@@ -72,34 +72,34 @@ class Settings(BaseSettings):
             # Resolve environment variables before validation
             yaml_config = resolve_env_vars(yaml_config)
             # Validate config using Pydantic model
-            bow_config = BowConfig(**yaml_config)
-            
+            app_config = AppConfig(**yaml_config)
+
         # Create the environment-specific settings instance
         if environment == "development":
             from .development import Development
-            settings = Development(bow_config=bow_config)
+            settings = Development(app_config=app_config)
         elif environment == "staging":
             from .staging import Staging
-            settings = Staging(bow_config=bow_config)
+            settings = Staging(app_config=app_config)
         elif environment == "production":
             from .production import Production
-            settings = Production(bow_config=bow_config)
+            settings = Production(app_config=app_config)
         else:
             raise ValueError(f"Unknown environment: {environment}")
             
         # Setup email client if SMTP settings exist
-        if bow_config.smtp_settings:
+        if app_config.smtp_settings:
             email_config = ConnectionConfig(
-                MAIL_USERNAME=bow_config.smtp_settings.username,
-                MAIL_PASSWORD=bow_config.smtp_settings.password,
-                MAIL_FROM_NAME=bow_config.smtp_settings.from_name,
-                MAIL_FROM=bow_config.smtp_settings.from_email,
-                MAIL_PORT=bow_config.smtp_settings.port,
-                MAIL_SERVER=bow_config.smtp_settings.host,
-                MAIL_STARTTLS=bow_config.smtp_settings.use_tls,
-                MAIL_SSL_TLS=bow_config.smtp_settings.use_ssl,
-                USE_CREDENTIALS=bow_config.smtp_settings.use_credentials,
-                VALIDATE_CERTS=bow_config.smtp_settings.validate_certs,
+                MAIL_USERNAME=app_config.smtp_settings.username,
+                MAIL_PASSWORD=app_config.smtp_settings.password,
+                MAIL_FROM_NAME=app_config.smtp_settings.from_name,
+                MAIL_FROM=app_config.smtp_settings.from_email,
+                MAIL_PORT=app_config.smtp_settings.port,
+                MAIL_SERVER=app_config.smtp_settings.host,
+                MAIL_STARTTLS=app_config.smtp_settings.use_tls,
+                MAIL_SSL_TLS=app_config.smtp_settings.use_ssl,
+                USE_CREDENTIALS=app_config.smtp_settings.use_credentials,
+                VALIDATE_CERTS=app_config.smtp_settings.validate_certs,
                 TEMPLATE_FOLDER=None
             )
             settings.email_client = FastMail(email_config)

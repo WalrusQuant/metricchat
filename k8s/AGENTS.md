@@ -7,7 +7,7 @@ Concise overview of `@k8s/` with emphasis on the Helm chart layout, how values m
 - **k8s/**
   - `README.md`: Install/upgrade instructions with `helm` examples, secrets usage, SA annotations, node selectors.
   - `AGENTS.md`: This guide.
-  - `chart/`: Helm chart for Bag of Words
+  - `chart/`: Helm chart for MetricChat
     - `Chart.yaml`, `Chart.lock`: Chart metadata and lockfile.
     - `values.yaml`: Default configuration values.
     - `templates/`: Rendered into K8s manifests
@@ -38,10 +38,10 @@ Concise overview of `@k8s/` with emphasis on the Helm chart layout, how values m
 - **App configuration & secrets**
   - `config.secretRef`: Name of an existing `Secret` whose keys override defaults from the `ConfigMap`.
   - Environment keys commonly used by the app (set via Secret):
-    - `BOW_DATABASE_URL`, `BOW_BASE_URL`, `BOW_ENCRYPTION_KEY`
-    - Google OAuth: `BOW_GOOGLE_AUTH_ENABLED`, `BOW_GOOGLE_CLIENT_ID`, `BOW_GOOGLE_CLIENT_SECRET`
-    - Signup/options: `BOW_ALLOW_UNINVITED_SIGNUPS`, `BOW_ALLOW_MULTIPLE_ORGANIZATIONS`, `BOW_VERIFY_EMAILS`
-    - SMTP: `BOW_SMTP_HOST`, `BOW_SMTP_PORT`, `BOW_SMTP_USERNAME`, `BOW_SMTP_PASSWORD`, `BOW_SMTP_FROM_NAME`, `BOW_SMTP_FROM_EMAIL`, `BOW_SMTP_USE_TLS`, `BOW_SMTP_USE_SSL`, `BOW_SMTP_USE_CREDENTIALS`, `BOW_SMTP_VALIDATE_CERTS`
+    - `MC_DATABASE_URL`, `MC_BASE_URL`, `MC_ENCRYPTION_KEY`
+    - Google OAuth: `MC_GOOGLE_AUTH_ENABLED`, `MC_GOOGLE_CLIENT_ID`, `MC_GOOGLE_CLIENT_SECRET`
+    - Signup/options: `MC_ALLOW_UNINVITED_SIGNUPS`, `MC_ALLOW_MULTIPLE_ORGANIZATIONS`, `MC_VERIFY_EMAILS`
+    - SMTP: `MC_SMTP_HOST`, `MC_SMTP_PORT`, `MC_SMTP_USERNAME`, `MC_SMTP_PASSWORD`, `MC_SMTP_FROM_NAME`, `MC_SMTP_FROM_EMAIL`, `MC_SMTP_USE_TLS`, `MC_SMTP_USE_SSL`, `MC_SMTP_USE_CREDENTIALS`, `MC_SMTP_VALIDATE_CERTS`
 - **ServiceAccount**
   - `serviceAccount.annotations`: Arbitrary annotations map.
 - **Scheduling**
@@ -49,14 +49,14 @@ Concise overview of `@k8s/` with emphasis on the Helm chart layout, how values m
 
 ### Install and upgrade (helm)
 - Add repo and update:
-  - `helm repo add bow https://helm.bagofwords.com`
+  - `helm repo add metricchat https://helm.metricchat.io`
   - `helm repo update`
 - Install with managed PostgreSQL:
-  - `helm upgrade -i -n <namespace> <release> bow/bagofwords --set postgresql.auth.username=<PG-USER> --set postgresql.auth.password=<PG-PASS> --set postgresql.auth.database=<PG-DB>`
+  - `helm upgrade -i -n <namespace> <release> metricchat/metricchat --set postgresql.auth.username=<PG-USER> --set postgresql.auth.password=<PG-PASS> --set postgresql.auth.database=<PG-DB>`
 - Install without TLS and custom hostname:
-  - `helm upgrade -i -n <namespace> <release> bow/bagofwords --set host=<HOST> --set postgresql.auth.username=<PG-USER> --set postgresql.auth.password=<PG-PASS> --set postgresql.auth.database=<PG-DB> --set ingress.tls=false`
+  - `helm upgrade -i -n <namespace> <release> metricchat/metricchat --set host=<HOST> --set postgresql.auth.username=<PG-USER> --set postgresql.auth.password=<PG-PASS> --set postgresql.auth.database=<PG-DB> --set ingress.tls=false`
 - Install with TLS and Google OAuth enabled (cert-manager assumed):
-  - `helm upgrade -i -n <namespace> <release> bow/bagofwords --set host=<HOST> --set postgresql.auth.username=<PG-USER> --set postgresql.auth.password=<PG-PASS> --set postgresql.auth.database=<PG-DB> --set config.googleOauthEnabled=true --set config.googleClientId=<CLIENT_ID> --set config.googleClientSecret=<CLIENT_SECRET>`
+  - `helm upgrade -i -n <namespace> <release> metricchat/metricchat --set host=<HOST> --set postgresql.auth.username=<PG-USER> --set postgresql.auth.password=<PG-PASS> --set postgresql.auth.database=<PG-DB> --set config.googleOauthEnabled=true --set config.googleClientId=<CLIENT_ID> --set config.googleClientSecret=<CLIENT_SECRET>`
 
 ### Using an existing Secret
 - Create `Secret` with only the keys you want to override; these values take precedence over the chart `ConfigMap` defaults.

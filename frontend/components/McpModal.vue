@@ -6,7 +6,7 @@
                 <div class="flex items-center justify-between">
                     <div class="flex items-center gap-3">
                         <McpIcon class="w-6 h-6" />
-                        <h3 class="text-lg font-semibold text-gray-900">Bag of words MCP Server</h3>
+                        <h3 class="text-lg font-semibold text-gray-900">MetricChat MCP Server</h3>
                     </div>
                     <UButton
                         color="gray"
@@ -16,7 +16,7 @@
                     />
                 </div>
                 <p class="text-sm text-gray-500 mt-2">
-                    Connect Claude, Cursor, or any MCP client to query your data via the Bag of words MCP Server.
+                    Connect Claude, Cursor, or any MCP client to query your data via the MetricChat MCP Server.
                 </p>
             </template>
 
@@ -351,7 +351,7 @@ const mcpConfig = computed(() => {
     const token = currentToken.value || "<YOUR_API_KEY>"
     return JSON.stringify({
         "mcpServers": {
-            "bagofwords": {
+            "metricchat": {
                 "url": mcpServerUrl.value,
                 "headers": {
                     "Authorization": `Bearer ${token}`

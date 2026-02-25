@@ -2,7 +2,7 @@
     <div class="flex h-screen justify-center py-20 px-5 sm:px-0" v-if="pageLoaded">
     <div class="w-full text-center sm:w-[400px]">
       <div>
-        <img src="/assets/logo-128.png" alt="Bag of Words" class="h-10 w-10 mx-auto" />
+        <img src="/assets/logo-128.png" alt="MetricChat" class="h-10 w-10 mx-auto" />
       </div>
       <h1 class="font-medium text-3xl mt-4 mb-5">Login</h1>
       <div class="px-10 py-6  border border-gray-200 rounded-xl shadow-sm bg-white">
@@ -91,7 +91,7 @@
 
 
         <div class="mt-3 block text-sm" v-if="authMode !== 'sso_only'">
-      New to Bag of words?
+      New to MetricChat?
        <NuxtLink to="/users/sign-up" class="text-blue-400 hover:text-blue-600">
         Sign up
       </NuxtLink>
