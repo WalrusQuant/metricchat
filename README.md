@@ -74,7 +74,7 @@ Use MetricChat from Cursor, Claude Desktop, and other AI clients via the Model C
 Get running in 30 seconds:
 
 ```bash
-docker run -p 3000:3000 metricchat/metricchat
+docker run -p 3000:3000 walrusquant/metricchat
 ```
 
 Then open [http://localhost:3000](http://localhost:3000) and connect your first data source.
