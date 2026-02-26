@@ -7,14 +7,14 @@
                     type="text"
                     v-model="searchQuery"
                     placeholder="Search LLMs..."
-                    class="border border-gray-300 rounded-md px-3 py-1.5 text-sm focus:ring-blue-500 focus:border-blue-500 w-full"
+                    class="border border-gray-300 rounded-md px-3 py-1.5 text-sm focus:ring-primary-500 focus:border-primary-500 w-full"
                 >
             </div>
             <div class="space-x-2">
                 <button 
                     v-if="useCan('manage_llm_settings')"
                     @click="providerModalOpen = true" 
-                    class="bg-blue-500 text-white text-sm px-3 py-1.5 rounded-md"
+                    class="bg-primary-500 text-white text-sm px-3 py-1.5 rounded-md"
                 >
                     Integrate Models
                 </button>
@@ -40,7 +40,7 @@
                                 <div class="ml-4">
                                     <div class="text-sm font-medium text-gray-900">
                                         {{ model.name }}
-                                        <span v-if="model.is_default" class="text-xs bg-blue-500 text-white px-1.5 py-0.5 rounded-md">Default</span>
+                                        <span v-if="model.is_default" class="text-xs bg-primary-500 text-white px-1.5 py-0.5 rounded-md">Default</span>
                                         <span v-if="model.is_small_default" class="text-xs bg-green-500 text-white px-1.5 py-0.5 rounded-md ml-1">
                                             <UTooltip text="Used for LLM Judge, tests, and other small tasks">
                                             Small default
@@ -83,7 +83,7 @@
             <button 
                 v-if="useCan('manage_llm_settings')"
                 @click="providerModalOpen = true" 
-                class="bg-blue-500 text-white text-sm px-4 py-2 rounded-md hover:bg-blue-600 transition-colors"
+                class="bg-primary-500 text-white text-sm px-4 py-2 rounded-md hover:bg-primary-600 transition-colors"
             >
                 Integrate Models
             </button>

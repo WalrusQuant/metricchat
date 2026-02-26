@@ -54,7 +54,7 @@
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">{{ file.created_at }}</td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <button @click="downloadFile(file)" class="text-blue-500 hover:text-blue-700">
+                                <button @click="downloadFile(file)" class="text-primary-500 hover:text-primary-700">
                                     <Icon name="heroicons-arrow-down-tray" class="w-5 h-5 text-gray-500 mr-2" />
                                 </button>
                             </td>

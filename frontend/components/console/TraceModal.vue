@@ -22,7 +22,7 @@
                         <div class="text-[11px] uppercase tracking-wide text-gray-500 mr-1">AI Scoring</div>
                         <div
                             v-if="traceData.agent_execution.instructions_effectiveness !== null"
-                            class="inline-flex items-center px-2 py-1 rounded-full border text-xs bg-blue-50 text-blue-700 border-blue-200"
+                            class="inline-flex items-center px-2 py-1 rounded-full border text-xs bg-primary-50 text-primary-700 border-primary-200"
                         >
                             <span class="mr-1">Instructions</span>
                             <span class="font-semibold">{{ traceData.agent_execution.instructions_effectiveness }}/5</span>
@@ -64,7 +64,7 @@
                             <div v-for="(item, index) in leftItems" :key="item.id" class="mb-2">
                                 <div :class="[
                                 'px-3 py-2 rounded border cursor-pointer text-xs',
-                                selectedItem?.id === item.id ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-gray-300'
+                                selectedItem?.id === item.id ? 'border-primary-500 bg-primary-50' : 'border-gray-200 hover:border-gray-300'
                             ]" @click="selectLeftItem(item)">
                                     <div class="flex items-center justify-between">
                                         <div class="font-medium text-gray-900 truncate">{{ item.title }}</div>
@@ -489,7 +489,7 @@ const getCompletionIcon = (completion: TraceCompletionData) => {
 
 const getCompletionIconClass = (completion: TraceCompletionData) => {
     if (completion.has_issue) return 'w-4 h-4 text-red-600 mr-2'
-    return completion.role === 'user' ? 'w-4 h-4 text-blue-600 mr-2' : 'w-4 h-4 text-gray-600 mr-2'
+    return completion.role === 'user' ? 'w-4 h-4 text-primary-600 mr-2' : 'w-4 h-4 text-gray-600 mr-2'
 }
 
 const getCompletionLabel = (completion: TraceCompletionData) => {
@@ -550,7 +550,7 @@ const getLeftItemIcon = (item: any) => {
 }
 
 const getLeftItemIconClass = (item: any) => {
-    if (item.kind === 'prompt') return 'w-3 h-3 text-blue-600'
+    if (item.kind === 'prompt') return 'w-3 h-3 text-primary-600'
     if (item.kind === 'final') return 'w-3 h-3 text-green-600'
     if (item.kind === 'feedback') return (item?.ref?.direction || 0) > 0 ? 'w-3 h-3 text-green-600' : 'w-3 h-3 text-red-600'
     const status = item?.ref?.status

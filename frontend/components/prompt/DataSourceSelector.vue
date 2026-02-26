@@ -57,7 +57,7 @@
                                 <DataSourceIcon :type="ds.type" class="h-4" />
                                 <span class="ml-2 text-[13px]">{{ ds.name }}</span>
                             </div>
-                            <Icon v-if="isSelected(ds)" name="heroicons-check" class="w-4 h-4 text-blue-500" />
+                            <Icon v-if="isSelected(ds)" name="heroicons-check" class="w-4 h-4 text-primary-500" />
                         </div>
                     </template>
                 </div>

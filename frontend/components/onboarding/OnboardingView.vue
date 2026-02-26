@@ -4,7 +4,7 @@
       <!-- Left: Progress -->
       <aside v-if="!props.hideSidebar" class="p-8 md:p-10 border-b md:border-b-0 md:border-r border-gray-100 md:col-span-1">
         <div>
-            <img src="/assets/logo-128.png" alt="Logo" class="w-10 h-10 mb-5" />
+            <img src="/assets/logo-icon.svg" alt="Logo" class="w-10 h-10 mb-5" />
           <h1 class="text-lg font-semibold text-gray-900">Welcome to MetricChat! 🎉</h1>
           <p class="text-sm text-gray-500 mt-1">Chat with your data, run deep analysis and create dashboards in seconds</p>
         </div>
@@ -50,7 +50,7 @@
           <div v-else :key="'step-' + currentStepKey" class="max-w-xl">
             <div class="flex items-start space-x-4">
               <div class="flex-1">
-                <img src="/assets/logo-128.png" alt="Logo" class="w-10 h-10 mb-5" v-if="props.hideSidebar" />
+                <img src="/assets/logo-icon.svg" alt="Logo" class="w-10 h-10 mb-5" v-if="props.hideSidebar" />
                 <h2 class="text-lg font-semibold text-gray-900 mb-2">{{ getCurrentStepTitle() }}</h2>
                 <p class="text-gray-600 mb-6">{{ getCurrentStepDescription() }}</p>
 

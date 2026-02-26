@@ -1,0 +1,14 @@
+:root {
+  --brand-bg: #FAFAF8;
+  --brand-surface: #F3F2EF;
+  --brand-border: #D6D3CD;
+  --brand-text: #1C1917;
+  --brand-text-muted: #78716C;
+  --brand-text-light: #A8A29E;
+  --brand-accent: #C4841D;
+  --brand-accent-light: #F5E6D0;
+}
+
+body {
+  background-color: var(--brand-bg);
+}

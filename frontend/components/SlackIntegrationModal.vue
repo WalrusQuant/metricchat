@@ -11,9 +11,9 @@
         <p class="text-green-600 mb-4">Slack is currently connected.</p>
 
         <!-- Usage Notes -->
-        <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
-          <h3 class="text-sm font-medium text-blue-800 mb-2">Usage Notes</h3>
-          <ul class="text-sm text-blue-700 space-y-1 list-disc list-inside">
+        <div class="bg-primary-50 border border-primary-200 rounded-lg p-4 mb-4">
+          <h3 class="text-sm font-medium text-primary-800 mb-2">Usage Notes</h3>
+          <ul class="text-sm text-primary-700 space-y-1 list-disc list-inside">
             <li>Only registered users can message or @mention the bot</li>
             <li>In channels/group chats, only <strong>public</strong> data sources are queried</li>
             <li>In private DMs, <strong>public + private</strong> data sources (that the user has access to) are queried</li>
@@ -65,7 +65,7 @@
             <label class="block text-sm font-medium mb-1">Signing Secret</label>
             <input v-model="signingSecret" type="text" class="w-full border rounded px-2 py-1" required />
           </div>
-          <button type="submit" class="bg-blue-500 text-white text-sm px-3 py-1.5 rounded-md">Connect</button>
+          <button type="submit" class="bg-primary-500 text-white text-sm px-3 py-1.5 rounded-md">Connect</button>
         </form>
       </div>
       <button class="absolute top-2 right-2 text-gray-400 hover:text-gray-600" @click="$emit('close')">✕</button>

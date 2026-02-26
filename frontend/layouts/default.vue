@@ -3,7 +3,7 @@
     <div v-if="showGlobalOnboardingBanner" class="fixed top-0 left-0 right-0 z-[1000]">
       <div
         @click="router.push(showGlobalOnboardingBannerLink)"
-        class="text-center cursor-pointer text-white text-sm bg-blue-500/95 hover:bg-blue-600/90 py-2 flex items-center justify-center shadow-md"
+        class="text-center cursor-pointer text-white text-sm bg-primary-500/95 hover:bg-primary-600/90 py-2 flex items-center justify-center shadow-md"
       >
         <UIcon name="i-heroicons-rocket-launch" class="h-5 mr-2" />
         <span>{{ showGlobalOnboardingBannerText }}</span>
@@ -11,16 +11,16 @@
     </div>
   <aside id="separator-sidebar"
     :class="[
-      'fixed left-0 z-40 bg-gray-50 transition-all duration-300 -translate-x-full sm:translate-x-0 border-r-[3px] border-gray-100',
+      'fixed left-0 z-40 bg-[var(--brand-surface)] transition-all duration-300 -translate-x-full sm:translate-x-0 border-r border-[var(--brand-border)]',
       isCollapsed ? 'w-14' : 'w-48',
       showGlobalOnboardingBanner ? 'top-10 bottom-0' : 'top-0 bottom-0'
     ]"
     aria-label="Sidebar">
     <button @click="toggleSidebar" :class="[
-            'flex items-center gap-3 rounded-lg transition-all duration-200 bg-gray-50',
-            isCollapsed 
-              ? 'px-2 py-2 w-full text-center justify-center -mb-4 text-gray-700 hover:text-blue-500' 
-              : 'px-1 py-1 mt-3 ml-auto -mb-5 text-gray-400 hover:text-gray-600'
+            'flex items-center gap-3 rounded-lg transition-all duration-200 bg-[var(--brand-surface)]',
+            isCollapsed
+              ? 'px-2 py-2 w-full text-center justify-center -mb-4 text-stone-700 hover:text-primary-500'
+              : 'px-1 py-1 mt-3 ml-auto -mb-5 text-stone-400 hover:text-stone-600'
           ]">
             <UTooltip v-if="isCollapsed" text="Expand sidebar" :popper="{ placement: 'right' }">
               <span class="flex items-center justify-center w-4 h-4 text-sm">
@@ -34,12 +34,13 @@
               <span v-if="showText" class="text-xs opacity-75"></span>
             </template>
           </button>
-    <div class="h-full px-3 py-4 bg-gray-50 flex flex-col justify-between">
+    <div class="h-full px-3 py-4 bg-[var(--brand-surface)] flex flex-col justify-between">
 
       <ul class="font-normal text-sm">
         <li>
-            <button @click="router.push('/')" class="flex items-center justify-center p-1 text-gray-700 group">
-              <img :src="workspaceIconUrl || '/assets/logo-128.png'" alt="MetricChat" :class="isCollapsed ? 'w-8 object-contain' : 'max-h-10 max-w-[120px] object-contain'" />
+            <button @click="router.push('/')" class="flex items-center gap-2 p-1 text-stone-700 group" :class="isCollapsed ? 'justify-center' : ''">
+              <img src="/assets/logo-icon.svg" alt="MetricChat" class="w-8 object-contain" />
+              <span v-if="showText && !workspaceIconUrl" class="text-sm font-semibold text-[var(--brand-text)] truncate">MetricChat</span>
             </button>
         </li>
 
@@ -55,7 +56,7 @@
                @click="createNewReport"
                :disabled="creatingReport"
                :class="[
-                 'flex items-center px-2 py-2 w-full rounded-lg text-blue-500 hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed',
+                 'flex items-center px-2 py-2 w-full rounded-lg text-primary-500 hover:bg-stone-200 disabled:opacity-50 disabled:cursor-not-allowed',
                  isCollapsed ? 'justify-center' : 'gap-3'
                ]">
               <UTooltip v-if="isCollapsed" :text="creatingReport ? 'Creating...' : 'New report'" :popper="{ placement: 'right' }">
@@ -79,7 +80,7 @@
         <li v-if="!item.adminOnly || isAdmin" :class="{ hidden: item.hidden }">
           <a :href="item.href" :class="[
             'flex items-center px-2 py-2 w-full rounded-lg',
-            isRouteActive(item.href) ? 'text-black bg-gray-200' : 'text-gray-600 hover:text-black hover:bg-gray-200',
+            isRouteActive(item.href) ? 'text-stone-900 border-l-[3px] border-primary-500 bg-stone-200' : 'text-stone-600 hover:text-stone-900 hover:bg-stone-200',
             isCollapsed ? 'justify-center' : 'gap-3'
           ]">
             <UTooltip v-if="isCollapsed" :text="item.label" :popper="{ placement: 'right' }">
@@ -103,7 +104,7 @@
         <li v-for="item in bottomNavItems" :key="item.href">
           <a :href="item.href" :target="item.external ? '_blank' : undefined" :class="[
             'flex items-center px-2 py-2 w-full rounded-lg',
-            item.external ? 'text-gray-600 hover:text-black hover:bg-gray-200' : (isRouteActive(item.href) ? 'text-black bg-gray-200' : 'text-gray-600 hover:text-black hover:bg-gray-200'),
+            item.external ? 'text-stone-600 hover:text-stone-900 hover:bg-stone-200' : (isRouteActive(item.href) ? 'text-stone-900 border-l-[3px] border-primary-500 bg-stone-200' : 'text-stone-600 hover:text-stone-900 hover:bg-stone-200'),
             isCollapsed ? 'justify-center' : 'gap-3'
           ]">
             <UTooltip v-if="isCollapsed" :text="item.label" :popper="{ placement: 'right' }">
@@ -123,7 +124,7 @@
           <button
             @click="showMcpModal = true"
             :class="[
-              'flex items-center px-2 py-2 w-full rounded-lg text-gray-600 hover:text-black hover:bg-gray-200',
+              'flex items-center px-2 py-2 w-full rounded-lg text-stone-600 hover:text-stone-900 hover:bg-stone-200',
               isCollapsed ? 'justify-center' : 'gap-3'
             ]"
           >
@@ -143,16 +144,16 @@
         <li>
           <UDropdown :items="userDropdownItems" :popper="{ placement: 'top-start' }">
              <button :class="[
-               'flex items-center px-2 py-2 w-full rounded-lg text-gray-600 hover:text-black hover:bg-gray-200',
+               'flex items-center px-2 py-2 w-full rounded-lg text-stone-600 hover:text-stone-900 hover:bg-stone-200',
                isCollapsed ? 'justify-center' : 'gap-3'
              ]">
               <UTooltip v-if="isCollapsed" :text="`Logged in as ${currentUserName}`" :popper="{ placement: 'right' }">
-                <div class="flex items-center justify-center w-5 h-5 bg-blue-500 text-white text-xs font-bold rounded-full">
+                <div class="flex items-center justify-center w-5 h-5 bg-primary-500 text-white text-xs font-bold rounded-full">
                   {{ userInitial }}
                 </div>
               </UTooltip>
               <template v-else>
-                <div class="flex items-center justify-center w-5 h-5 bg-blue-500 text-white text-xs font-bold rounded-full">
+                <div class="flex items-center justify-center w-5 h-5 bg-primary-500 text-white text-xs font-bold rounded-full">
                   {{ userInitial }}
                 </div>
                 <span v-if="showText" class="text-sm truncate">{{ currentUserName }}</span>
@@ -162,7 +163,7 @@
         </li>
         <li v-if="version">
           <UTooltip text="Version" :popper="{ placement: 'right' }">
-            <div class="text-[9px] text-gray-500 p-0 cursor-pointer hover:text-gray-900">
+            <div class="text-[9px] text-stone-500 p-0 cursor-pointer hover:text-stone-900">
               {{ version }}
             </div>
           </UTooltip>
@@ -254,7 +255,7 @@
 
   const { isExcel } = useExcel()
   const router = useRouter()
-  const { $intercom } = useNuxtApp()
+
 
   onMounted(async () => {
     try {
@@ -268,7 +269,7 @@
       }
     } catch {}
   })
-  const { version, environment, app_url, intercom } = useRuntimeConfig().public
+  const { version, environment, app_url } = useRuntimeConfig().public
   
   // Sidebar collapse state (shared via composable)
   const { isCollapsed, showText, toggle: toggleSidebar } = useSidebar()
@@ -299,25 +300,6 @@
     return role === 'admin'
   })
  
-  if (environment === 'production' && intercom) {
-    $intercom.boot()
-    watch([currentUser, organization], ([user, org]) => {
-      if (user && org) {
-        $intercom.update({
-          user_id: (user as any).id,
-          name: (user as any)?.name,
-          email: (user as any)?.email,
-          version: version,
-          environment: environment,
-          app_url: app_url,
-          company: {
-            company_id: org.id,
-            name: org.name
-          }
-        })
-      }
-    }, { immediate: true })
-  }
 
 const createNewReport = async () => {
   if (creatingReport.value) return

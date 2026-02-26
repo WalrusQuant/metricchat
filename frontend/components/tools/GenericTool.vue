@@ -36,7 +36,7 @@
                           {{ showFullInput[key] ? value : value.slice(0, 150) + '...' }}
                         </div>
                         <button 
-                          class="text-[10px] text-blue-600 hover:text-blue-800"
+                          class="text-[10px] text-primary-600 hover:text-primary-800"
                           @click.stop="toggleFullInput(key)"
                         >
                           {{ showFullInput[key] ? 'Show less' : `Show all (${value.length} chars)` }}
@@ -65,7 +65,7 @@
                         </div>
                         <button 
                           v-if="value.length > 5"
-                          class="text-[10px] text-blue-600 hover:text-blue-800"
+                          class="text-[10px] text-primary-600 hover:text-primary-800"
                           @click.stop="toggleFullInput(key)"
                         >
                           {{ showFullInput[key] ? 'Show less' : `Show all (${value.length} items)` }}
@@ -78,7 +78,7 @@
                         <pre class="text-[11px] text-gray-800 whitespace-pre-wrap break-words bg-gray-50 rounded px-2 py-1 overflow-x-auto max-h-32" :class="{ 'max-h-none': showFullInput[key] }">{{ formatObject(value, showFullInput[key]) }}</pre>
                         <button 
                           v-if="JSON.stringify(value).length > 200"
-                          class="text-[10px] text-blue-600 hover:text-blue-800"
+                          class="text-[10px] text-primary-600 hover:text-primary-800"
                           @click.stop="toggleFullInput(key)"
                         >
                           {{ showFullInput[key] ? 'Collapse' : 'Expand' }}
@@ -122,7 +122,7 @@
                 </div>
                 <button 
                   v-if="outputData.length > 300"
-                  class="text-[10px] text-blue-600 hover:text-blue-800 mt-1"
+                  class="text-[10px] text-primary-600 hover:text-primary-800 mt-1"
                   @click.stop="showFullOutput = !showFullOutput"
                 >
                   {{ showFullOutput ? 'Show less' : `Show all (${outputData.length} chars)` }}
@@ -143,7 +143,7 @@
                   <!-- Full JSON (collapsible) -->
                   <div>
                     <button 
-                      class="text-[10px] text-blue-600 hover:text-blue-800 flex items-center gap-1"
+                      class="text-[10px] text-primary-600 hover:text-primary-800 flex items-center gap-1"
                       @click.stop="showFullOutput = !showFullOutput"
                     >
                       <Icon :name="showFullOutput ? 'heroicons-chevron-down' : 'heroicons-chevron-right'" class="w-3 h-3" />

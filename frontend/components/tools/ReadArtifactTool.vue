@@ -4,7 +4,7 @@
     <div class="flex items-center text-xs text-gray-500 cursor-pointer hover:text-gray-700" @click="toggleCollapsed">
       <Icon :name="isCollapsed ? 'heroicons-chevron-right' : 'heroicons-chevron-down'" class="w-3 h-3 mr-1.5 text-gray-400" />
       <Spinner v-if="status === 'running'" class="w-3 h-3 mr-1.5 text-gray-400" />
-      <Icon v-else-if="status === 'success'" name="heroicons-document-text" class="w-3 h-3 mr-1.5 text-blue-500" />
+      <Icon v-else-if="status === 'success'" name="heroicons-document-text" class="w-3 h-3 mr-1.5 text-primary-500" />
       <Icon v-else-if="status === 'error'" name="heroicons-exclamation-circle" class="w-3 h-3 mr-1.5 text-amber-500" />
 
       <span v-if="status === 'running'" class="tool-shimmer">Reading artifact...</span>
@@ -19,7 +19,7 @@
           'ml-2 px-1.5 py-0.5 rounded text-[10px] font-medium',
           artifactMode === 'slides'
             ? 'bg-purple-100 text-purple-700'
-            : 'bg-blue-100 text-blue-700'
+            : 'bg-primary-100 text-primary-700'
         ]"
       >
         {{ artifactMode === 'slides' ? 'Slides' : 'Dashboard' }}
@@ -44,14 +44,14 @@
           <div
             :class="[
               'w-8 h-8 rounded flex-shrink-0 flex items-center justify-center',
-              artifactMode === 'slides' ? 'bg-slate-800' : 'bg-blue-50'
+              artifactMode === 'slides' ? 'bg-slate-800' : 'bg-primary-50'
             ]"
           >
             <Icon
               :name="artifactMode === 'slides' ? 'heroicons:presentation-chart-bar' : 'heroicons:chart-bar-square'"
               :class="[
                 'w-4 h-4',
-                artifactMode === 'slides' ? 'text-slate-400' : 'text-blue-500'
+                artifactMode === 'slides' ? 'text-slate-400' : 'text-primary-500'
               ]"
             />
           </div>

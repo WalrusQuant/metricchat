@@ -51,7 +51,7 @@
               :class="[
                 'px-3 py-1.5 text-xs font-medium border-b-2 transition-colors',
                 activeTab === 'chart' 
-                  ? 'border-blue-500 text-blue-600' 
+                  ? 'border-primary-500 text-primary-600' 
                   : 'border-transparent text-gray-400 hover:text-gray-600'
               ]"
             >
@@ -63,7 +63,7 @@
               :class="[
                 'px-3 py-1.5 text-xs font-medium border-b-2 transition-colors',
                 activeTab === 'table' 
-                  ? 'border-blue-500 text-blue-600' 
+                  ? 'border-primary-500 text-primary-600' 
                   : 'border-transparent text-gray-400 hover:text-gray-600'
               ]"
             >
@@ -75,7 +75,7 @@
               :class="[
                 'px-3 py-1.5 text-xs font-medium border-b-2 transition-colors',
                 activeTab === 'code' 
-                  ? 'border-blue-500 text-blue-600' 
+                  ? 'border-primary-500 text-primary-600' 
                   : 'border-transparent text-gray-400 hover:text-gray-600'
               ]"
             >
@@ -241,7 +241,7 @@
               class="text-xs px-2 py-0.5 rounded transition-colors flex items-center hover:bg-gray-50"
               @click.stop="openEntityModal = true"
             >
-              <Icon name="heroicons-bookmark" class="w-3.5 h-3.5 text-blue-500 mr-1" />
+              <Icon name="heroicons-bookmark" class="w-3.5 h-3.5 text-primary-500 mr-1" />
               Save Query
             </button>
             <span v-else class="text-xs flex items-center">

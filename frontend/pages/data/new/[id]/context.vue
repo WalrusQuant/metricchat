@@ -53,7 +53,7 @@
                   </div>
                 </div>
                 <div class="flex items-center gap-2">
-                  <button class="text-xs text-blue-500 hover:text-blue-600 p-2 rounded-md" @click="openInstructionModal">Add Custom Instruction</button>
+                  <button class="text-xs text-primary-500 hover:text-primary-600 p-2 rounded-md" @click="openInstructionModal">Add Custom Instruction</button>
                   <button v-if="suggestedInstructions.length === 0 && hasAttemptedLLMSync" class="text-xs text-gray-500 hover:text-gray-600 p-2 rounded-md" :disabled="isLLMSyncInProgress" @click="runLLMSync">
                     {{ isLLMSyncInProgress ? 'Generating...' : 'Generate AI Suggestions' }}
                   </button>
@@ -97,7 +97,7 @@
         </div>
 
         <div class="flex justify-end pt-4">
-          <button @click="handleSave" :disabled="saving" class="bg-blue-500 hover:bg-blue-600 text-white text-xs font-medium py-1.5 px-3 rounded disabled:opacity-50">
+          <button @click="handleSave" :disabled="saving" class="bg-primary-500 hover:bg-primary-600 text-white text-xs font-medium py-1.5 px-3 rounded disabled:opacity-50">
             <span v-if="saving">Saving...</span>
             <span v-else>Save & Continue</span>
           </button>

@@ -26,7 +26,7 @@
                                     v-model="searchQuery"
                                     type="text"
                                     placeholder="Search data agents..."
-                                    class="w-full pl-10 pr-4 text-xs py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+                                    class="w-full pl-10 pr-4 text-xs py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-primary-500 focus:border-primary-500"
                                 />
                                 <UIcon
                                     name="i-heroicons-magnifying-glass"
@@ -38,7 +38,7 @@
                         <div class="flex items-center justify-end gap-2 w-full md:w-auto">
                             <UButton
                                 v-if="canCreateDataSource && connections.length > 0"
-                                color="blue"
+                                color="primary"
                                 variant="solid"
                                 size="xs"
                                 icon="i-heroicons-plus"
@@ -101,7 +101,7 @@
                             <button
                                 v-if="needsUserConnection(ds)"
                                 @click.stop="openCredentialsModal(ds)"
-                                class="mt-3 w-full inline-flex items-center justify-center gap-1.5 px-3 py-1.5 text-xs text-blue-600 bg-blue-50 border border-blue-200 rounded-lg hover:bg-blue-100 transition-colors"
+                                class="mt-3 w-full inline-flex items-center justify-center gap-1.5 px-3 py-1.5 text-xs text-primary-600 bg-primary-50 border border-primary-200 rounded-lg hover:bg-primary-100 transition-colors"
                             >
                                 <UIcon name="heroicons-key" class="w-3.5 h-3.5" />
                                 Connect
@@ -126,7 +126,7 @@
                         <UButton
                             v-if="canCreateDataSource"
                             @click="selectedDataSourceType = undefined; showAddConnectionModal = true"
-                            color="blue"
+                            color="primary"
                             size="xs"
                         >
                             <UIcon name="heroicons-plus" class="w-3 h-3 mr-1" />

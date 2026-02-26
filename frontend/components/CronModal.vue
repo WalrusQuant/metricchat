@@ -41,7 +41,7 @@
                     </button>
                     <button 
                         @click="scheduleReport"
-                        class="px-3 py-1.5 text-xs font-medium text-white bg-blue-500 border border-transparent rounded-md hover:bg-blue-600"
+                        class="px-3 py-1.5 text-xs font-medium text-white bg-primary-500 border border-transparent rounded-md hover:bg-primary-600"
                     >
                         Schedule
                     </button>

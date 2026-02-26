@@ -15,7 +15,7 @@
           <div class="flex-1 overflow-auto">
             <div class="bg-white rounded-lg p-3">
               <!-- Info message for non-admins (suggestions) -->
-              <div v-if="!canCreateEntities && canSuggestEntities" class="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg text-xs text-blue-800">
+              <div v-if="!canCreateEntities && canSuggestEntities" class="mb-4 p-3 bg-primary-50 border border-primary-200 rounded-lg text-xs text-primary-800">
                 <div class="font-medium mb-1">Suggest Saved Query for Review</div>
                 <div>Your query will be submitted for admin approval before being published.</div>
               </div>
@@ -40,7 +40,7 @@
             <button class="bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-xs hover:bg-gray-50" @click="open = false">Cancel</button>
             <button 
               class="text-white text-xs font-medium py-1.5 px-3 rounded-lg disabled:opacity-50" 
-              :class="canCreateEntities ? 'bg-blue-500 hover:bg-blue-600' : 'bg-amber-500 hover:bg-amber-600'"
+              :class="canCreateEntities ? 'bg-primary-500 hover:bg-primary-600' : 'bg-amber-500 hover:bg-amber-600'"
               :disabled="saving || !canSave" 
               @click="onSave"
             >

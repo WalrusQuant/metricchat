@@ -79,8 +79,8 @@
                                         class="border border-gray-300 rounded px-2 py-1 text-xs w-full md:w-56"
                                     />
                                     <!-- Actions -->
-                                    <UButton :disabled="selectedIds.size === 0" color="blue" size="xs" icon="i-heroicons-play" @click="runSelected">Run Selected</UButton>
-                                    <UButton color="blue" size="xs" variant="soft" icon="i-heroicons-plus" @click="addNewTest">Add New Test</UButton>
+                                    <UButton :disabled="selectedIds.size === 0" color="primary" size="xs" icon="i-heroicons-play" @click="runSelected">Run Selected</UButton>
+                                    <UButton color="primary" size="xs" variant="soft" icon="i-heroicons-plus" @click="addNewTest">Add New Test</UButton>
                                 </div>
                             </div>
                         </div>
@@ -121,7 +121,7 @@
                                         <td class="px-6 py-3">
                                             <div class="flex items-center gap-2">
                                                 <UButton color="gray" size="xs" variant="soft" icon="i-heroicons-pencil-square" @click="editCase(c)">Edit</UButton>
-                                                <UButton color="blue" size="xs" variant="soft" icon="i-heroicons-play" @click="runCase(c)">Run Test</UButton>
+                                                <UButton color="primary" size="xs" variant="soft" icon="i-heroicons-play" @click="runCase(c)">Run Test</UButton>
                                                 <UButton color="red" size="xs" variant="soft" icon="i-heroicons-trash" @click="deleteCase(c)">Delete</UButton>
                                             </div>
                                         </td>
@@ -207,7 +207,7 @@
                                 <tbody class="bg-white divide-y divide-gray-200 text-xs">
                                     <tr v-for="r in filteredRuns" :key="r.id" class="hover:bg-gray-50">
                                         <td class="px-6 py-3 text-gray-900">
-                                            <a :href="`/evals/runs/${r.id}`" class="text-blue-600 hover:underline">
+                                            <a :href="`/evals/runs/${r.id}`" class="text-primary-600 hover:underline">
                                                 {{ r.title || 'Test Run' }}
                                             </a>
                                         </td>
@@ -345,7 +345,7 @@ const tabClass = (tab: 'tests' | 'runs') => {
     return [
         'whitespace-nowrap py-4 px-1 border-b-2 text-sm font-medium',
         isActive
-            ? 'border-blue-500 text-blue-600'
+            ? 'border-primary-500 text-primary-600'
             : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
     ]
 }
@@ -452,7 +452,7 @@ function categoriesForCase(c: TestCaseRow): string[] {
 
 function badgeClassesFor(catLabel: string): string {
     const map: Record<string, string> = {
-        'Create Data': 'bg-blue-50 text-blue-700 border-blue-100',
+        'Create Data': 'bg-primary-50 text-primary-700 border-primary-100',
         'Clarify': 'bg-amber-50 text-amber-700 border-amber-100',
         'Describe Table': 'bg-teal-50 text-teal-700 border-teal-100',
         'Metadata': 'bg-slate-50 text-slate-700 border-slate-100',

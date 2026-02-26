@@ -8,10 +8,10 @@
                     type="text"
                     v-model="searchQuery"
                     placeholder="Search members..."
-                    class="border border-gray-300 rounded-md px-3 py-1.5 text-sm focus:ring-blue-500 focus:border-blue-500 w-full"
+                    class="border border-gray-300 rounded-md px-3 py-1.5 text-sm focus:ring-primary-500 focus:border-primary-500 w-full"
                 >
             </div>
-            <button @click="inviteModalOpen = true" class="bg-blue-500 text-white text-sm px-3 py-1.5 rounded-md"
+            <button @click="inviteModalOpen = true" class="bg-primary-500 text-white text-sm px-3 py-1.5 rounded-md"
                 v-if="useCan('add_organization_members')"
             >Add Member</button>
         </div>
@@ -132,7 +132,7 @@
                         v-model="inviteForm.email"
                         type="email" 
                         required
-                        class="border border-gray-300 rounded-lg px-4 py-2 w-full h-9 text-sm focus:outline-none focus:border-blue-500"
+                        class="border border-gray-300 rounded-lg px-4 py-2 w-full h-9 text-sm focus:outline-none focus:border-primary-500"
                         placeholder="member@example.com"
                     />
                 </div>
@@ -142,7 +142,7 @@
                     <select 
                         v-model="inviteForm.role"
                         required
-                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
                     >
                         <option value="member">Member</option>
                         <option value="admin">Admin</option>
@@ -160,7 +160,7 @@
                     <button 
 
                         type="submit"
-                        class="px-3 py-1.5 text-xs font-medium text-white bg-blue-500 border border-transparent rounded-md hover:bg-blue-600"
+                        class="px-3 py-1.5 text-xs font-medium text-white bg-primary-500 border border-transparent rounded-md hover:bg-primary-600"
                     >
                         Send Invitation
                     </button>

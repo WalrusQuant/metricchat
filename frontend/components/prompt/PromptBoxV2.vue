@@ -14,7 +14,7 @@
         <!-- Minimalist prompt container -->
         <div
             class="border rounded-xl bg-white focus-within:border-gray-300 transition-colors relative"
-            :class="isDraggingFiles ? 'border-blue-400 border-2 bg-blue-50/30' : 'border-gray-200'"
+            :class="isDraggingFiles ? 'border-primary-400 border-2 bg-primary-50/30' : 'border-gray-200'"
             @dragenter="handleDragEnter"
             @dragleave="handleDragLeave"
             @dragover="handleDragOver"
@@ -24,9 +24,9 @@
             <!-- Drop overlay -->
             <div
                 v-if="isDraggingFiles"
-                class="absolute inset-0 bg-blue-50/80 rounded-xl flex items-center justify-center z-10 pointer-events-none"
+                class="absolute inset-0 bg-primary-50/80 rounded-xl flex items-center justify-center z-10 pointer-events-none"
             >
-                <div class="flex flex-col items-center text-blue-600">
+                <div class="flex flex-col items-center text-primary-600">
                     <Icon name="heroicons-cloud-arrow-up" class="w-8 h-8 mb-2" />
                     <span class="text-sm font-medium">Drop files to upload</span>
                 </div>
@@ -82,7 +82,7 @@
                         </div>
                         <!-- Processing overlay -->
                         <div v-if="file.status === 'processing'" class="absolute inset-0 flex items-center justify-center bg-white/60">
-                            <Spinner class="w-4 h-4 text-blue-500" />
+                            <Spinner class="w-4 h-4 text-primary-500" />
                         </div>
                         <!-- Error overlay -->
                         <div v-if="file.status === 'error'" class="absolute inset-0 flex items-center justify-center bg-red-50/80">
@@ -105,7 +105,7 @@
                     :key="file.id"
                     class="inline-flex items-center gap-1.5 px-2 py-1 bg-gray-100 rounded-lg text-xs text-gray-700 group"
                 >
-                    <Spinner v-if="file.status === 'processing'" class="w-3 h-3 text-blue-500 flex-shrink-0" />
+                    <Spinner v-if="file.status === 'processing'" class="w-3 h-3 text-primary-500 flex-shrink-0" />
                     <Icon v-else-if="file.status === 'error'" name="heroicons-exclamation-circle" class="w-3.5 h-3.5 text-red-500 flex-shrink-0" />
                     <Icon v-else name="heroicons-document" class="w-3.5 h-3.5 text-gray-500 flex-shrink-0" />
                     <span class="truncate max-w-[150px]">{{ file.filename }}</span>
@@ -143,21 +143,21 @@
                                         <Icon name="heroicons-chat-bubble-left-right" class="w-4 h-4 mr-2" />
                                         Chat
                                     </div>
-                                    <Icon v-if="mode === 'chat'" name="heroicons-check" class="w-4 h-4 text-blue-500" />
+                                    <Icon v-if="mode === 'chat'" name="heroicons-check" class="w-4 h-4 text-primary-500" />
                                 </div>
                                 <div class="px-2 py-1 rounded hover:bg-gray-100 cursor-pointer flex items-center justify-between" @click="() => { selectMode('deep'); close(); }">
                                     <div class="flex items-center">
                                         <Icon name="heroicons-light-bulb" class="w-4 h-4 mr-2" />
                                         Deep Analytics
                                     </div>
-                                    <Icon v-if="mode === 'deep'" name="heroicons-check" class="w-4 h-4 text-blue-500" />
+                                    <Icon v-if="mode === 'deep'" name="heroicons-check" class="w-4 h-4 text-primary-500" />
                                 </div>
                                 <div v-if="canUseTrainingMode" class="px-2 py-1 rounded hover:bg-gray-100 cursor-pointer flex items-center justify-between" @click="() => { selectMode('training'); close(); }">
                                     <div class="flex items-center">
                                         <Icon name="heroicons-academic-cap" class="w-4 h-4 mr-2" />
                                         Training
                                     </div>
-                                    <Icon v-if="mode === 'training'" name="heroicons-check" class="w-4 h-4 text-blue-500" />
+                                    <Icon v-if="mode === 'training'" name="heroicons-check" class="w-4 h-4 text-primary-500" />
                                 </div>
                             </div>
                         </template>
@@ -200,7 +200,7 @@
                                         <span class="font-medium truncate">{{ m.name }}</span>
                                         <span class="text-gray-500 text-[10px] truncate">{{ m.provider?.name }}</span>
                                     </div>
-                                    <Icon v-if="selectedModel === m.id" name="heroicons-check" class="w-4 h-4 text-blue-500 ml-2 flex-shrink-0" />
+                                    <Icon v-if="selectedModel === m.id" name="heroicons-check" class="w-4 h-4 text-primary-500 ml-2 flex-shrink-0" />
                                 </div>
                             </div>
                         </template>

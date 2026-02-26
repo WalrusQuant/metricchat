@@ -70,7 +70,7 @@
             <div v-if="loadMode" class="flex items-center gap-1">
               <span class="text-gray-500">Load:</span>
               <span class="px-1.5 py-0.5 rounded text-[9px] font-medium"
-                :class="loadMode === 'always' ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-600'"
+                :class="loadMode === 'always' ? 'bg-primary-100 text-primary-700' : 'bg-gray-100 text-gray-600'"
               >
                 {{ loadMode }}
               </span>
@@ -119,7 +119,7 @@
                 @click.stop="handleEdit"
                 class="flex items-center px-2 py-1 text-[10px] font-medium text-gray-700 bg-gray-50 hover:bg-gray-100 rounded transition-colors"
               >
-                <Icon name="heroicons:pencil" class="w-3 h-3 text-blue-600 mr-1" />
+                <Icon name="heroicons:pencil" class="w-3 h-3 text-primary-600 mr-1" />
                 <span>Edit</span>
               </button>
               <button

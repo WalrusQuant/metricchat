@@ -12,7 +12,7 @@
                 <!-- Header with create button -->
                 <div class="flex items-center justify-between">
                     <div class="text-sm text-gray-600">{{ suites.length }} suite{{ suites.length !== 1 ? 's' : '' }}</div>
-                    <UButton color="blue" size="xs" variant="soft" icon="i-heroicons-plus" @click="showCreateModal = true">
+                    <UButton color="primary" size="xs" variant="soft" icon="i-heroicons-plus" @click="showCreateModal = true">
                         Create New Suite
                     </UButton>
                 </div>
@@ -25,7 +25,7 @@
                 <!-- Empty state -->
                 <div v-else-if="suites.length === 0" class="py-8 text-center">
                     <div class="text-gray-500 text-sm mb-2">No test suites yet</div>
-                    <UButton color="blue" size="xs" variant="soft" icon="i-heroicons-plus" @click="showCreateModal = true">
+                    <UButton color="primary" size="xs" variant="soft" icon="i-heroicons-plus" @click="showCreateModal = true">
                         Create your first suite
                     </UButton>
                 </div>
@@ -45,7 +45,7 @@
                             <tr v-for="suite in suites" :key="suite.id" class="hover:bg-gray-50">
                                 <td class="px-4 py-3 text-sm text-gray-900">{{ suite.name }}</td>
                                 <td class="px-4 py-3 text-sm text-gray-600">
-                                    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-primary-100 text-primary-800">
                                         {{ suite.tests_count }} test{{ suite.tests_count !== 1 ? 's' : '' }}
                                     </span>
                                 </td>

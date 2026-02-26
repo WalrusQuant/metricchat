@@ -43,7 +43,7 @@
     <div class="absolute bottom-2 left-2">
         <button 
           @click="$emit('save', editor.getHTML())"
-          class="text-xs bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded"
+          class="text-xs bg-primary-500 hover:bg-primary-600 text-white px-2 py-1 rounded"
         >
             Save
         </button>
@@ -120,7 +120,7 @@
         }
 
         a {
-          color: #3b82f6; /* blue-500 */
+          color: #109090; /* primary-500 */
           text-decoration: underline;
         }
 

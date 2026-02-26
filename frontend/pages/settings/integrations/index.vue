@@ -32,7 +32,7 @@
         </div>
       </div>
       <button
-        class="bg-blue-500 text-white text-sm px-3 py-1.5 rounded-md"
+        class="bg-primary-500 text-white text-sm px-3 py-1.5 rounded-md"
         @click.stop="showSlackModal = true"
       >
         {{ slackIntegrated ? 'Settings' : 'Integrate' }}
@@ -62,7 +62,7 @@
         </div>
       </div>
       <button
-        class="bg-blue-500 text-white text-sm px-3 py-1.5 rounded-md"
+        class="bg-primary-500 text-white text-sm px-3 py-1.5 rounded-md"
         @click.stop="showTeamsModal = true"
       >
         {{ teamsIntegrated ? 'Settings' : 'Integrate' }}

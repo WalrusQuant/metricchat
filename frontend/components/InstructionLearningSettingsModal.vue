@@ -66,7 +66,7 @@
                 <UButton color="gray" variant="ghost" @click="close" :disabled="isSaving">
                     {{ canEdit ? 'Cancel' : 'Close' }}
                 </UButton>
-                <UButton v-if="canEdit" color="blue" @click="save" :loading="isSaving">
+                <UButton v-if="canEdit" color="primary" @click="save" :loading="isSaving">
                     Save
                 </UButton>
             </div>

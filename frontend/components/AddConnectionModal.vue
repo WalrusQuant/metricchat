@@ -57,7 +57,7 @@
               'group rounded-lg p-3 bg-white border transition-all w-full',
               isLocked(ds)
                 ? 'opacity-60 cursor-not-allowed border-gray-200'
-                : 'hover:bg-gray-50 border-gray-100 hover:border-blue-200'
+                : 'hover:bg-gray-50 border-gray-100 hover:border-primary-200'
             ]"
           >
             <div class="flex flex-col items-center text-center">

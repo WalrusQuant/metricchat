@@ -3,7 +3,7 @@
     <!-- Trigger Button (default slot) - matches Toolbar button style -->
 
         <UTooltip text="Add Filters">
-    <UChip v-if="activeFilterCount > 0" :text="activeFilterCount" size="2xl" color="blue">
+    <UChip v-if="activeFilterCount > 0" :text="activeFilterCount" size="2xl" color="primary">
       <button
         type="button"
         class="text-lg items-center flex gap-1 hover:bg-gray-100 px-2 py-1 rounded"
@@ -56,7 +56,7 @@
           <!-- Empty State - has columns but no filters -->
           <div v-else-if="filterGroups.length === 0" class="text-center py-6">
             <p class="text-xs text-gray-500 mb-3">No filters applied</p>
-            <UButton size="xs" color="blue" @click="addGroup">
+            <UButton size="xs" color="primary" @click="addGroup">
               Add filter
             </UButton>
           </div>
@@ -82,7 +82,7 @@
                   :key="condition.id"
                   class="mb-2 last:mb-0"
                 >
-                  <div v-if="condIndex > 0" class="text-[10px] font-semibold text-blue-500 mb-1">AND</div>
+                  <div v-if="condIndex > 0" class="text-[10px] font-semibold text-primary-500 mb-1">AND</div>
 
                   <div class="flex items-center gap-1.5">
                     <!-- Column Select -->
@@ -216,7 +216,7 @@
           <span class="text-xs text-gray-500">
             {{ filteredRowCount }} of {{ totalRowCount }} rows
           </span>
-          <UButton size="xs" color="blue" @click="applyFilters">
+          <UButton size="xs" color="primary" @click="applyFilters">
             Apply
           </UButton>
         </div>

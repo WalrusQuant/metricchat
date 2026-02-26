@@ -5,15 +5,15 @@
         <button
             v-if="isVisualType(props.step?.data_model?.type)"
             @click="activeTab = 'visual'" class="px-4 py-1 text-xs"
-            :class="{ 'border-b-2 border-blue-500 text-blue-600': activeTab === 'visual', 'text-gray-500': activeTab !== 'visual' }">
+            :class="{ 'border-b-2 border-primary-500 text-primary-600': activeTab === 'visual', 'text-gray-500': activeTab !== 'visual' }">
             Visual
         </button>
         <button @click="activeTab = 'model'" class="px-4 py-1 text-xs"
-            :class="{ 'border-b-2 border-blue-500 text-blue-600': activeTab === 'model', 'text-gray-500': activeTab !== 'model' }">
+            :class="{ 'border-b-2 border-primary-500 text-primary-600': activeTab === 'model', 'text-gray-500': activeTab !== 'model' }">
             Data Model
         </button>
         <button @click="activeTab = 'data'" class="px-4 py-1 text-xs"
-            :class="{ 'border-b-2 border-blue-500 text-blue-600': activeTab === 'data', 'text-gray-500': activeTab !== 'data' }">
+            :class="{ 'border-b-2 border-primary-500 text-primary-600': activeTab === 'data', 'text-gray-500': activeTab !== 'data' }">
             Data
             <span v-if="!props.step?.data?.rows" class="text-xs text-gray-400">
                 <span class="inline-block animate-pulse">•</span>
@@ -22,7 +22,7 @@
             </span>
         </button>
         <button @click="activeTab = 'code'" class="px-4 py-1 text-xs"
-            :class="{ 'border-b-2 border-blue-500 text-blue-600': activeTab === 'code', 'text-gray-500': activeTab !== 'code' }">
+            :class="{ 'border-b-2 border-primary-500 text-primary-600': activeTab === 'code', 'text-gray-500': activeTab !== 'code' }">
             Code
         </button>
 

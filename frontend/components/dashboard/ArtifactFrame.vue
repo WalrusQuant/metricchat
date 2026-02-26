@@ -52,7 +52,7 @@
             v-if="!isLatestSelected && artifactsList.length > 1"
             @click="useThisVersion"
             :disabled="isDuplicating"
-            class="text-xs px-2 py-1 bg-blue-50 text-blue-600 hover:bg-blue-100 rounded border border-blue-200 transition-colors disabled:opacity-50 flex items-center gap-1"
+            class="text-xs px-2 py-1 bg-primary-50 text-primary-600 hover:bg-primary-100 rounded border border-primary-200 transition-colors disabled:opacity-50 flex items-center gap-1"
           >
             <Spinner v-if="isDuplicating" class="w-3 h-3" />
             <Icon v-else name="heroicons:arrow-uturn-up" class="w-3 h-3" />
@@ -135,7 +135,7 @@
         <UButton
           @click="generateDashboardPrompt"
           size="xs"
-          color="blue"
+          color="primary"
         >
           <Icon name="heroicons:bolt" class="w-4 h-4" />
           Generate Dashboard
@@ -803,7 +803,7 @@ function buildChartOptions(viz) {
   if (!rows?.length) return null;
 
   const type = (view?.view?.type || view?.type || dataModel?.type || '').toLowerCase();
-  const colors = view?.view?.palette?.colors || ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6'];
+  const colors = view?.view?.palette?.colors || ['#0C7C7C', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6'];
 
   const normalizedRows = rows.map(r => {
     const o = {};

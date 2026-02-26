@@ -17,9 +17,9 @@
                         @click="selectOption(option)"
                         class="flex items-center gap-3 px-3 py-2 border border-gray-200 rounded-md hover:bg-gray-50 cursor-pointer"
                     >
-                        <Icon v-if="option.type === 'new_provider'" name="heroicons:plus-circle" class="w-5 h-5 text-blue-600" />
+                        <Icon v-if="option.type === 'new_provider'" name="heroicons:plus-circle" class="w-5 h-5 text-primary-600" />
                         <LLMProviderIcon v-else :icon="true" :provider="option.type" class="w-6 h-6" />
-                        <span class="text-sm" :class="option.type === 'new_provider' ? 'text-blue-600' : 'text-gray-800'">{{ option.name }}</span>
+                        <span class="text-sm" :class="option.type === 'new_provider' ? 'text-primary-600' : 'text-gray-800'">{{ option.name }}</span>
                     </div>
                 </div>
 
@@ -44,7 +44,7 @@
                                 v-model="selectedProvider.credentials.api_key" 
                                 type="text" 
                                 placeholder="Keep blank to use stored key"
-                                class="mt-2 border border-gray-300 rounded-lg px-4 py-2 w-full h-9 text-sm focus:outline-none focus:border-blue-500" 
+                                class="mt-2 border border-gray-300 rounded-lg px-4 py-2 w-full h-9 text-sm focus:outline-none focus:border-primary-500" 
                             />
                         </div>
                         <div class="" v-if="selectedProvider?.provider_type === 'azure' || selectedProvider?.type === 'azure'">
@@ -55,7 +55,7 @@
                                 v-model="selectedProvider.credentials.endpoint_url" 
                                 type="text" 
                                 placeholder="e.g. https://<resource>.openai.azure.com"
-                                class="mt-2 border border-gray-300 rounded-lg px-4 py-2 w-full h-9 text-sm focus:outline-none focus:border-blue-500" 
+                                class="mt-2 border border-gray-300 rounded-lg px-4 py-2 w-full h-9 text-sm focus:outline-none focus:border-primary-500" 
                             />
                         </div>
                         <div class="" v-if="selectedProvider?.provider_type === 'custom' || selectedProvider?.type === 'custom'">
@@ -66,13 +66,13 @@
                                 v-model="selectedProvider.credentials.base_url" 
                                 type="text" 
                                 placeholder="http://localhost:11434/v1"
-                                class="mt-2 border border-gray-300 rounded-lg px-4 py-2 w-full h-9 text-sm focus:outline-none focus:border-blue-500" 
+                                class="mt-2 border border-gray-300 rounded-lg px-4 py-2 w-full h-9 text-sm focus:outline-none focus:border-primary-500" 
                             />
                             <p class="text-xs text-gray-500 mt-1">OpenAI-compatible endpoint (Ollama, Groq, Together AI, LM Studio, vLLM, etc.)</p>
                         </div>
                         <div class="" v-if="selectedProvider?.provider_type === 'openai' || selectedProvider?.type === 'openai'">
                             <div class="mt-1">
-                                <button type="button" @click="toggleBaseUrl" class="text-xs text-blue-600 hover:underline">
+                                <button type="button" @click="toggleBaseUrl" class="text-xs text-primary-600 hover:underline">
                                     {{ showBaseUrl ? 'Use default base URL' : 'Set custom base URL' }}
                                 </button>
                             </div>
@@ -84,7 +84,7 @@
                                     v-model="selectedProvider.credentials.base_url" 
                                     type="text" 
                                     placeholder="e.g. https://my-openai-proxy.example.com/v1"
-                                    class="mt-2 border border-gray-300 rounded-lg px-4 py-2 w-full h-9 text-sm focus:outline-none focus:border-blue-500" 
+                                    class="mt-2 border border-gray-300 rounded-lg px-4 py-2 w-full h-9 text-sm focus:outline-none focus:border-primary-500" 
                                 />
                             </div>
                         </div>
@@ -111,14 +111,14 @@
                                 </div>
                                 
                                 <!-- Custom Models for existing provider -->
-                                <div v-for="(customModel, index) in existingProviderCustomModels" :key="`existing-custom-${index}`" class="flex items-center gap-2 p-2 border border-blue-200 rounded-lg bg-blue-50">
+                                <div v-for="(customModel, index) in existingProviderCustomModels" :key="`existing-custom-${index}`" class="flex items-center gap-2 p-2 border border-primary-200 rounded-lg bg-primary-50">
                                     <UCheckbox v-model="customModel.is_enabled" />
                                     <div class="flex-1">
                                         <input 
                                             v-model="customModel.model_id" 
                                             type="text" 
                                             placeholder="Model ID"
-                                            class="text-sm border border-gray-300 rounded px-2 py-1 w-full focus:outline-none focus:border-blue-500"
+                                            class="text-sm border border-gray-300 rounded px-2 py-1 w-full focus:outline-none focus:border-primary-500"
                                         />
                                     </div>
                                     <button 
@@ -135,7 +135,7 @@
                                     <button 
                                         type="button"
                                         @click="addExistingProviderCustomModel"
-                                        class="text-sm text-blue-500 hover:text-blue-700 underline flex items-center gap-1"
+                                        class="text-sm text-primary-500 hover:text-primary-700 underline flex items-center gap-1"
                                     >
                                         <Icon name="heroicons:plus-circle" class="w-4 h-4" />
                                         Add Custom Model
@@ -175,9 +175,9 @@
                                 <button v-for="provider in providers" 
                                     @click="providerForm.provider_type = provider.type" 
                                     :key="provider.type" 
-                                    class="bg-white hover:border-blue-300 border border-gray-200 rounded-lg flex items-center justify-center py-4 transition-colors"
+                                    class="bg-white hover:border-primary-300 border border-gray-200 rounded-lg flex items-center justify-center py-4 transition-colors"
                                     type="button"
-                                    :class="{ '!border-blue-500 border-2': providerForm.provider_type === provider.type }"
+                                    :class="{ '!border-primary-500 border-2': providerForm.provider_type === provider.type }"
                                 >
                                     <!-- Custom provider: show icon + text inline -->
                                     <template v-if="provider.type === 'custom'">
@@ -197,23 +197,23 @@
                                 <label class="text-sm font-medium text-gray-700 mb-2">Name</label>
                                 <input v-model="providerForm.name" type="text" required 
                                     :placeholder="`Provider Name (e.g. ${providerForm.provider_type} production)`"
-                                    class="border border-gray-300 rounded-lg px-4 py-2 w-full h-9 text-sm focus:outline-none focus:border-blue-500" />
+                                    class="border border-gray-300 rounded-lg px-4 py-2 w-full h-9 text-sm focus:outline-none focus:border-primary-500" />
                             </div>
                             <div v-for="(field, index) in credentialFieldsForNewProvider" :key="field.key">
                                 <label class="text-sm font-medium text-gray-700 mb-2 mt-2">{{ field.title }}</label>
                                 <input v-model="providerForm.credentials[field.key]" type="text" :required="!!field.required"
                                     :placeholder="getFieldPlaceholder(field)"
-                                    class="border border-gray-300 rounded-lg px-4 py-2 w-full h-9 text-sm focus:outline-none focus:border-blue-500" />
+                                    class="border border-gray-300 rounded-lg px-4 py-2 w-full h-9 text-sm focus:outline-none focus:border-primary-500" />
                             </div>
                             <div v-if="providerForm.provider_type === 'openai'" class="mt-1">
-                                <button type="button" @click="toggleBaseUrlNewProvider" class="text-xs text-blue-600 hover:underline">
+                                <button type="button" @click="toggleBaseUrlNewProvider" class="text-xs text-primary-600 hover:underline">
                                     {{ showBaseUrlNew ? 'Use default base URL' : 'Set custom base URL' }}
                                 </button>
                                 <div v-if="showBaseUrlNew" class="mt-2">
                                     <label class="text-sm font-medium text-gray-700 mb-2">Base URL (optional)</label>
                                     <input v-model="providerForm.credentials.base_url" type="text"
                                         placeholder="e.g. https://my-openai-proxy.example.com/v1"
-                                        class="border border-gray-300 rounded-lg px-4 py-2 w-full h-9 text-sm focus:outline-none focus:border-blue-500" />
+                                        class="border border-gray-300 rounded-lg px-4 py-2 w-full h-9 text-sm focus:outline-none focus:border-primary-500" />
                                 </div>
                             </div>
                         </div>
@@ -240,14 +240,14 @@
                                 </template>
                                 
                                 <!-- Custom Models -->
-                                <div v-for="(customModel, index) in customModels" :key="`custom-${index}`" class="flex items-center gap-2 p-2 border border-blue-200 rounded-lg bg-blue-50">
+                                <div v-for="(customModel, index) in customModels" :key="`custom-${index}`" class="flex items-center gap-2 p-2 border border-primary-200 rounded-lg bg-primary-50">
                                     <UCheckbox v-model="customModel.is_enabled" />
                                     <div class="flex-1">
                                         <input 
                                             v-model="customModel.model_id" 
                                             type="text" 
                                             placeholder="Model ID"
-                                            class="text-sm border border-gray-300 rounded px-2 py-1 w-full focus:outline-none focus:border-blue-500"
+                                            class="text-sm border border-gray-300 rounded px-2 py-1 w-full focus:outline-none focus:border-primary-500"
                                         />
                                     </div>
                                     <button 
@@ -264,7 +264,7 @@
                                     <button 
                                         type="button"
                                         @click="addCustomModel"
-                                        class="text-sm text-blue-500 hover:text-blue-700 underline flex items-center gap-1"
+                                        class="text-sm text-primary-500 hover:text-primary-700 underline flex items-center gap-1"
                                     >
                                         <Icon name="heroicons:plus-circle" class="w-4 h-4" />
                                         Add Custom Model
@@ -299,7 +299,7 @@
                         <UButton 
                             type="submit" 
                             :label="selectedProvider?.type === 'new_provider' ? 'Save Provider' : 'Update Provider'"  
-                            class="!bg-blue-500 !text-white" 
+                            class="!bg-primary-500 !text-white" 
                             @click="selectedProvider?.type === 'new_provider' ? createProvider() : updateProvider()"
                         />
                     </div>

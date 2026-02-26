@@ -13,18 +13,18 @@ const defaultDescription = 'This feature requires an enterprise license. Contact
 </script>
 
 <template>
-  <div class="rounded-lg border border-blue-200 bg-blue-50 p-6">
+  <div class="rounded-lg border border-primary-200 bg-primary-50 p-6">
     <div class="flex items-start gap-4">
       <div class="flex-shrink-0">
-        <svg class="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+        <svg class="h-6 w-6 text-primary-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
         </svg>
       </div>
       <div class="flex-1">
-        <h3 class="text-sm font-semibold text-blue-900">
+        <h3 class="text-sm font-semibold text-primary-900">
           {{ title || defaultTitle }}
         </h3>
-        <p class="mt-1 text-sm text-blue-700">
+        <p class="mt-1 text-sm text-primary-700">
           {{ description || defaultDescription }}
         </p>
         <div class="mt-4">
@@ -32,7 +32,7 @@ const defaultDescription = 'This feature requires an enterprise license. Contact
             href="https://metricchat.io/pricing"
             target="_blank"
             rel="noopener noreferrer"
-            class="inline-flex items-center gap-1 text-sm font-medium text-blue-600 hover:text-blue-800"
+            class="inline-flex items-center gap-1 text-sm font-medium text-primary-600 hover:text-primary-800"
           >
             Learn about Enterprise
             <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">

@@ -17,7 +17,7 @@
                             v-model="form.name" 
                             type="text" 
                             :disabled="!canUpdateDataSource" 
-                            class="border border-gray-200 rounded-lg px-3 py-2 w-full max-w-md h-9 text-sm focus:outline-none focus:ring-2 focus:ring-blue-200 disabled:bg-gray-50 disabled:text-gray-500" 
+                            class="border border-gray-200 rounded-lg px-3 py-2 w-full max-w-md h-9 text-sm focus:outline-none focus:ring-2 focus:ring-primary-200 disabled:bg-gray-50 disabled:text-gray-500" 
                             placeholder="Name" 
                         />
                         <button 
@@ -52,7 +52,7 @@
                         <button 
                             v-if="canUpdateDataSource" 
                             @click="openAdd" 
-                            class="px-2.5 py-1.5 text-xs bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+                            class="px-2.5 py-1.5 text-xs bg-primary-500 text-white rounded-lg hover:bg-primary-600"
                         >
                             Add member
                         </button>
@@ -117,7 +117,7 @@
 
                 <div class="flex justify-end space-x-2 mt-4">
                     <button @click="showAddModal = false" class="px-3 py-1.5 text-xs border border-gray-300 text-gray-700 rounded-lg">Cancel</button>
-                    <button @click="addSelectedUsers" :disabled="selectedUsers.length === 0 || adding" class="px-3 py-1.5 text-xs bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50">
+                    <button @click="addSelectedUsers" :disabled="selectedUsers.length === 0 || adding" class="px-3 py-1.5 text-xs bg-primary-500 text-white rounded-lg hover:bg-primary-600 disabled:opacity-50">
                         {{ adding ? 'Adding…' : 'Add' }}
                     </button>
                 </div>

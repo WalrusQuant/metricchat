@@ -2,9 +2,9 @@
   <div class="space-y-2">
     <!-- Header with type and name -->
     <div class="flex items-center space-x-2">
-      <UIcon :name="getResourceIcon(resource.resource_type)" class="w-4 h-4 text-blue-600" />
+      <UIcon :name="getResourceIcon(resource.resource_type)" class="w-4 h-4 text-primary-600" />
       <span class="font-medium text-gray-900">{{ resource.name }}</span>
-      <span class="px-2 py-1 text-xs bg-blue-100 text-blue-700 rounded">{{ resource.resource_type }}</span>
+      <span class="px-2 py-1 text-xs bg-primary-100 text-primary-700 rounded">{{ resource.resource_type }}</span>
     </div>
 
     <!-- Description -->
@@ -90,7 +90,7 @@
         <div class="text-gray-500">
           <span v-if="rawData?.type">Type: {{ rawData.type }}</span>
           <span v-if="rawData?.maturity" class="ml-2">Maturity: {{ rawData.maturity }}</span>
-          <a v-if="rawData?.url" :href="rawData.url" target="_blank" class="ml-2 text-blue-600 hover:underline">
+          <a v-if="rawData?.url" :href="rawData.url" target="_blank" class="ml-2 text-primary-600 hover:underline">
             View Exposure
           </a>
         </div>

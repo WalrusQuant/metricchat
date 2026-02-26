@@ -64,7 +64,7 @@
                                             v-for="color in defaultColors"
                                             :key="color"
                                             type="button"
-                                            class="w-7 h-7 rounded-full border focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-blue-200"
+                                            class="w-7 h-7 rounded-full border focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-primary-200"
                                             :class="form.color === color ? 'border-gray-900' : 'border-gray-200'"
                                             :style="{ backgroundColor: color }"
                                             @click="form.color = color"
@@ -98,7 +98,7 @@
                                 Cancel
                             </UButton>
                             <UButton
-                                class="!bg-blue-500 !text-white"
+                                class="!bg-primary-500 !text-white"
                                 :loading="isSaving"
                                 @click="submit"
                                 :disabled="!canSubmit"

@@ -12,7 +12,7 @@
                 <div class="flex items-center justify-between mb-4" v-if="canManageConnections">
                     <h2 class="text-sm font-medium text-gray-700">Connections</h2>
                     <UButton
-                        color="blue"
+                        color="primary"
                         variant="soft"
                         size="xs"
                         @click="openLinkModal"
@@ -105,7 +105,7 @@
                                         <UIcon name="heroicons-exclamation-circle" class="w-3 h-3 mr-1" />
                                         User credentials required
                                     </span>
-                                    <UButton size="xs" color="blue" variant="soft" @click="openAddCredentials(conn.id)">Connect</UButton>
+                                    <UButton size="xs" color="primary" variant="soft" @click="openAddCredentials(conn.id)">Connect</UButton>
                                 </template>
                             </div>
                         </div>
@@ -117,7 +117,7 @@
                         <p class="text-sm">No connections linked to this domain.</p>
                         <UButton
                             v-if="canManageConnections"
-                            color="blue"
+                            color="primary"
                             variant="soft"
                             size="sm"
                             class="mt-3"
@@ -155,7 +155,7 @@
                         v-for="conn in availableConnections"
                         :key="conn.id"
                         class="flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50"
-                        :class="{ 'border-blue-500 bg-blue-50': selectedConnectionId === conn.id }"
+                        :class="{ 'border-primary-500 bg-primary-50': selectedConnectionId === conn.id }"
                     >
                         <input
                             type="radio"
@@ -172,7 +172,7 @@
                         <UIcon
                             v-if="selectedConnectionId === conn.id"
                             name="heroicons-check-circle-solid"
-                            class="w-5 h-5 text-blue-600"
+                            class="w-5 h-5 text-primary-600"
                         />
                     </label>
                 </div>
@@ -188,7 +188,7 @@
                 <div class="flex justify-end gap-2">
                     <UButton color="gray" variant="ghost" @click="showLinkModal = false">Cancel</UButton>
                     <UButton
-                        color="blue"
+                        color="primary"
                         :disabled="!selectedConnectionId || isLinking"
                         :loading="isLinking"
                         @click="linkConnection"

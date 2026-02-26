@@ -40,7 +40,7 @@
                             :key="build.id"
                             @click="selectBuild(build)"
                             class="w-full px-3 py-2 text-left border-b border-gray-100 hover:bg-white transition-colors"
-                            :class="{ 'bg-white border-l-2 border-l-blue-500': selectedBuild?.id === build.id }"
+                            :class="{ 'bg-white border-l-2 border-l-primary-500': selectedBuild?.id === build.id }"
                         >
                             <div class="flex items-center justify-between">
                                 <div class="flex items-center gap-1.5 min-w-0">
@@ -184,7 +184,7 @@
                                     <!-- Publish button - only for unpublished builds (draft or pending_approval) -->
                                     <UButton
                                         v-if="!selectedBuild.is_main && (selectedBuild.status === 'draft' || selectedBuild.status === 'pending_approval') && canCreateBuilds"
-                                        color="blue"
+                                        color="primary"
                                         variant="solid"
                                         size="xs"
                                         :disabled="publishingBuild"
@@ -277,7 +277,7 @@
                                             <button
                                                 v-if="isBuildEditable"
                                                 @click="openEditInstruction(item)"
-                                                class="flex items-center gap-0.5 px-1.5 py-0.5 text-[9px] font-medium text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded transition-colors"
+                                                class="flex items-center gap-0.5 px-1.5 py-0.5 text-[9px] font-medium text-primary-600 hover:text-primary-700 hover:bg-primary-50 rounded transition-colors"
                                                 title="Edit instruction"
                                             >
                                                 <UIcon name="i-heroicons-pencil" class="w-3 h-3" />
@@ -315,7 +315,7 @@
                                                 <button
                                                     v-if="isBuildEditable"
                                                     @click="openEditInstruction(item)"
-                                                    class="flex items-center gap-0.5 px-1.5 py-0.5 text-[9px] font-medium text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded transition-colors"
+                                                    class="flex items-center gap-0.5 px-1.5 py-0.5 text-[9px] font-medium text-primary-600 hover:text-primary-700 hover:bg-primary-50 rounded transition-colors"
                                                     title="Edit instruction"
                                                 >
                                                     <UIcon name="i-heroicons-pencil" class="w-3 h-3" />
@@ -343,7 +343,7 @@
                                             </span>
                                             <span 
                                                 v-if="item.changed_fields?.includes('status')"
-                                                class="inline-flex items-center gap-0.5 px-1 py-0.5 bg-blue-100 text-blue-700 rounded text-[9px]"
+                                                class="inline-flex items-center gap-0.5 px-1 py-0.5 bg-primary-100 text-primary-700 rounded text-[9px]"
                                             >
                                                 <UIcon name="i-heroicons-flag" class="w-2.5 h-2.5" />
                                                 {{ item.previous_status }} → {{ item.status }}
@@ -446,7 +446,7 @@
                                 <div v-if="!loadingTestSuites && testSuites.length === 0" class="text-center py-3">
                                     <p class="text-xs text-gray-500">
                                         No test cases have been found, create in 
-                                        <NuxtLink to="/evals" class="text-blue-600 hover:text-blue-700 hover:underline">/evals</NuxtLink>
+                                        <NuxtLink to="/evals" class="text-primary-600 hover:text-primary-700 hover:underline">/evals</NuxtLink>
                                     </p>
                                 </div>
 
@@ -470,7 +470,7 @@
                                         </USelectMenu>
                                         
                                         <UButton
-                                            color="blue"
+                                            color="primary"
                                             size="xs"
                                             :loading="runningEval"
                                             :disabled="!selectedSuiteId || runningEval || !hasTestCases"
@@ -488,7 +488,7 @@
                                     <div v-if="selectedSuiteId && !hasTestCases && !loadingTestSuites" class="text-center py-2">
                                         <p class="text-xs text-gray-500">
                                             No test cases have been found, create in 
-                                            <NuxtLink to="/evals" class="text-blue-600 hover:text-blue-700 hover:underline">/evals</NuxtLink>
+                                            <NuxtLink to="/evals" class="text-primary-600 hover:text-primary-700 hover:underline">/evals</NuxtLink>
                                         </p>
                                     </div>
 
@@ -496,7 +496,7 @@
                                     <div v-if="activeTestRun" class="bg-white border border-gray-200 rounded-lg p-3 space-y-2">
                                         <div class="flex items-center justify-between">
                                             <div class="flex items-center gap-2">
-                                                <Spinner v-if="activeTestRun.status === 'in_progress'" class="w-3.5 h-3.5 text-blue-500" />
+                                                <Spinner v-if="activeTestRun.status === 'in_progress'" class="w-3.5 h-3.5 text-primary-500" />
                                                 <UIcon 
                                                     v-else-if="activeTestRun.status === 'success'" 
                                                     name="i-heroicons-check-circle" 
@@ -514,7 +514,7 @@
                                             <span 
                                                 class="text-[9px] px-1.5 py-0.5 rounded-full"
                                                 :class="{
-                                                    'bg-blue-100 text-blue-700': activeTestRun.status === 'in_progress',
+                                                    'bg-primary-100 text-primary-700': activeTestRun.status === 'in_progress',
                                                     'bg-green-100 text-green-700': activeTestRun.status === 'success',
                                                     'bg-red-100 text-red-700': activeTestRun.status === 'error' || activeTestRun.status === 'fail'
                                                 }"
@@ -534,7 +534,7 @@
                                             <span class="inline-flex items-center px-1.5 py-0.5 rounded border bg-red-50 text-red-700 border-red-200">
                                                 Fail: {{ testResultsSummary.failed }}
                                             </span>
-                                            <span v-if="testResultsSummary.inProgress > 0" class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded border bg-blue-50 text-blue-700 border-blue-200">
+                                            <span v-if="testResultsSummary.inProgress > 0" class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded border bg-primary-50 text-primary-700 border-primary-200">
                                                 <Spinner class="w-2.5 h-2.5" />
                                                 Running: {{ testResultsSummary.inProgress }}
                                             </span>
@@ -543,7 +543,7 @@
                                         <!-- Progress bar -->
                                         <div v-if="activeTestRun.status === 'in_progress'" class="w-full bg-gray-100 rounded-full h-1.5">
                                             <div 
-                                                class="bg-blue-500 h-1.5 rounded-full transition-all duration-300"
+                                                class="bg-primary-500 h-1.5 rounded-full transition-all duration-300"
                                                 :style="{ width: `${testResultsSummary.progressPercent}%` }"
                                             />
                                         </div>
@@ -555,7 +555,7 @@
                                             </span>
                                             <NuxtLink 
                                                 :to="`/evals/runs/${activeTestRun.id}`" 
-                                                class="text-[10px] text-blue-500 hover:underline flex items-center gap-0.5"
+                                                class="text-[10px] text-primary-500 hover:underline flex items-center gap-0.5"
                                             >
                                                 View details
                                                 <UIcon name="i-heroicons-arrow-top-right-on-square" class="w-2.5 h-2.5" />
@@ -584,7 +584,7 @@
                                                     <span class="text-gray-400">{{ formatTimeAgo(run.created_at) }}</span>
                                                     <NuxtLink 
                                                         :to="`/evals/runs/${run.id}`" 
-                                                        class="text-blue-500 hover:underline"
+                                                        class="text-primary-500 hover:underline"
                                                     >
                                                         View
                                                     </NuxtLink>
@@ -1211,7 +1211,7 @@ const removeChange = async (item: DiffInstructionItem) => {
             toast.add({
                 title: 'Change removed',
                 description: 'Addition reverted',
-                color: 'blue',
+                color: 'primary',
                 icon: 'i-heroicons-arrow-uturn-left'
             })
         } else if (item.change_type === 'modified' && item.from_version_id) {
@@ -1230,7 +1230,7 @@ const removeChange = async (item: DiffInstructionItem) => {
             toast.add({
                 title: 'Change reverted',
                 description: 'Modification undone',
-                color: 'blue',
+                color: 'primary',
                 icon: 'i-heroicons-arrow-uturn-left'
             })
         } else if (item.change_type === 'removed' && item.from_version_id) {
@@ -1536,7 +1536,7 @@ const runEval = async () => {
             toast.add({
                 title: 'Eval started',
                 description: `Running tests for Build #${selectedBuild.value.build_number}`,
-                color: 'blue',
+                color: 'primary',
                 icon: 'i-heroicons-play'
             })
         }

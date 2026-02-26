@@ -60,7 +60,7 @@
                     <span class="font-medium truncate">{{ m.name || m.model_id }}</span>
                     <span class="text-gray-500 text-[10px] truncate">{{ m.provider?.name || m.provider_name || '' }}</span>
                   </div>
-                  <Icon v-if="selectedModelId === (m.id || m.model_id)" name="heroicons-check" class="w-4 h-4 text-blue-500 ml-2 flex-shrink-0" />
+                  <Icon v-if="selectedModelId === (m.id || m.model_id)" name="heroicons-check" class="w-4 h-4 text-primary-500 ml-2 flex-shrink-0" />
                 </div>
               </div>
             </template>

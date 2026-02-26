@@ -64,7 +64,7 @@ const variantClass = computed(() => {
 const containerClass = computed(() => {
   const v = props.block.variant
   if (v === 'insight' || v === 'callout') {
-    return 'p-4 rounded-lg border-l-4 border-blue-500 bg-blue-50/50'
+    return 'p-4 rounded-lg border-l-4 border-primary-500 bg-primary-50/50'
   }
   if (v === 'summary') {
     return 'p-4 rounded-lg bg-gray-50/50 border border-gray-200/50'
@@ -81,7 +81,7 @@ const proseClass = computed(() => {
     return 'prose-headings:text-sm prose-headings:font-normal prose-headings:text-gray-500 prose-headings:m-0 prose-p:text-sm prose-p:text-gray-500'
   }
   if (v === 'insight' || v === 'callout') {
-    return 'prose-p:text-blue-800 prose-headings:text-blue-900'
+    return 'prose-p:text-primary-800 prose-headings:text-primary-900'
   }
   return ''
 })

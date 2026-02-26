@@ -69,7 +69,7 @@
           </USelectMenu>
           <button
             type="button"
-            class="mt-2 inline-flex items-center gap-1.5 text-xs text-blue-600 hover:text-blue-700"
+            class="mt-2 inline-flex items-center gap-1.5 text-xs text-primary-600 hover:text-primary-700"
             :disabled="creatingFromConnection"
             @click="showAddConnectionModal = true"
           >
@@ -81,7 +81,7 @@
         <!-- Existing connection flow (main form) -->
         <div v-if="selectedConnections.length > 0">
           <div class="flex items-center gap-2 mb-4">
-            <UToggle v-model="useLlmSync" :disabled="creatingFromConnection" size="xs" color="blue" />
+            <UToggle v-model="useLlmSync" :disabled="creatingFromConnection" size="xs" color="primary" />
             <span class="text-xs text-gray-700">Use LLM to learn domain</span>
           </div>
 
@@ -94,7 +94,7 @@
               ← Cancel
             </NuxtLink>
             <UButton
-              color="blue"
+              color="primary"
               size="xs"
               :loading="creatingFromConnection"
               :disabled="!canSubmitExisting"

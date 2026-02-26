@@ -8,7 +8,7 @@
             <button 
                 v-if="selectAllMode === 'page' && total > selectedCount"
                 @click="$emit('select-all')"
-                class="text-xs text-blue-600 hover:text-blue-700"
+                class="text-xs text-primary-600 hover:text-primary-700"
             >
                 All {{ total }}
             </button>

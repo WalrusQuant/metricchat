@@ -324,14 +324,9 @@ async def startup_event():
     license_status = f"Enterprise ({license_info.org_name})" if license_info.licensed else "Community"
 
     print(f"""
-   ____                       __                         _
- |  _ \\                     / _|                       | |
- | |_) | __ _  __ _    ___ | |_  __      _____  _ __ __| |___
- |  _ < / _` |/ _` |  / _ \\|  _| \\ \\ /\\ / / _ \\| '__/ _` / __|
- | |_) | (_| | (_| | | (_) | |    \\ V  V / (_) | | | (_| \\__ \\
- |____/ \\__,_|\\__, |  \\___/|_|     \\_/\\_/ \\___/|_|  \\__,_|___/
-               __/ |
-              |___/
+  ─────────────────────────────
+          MetricChat
+  ─────────────────────────────
 
 Starting server with configuration:
     - Environment: {settings.ENVIRONMENT}

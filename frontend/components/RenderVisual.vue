@@ -148,7 +148,7 @@ const isLoading = ref(false)
 const chartRenderKey = ref(0)
 
 // --- Default color palette ---
-const DEFAULT_PALETTE = ['#2563eb', '#16a34a', '#ea580c', '#dc2626', '#7c3aed', '#0891b2', '#db2777', '#84cc16']
+const DEFAULT_PALETTE = ['#0C7C7C', '#16a34a', '#ea580c', '#dc2626', '#7c3aed', '#0891b2', '#db2777', '#84cc16']
 
 // --- Helper: Get colors from view or default ---
 function getColors(): string[] {

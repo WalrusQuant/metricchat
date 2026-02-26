@@ -41,7 +41,7 @@
                                 <p class="mt-2 text-sm text-gray-500 max-w-sm">
                                     This data source is private. Contact the owner or an admin to request access.
                                 </p>
-                                <NuxtLink to="/data" class="mt-4 text-sm text-blue-600 hover:underline">
+                                <NuxtLink to="/data" class="mt-4 text-sm text-primary-600 hover:underline">
                                     ← Back to Data Sources
                                 </NuxtLink>
                             </div>
@@ -57,7 +57,7 @@
                                 <p class="mt-2 text-sm text-gray-500 max-w-sm">
                                     The data source you're looking for doesn't exist or has been removed.
                                 </p>
-                                <NuxtLink to="/data" class="mt-4 text-sm text-blue-600 hover:underline">
+                                <NuxtLink to="/data" class="mt-4 text-sm text-primary-600 hover:underline">
                                     ← Back to Data Sources
                                 </NuxtLink>
                             </div>
@@ -75,7 +75,7 @@
                                     :to="tabTo(tab.name)"
                                     :class="[
                                         isTabActive(tab.name)
-                                            ? 'border-blue-500 text-blue-600'
+                                            ? 'border-primary-500 text-primary-600'
                                             : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700',
                                         'whitespace-nowrap border-b-2 py-2 px-2 text-sm font-medium flex items-center space-x-2'
                                     ]"

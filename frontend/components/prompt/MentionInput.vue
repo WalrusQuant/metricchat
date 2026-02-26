@@ -33,7 +33,7 @@
             :key="item.id"
             :class="[
               'group px-2 py-1 cursor-pointer flex items-center justify-between hover:bg-gray-50',
-              { 'bg-blue-50': selectedIndex === getCumulativeIndex(categoryIndex, itemIndex) }
+              { 'bg-primary-50': selectedIndex === getCumulativeIndex(categoryIndex, itemIndex) }
             ]"
             :data-idx="getCumulativeIndex(categoryIndex, itemIndex)"
             @click="selectItem(item, category.name)"
@@ -76,7 +76,7 @@
             <Icon v-else-if="expandedCategory === 'entities'" :name="expandedItem?.entity_type === 'metric' ? 'heroicons-chart-bar' : 'heroicons-cube'" class="w-3.5 h-3.5 flex-shrink-0 text-gray-500" />
             <div class="text-[13px] font-medium truncate">{{ expandedItem?.name }}</div>
           </div>
-          <button @click="selectItem(expandedItem, expandedCategory)" class="text-sm text-blue-600 hover:text-blue-700 font-medium px-1">+</button>
+          <button @click="selectItem(expandedItem, expandedCategory)" class="text-sm text-primary-600 hover:text-primary-700 font-medium px-1">+</button>
         </div>
 
         <!-- Data source details: description + tables list (client-side filtered) -->

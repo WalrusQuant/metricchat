@@ -2,12 +2,12 @@
     <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
         <div class="p-6 border-b border-gray-50">
             <h3 class="text-lg font-semibold text-gray-900">Recently Failed Queries</h3>
-            <p class="text-sm text-gray-500 mt-1">Latest query failures - for more go to <nuxt-link to="/console/diagnosis" class="text-blue-600 hover:text-blue-800">diagnosis</nuxt-link> page</p>
+            <p class="text-sm text-gray-500 mt-1">Latest query failures - for more go to <nuxt-link to="/console/diagnosis" class="text-primary-600 hover:text-primary-800">diagnosis</nuxt-link> page</p>
         </div>
         <div class="p-0">
             <div v-if="isLoading" class="flex items-center justify-center py-8">
                 <div class="flex items-center space-x-2">
-                    <div class="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600"></div>
+                    <div class="animate-spin rounded-full h-4 w-4 border-b-2 border-primary-600"></div>
                     <span class="text-sm text-gray-600">Loading...</span>
                 </div>
             </div>

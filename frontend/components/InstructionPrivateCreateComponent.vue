@@ -150,7 +150,7 @@
                         >
                             <button 
                                 type="button"
-                                class="text-[11px] text-blue-500 hover:text-blue-600 transition-colors"
+                                class="text-[11px] text-primary-500 hover:text-primary-600 transition-colors"
                                 @click="$emit('relink-to-git')"
                             >
                                 Relink
@@ -160,16 +160,16 @@
                 </div>
 
                 <!-- Build Approval Notice (shown to non-admins creating new instructions) -->
-                <div v-if="showBuildApprovalNotice" class="flex items-center gap-2 p-2.5 bg-blue-50 border border-blue-200 rounded-lg">
-                    <Icon name="heroicons:clock" class="w-4 h-4 text-blue-600 shrink-0" />
+                <div v-if="showBuildApprovalNotice" class="flex items-center gap-2 p-2.5 bg-primary-50 border border-primary-200 rounded-lg">
+                    <Icon name="heroicons:clock" class="w-4 h-4 text-primary-600 shrink-0" />
                     <div class="min-w-0">
-                        <span class="text-xs font-medium text-blue-800">Pending Build Approval</span>
-                        <p class="text-[11px] text-blue-600 mt-0.5">This instruction will be added to a build for admin review.</p>
+                        <span class="text-xs font-medium text-primary-800">Pending Build Approval</span>
+                        <p class="text-[11px] text-primary-600 mt-0.5">This instruction will be added to a build for admin review.</p>
                     </div>
                 </div>
 
                 <!-- Hero Textarea / Code Editor -->
-                <div class="border border-gray-200 rounded-xl overflow-hidden focus-within:ring-2 focus-within:ring-blue-100 focus-within:border-blue-400">
+                <div class="border border-gray-200 rounded-xl overflow-hidden focus-within:ring-2 focus-within:ring-primary-100 focus-within:border-primary-400">
                     <!-- Header with title and code view toggle -->
                     <div class="flex items-center justify-between px-3 py-1.5 bg-white border-b border-gray-100">
                         <div class="flex items-center gap-2 min-w-0">
@@ -443,7 +443,7 @@ Examples:
                         <UButton 
                             type="submit" 
                             size="xs" 
-                            color="blue"
+                            color="primary"
                             :loading="isSubmitting"
                         >
                             {{ isEditing ? 'Update' : 'Create' }}
@@ -1013,7 +1013,7 @@ watch(() => props.selectedDataSources, () => {
     
     /* Regular links - but not inside headings */
     a { 
-        @apply text-blue-600 hover:text-blue-800 underline;
+        @apply text-primary-600 hover:text-primary-800 underline;
     }
     
     blockquote { 

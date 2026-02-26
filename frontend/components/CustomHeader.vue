@@ -41,7 +41,7 @@ export default {
     headerStyles() {
       return {
         color: this.themeTokens.textColor || '#0f172a',
-        fontFamily: this.themeTokens.fontFamily || 'Inter, ui-sans-serif, system-ui'
+        fontFamily: this.themeTokens.fontFamily || 'DM Sans, ui-sans-serif, system-ui'
       };
     },
     iconStyles() {

@@ -9,7 +9,7 @@
       <form @submit.prevent="onSubmit" class="space-y-3">
         <div v-if="props.allowNameEdit !== false" class="p-3 rounded border">
           <label class="text-sm font-medium text-gray-700 mb-1 block">Connection Name</label>
-          <input v-model="name" type="text" placeholder="e.g., 'Sales DB', 'Production'" class="border border-gray-300 rounded-lg px-3 py-1.5 w-full text-sm focus:outline-none focus:border-blue-500" />
+          <input v-model="name" type="text" placeholder="e.g., 'Sales DB', 'Production'" class="border border-gray-300 rounded-lg px-3 py-1.5 w-full text-sm focus:outline-none focus:border-primary-500" />
         </div>
 
         <div v-if="fields.config" class="p-3 rounded border">
@@ -19,12 +19,12 @@
               <label :for="field.field_name" class="text-xs text-gray-700">{{ field.title || field.field_name }}</label>
               <span class="text-xs text-gray-500">{{ field.description }}</span>
             </div>
-            <input v-if="field.type === 'string' && uiType(field) !== 'textarea' && uiType(field) !== 'password'" type="text" v-model="formData.config[field.field_name]" :id="field.field_name" class="block w-full px-3 py-1.5 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 text-sm" :placeholder="field.title || field.field_name" />
-            <input v-else-if="field.type === 'integer' || field.type === 'number' || uiType(field) === 'number'" type="number" v-model.number="formData.config[field.field_name]" :id="field.field_name" class="block w-full px-3 py-1.5 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 text-sm" :placeholder="field.title || field.field_name" :min="field.minimum" :max="field.maximum" />
-            <UToggle v-else-if="field.type === 'boolean' || uiType(field) === 'boolean' || uiType(field) === 'toggle'" v-model="formData.config[field.field_name]" size="xs" color="blue" />
-            <textarea v-else-if="uiType(field) === 'textarea'" v-model="formData.config[field.field_name]" :id="field.field_name" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" :placeholder="field.title || field.field_name" rows="3" />
-            <input v-else-if="uiType(field) === 'password' || field.type === 'password'" type="password" v-model="formData.config[field.field_name]" :id="field.field_name" class="block w-full px-3 py-1.5 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 text-sm" :placeholder="field.title || field.field_name" />
-            <input v-else type="text" v-model="formData.config[field.field_name]" :id="field.field_name" class="block w-full px-3 py-1.5 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 text-sm" :placeholder="field.title || field.field_name" />
+            <input v-if="field.type === 'string' && uiType(field) !== 'textarea' && uiType(field) !== 'password'" type="text" v-model="formData.config[field.field_name]" :id="field.field_name" class="block w-full px-3 py-1.5 border border-gray-300 rounded-md focus:outline-none focus:border-primary-500 text-sm" :placeholder="field.title || field.field_name" />
+            <input v-else-if="field.type === 'integer' || field.type === 'number' || uiType(field) === 'number'" type="number" v-model.number="formData.config[field.field_name]" :id="field.field_name" class="block w-full px-3 py-1.5 border border-gray-300 rounded-md focus:outline-none focus:border-primary-500 text-sm" :placeholder="field.title || field.field_name" :min="field.minimum" :max="field.maximum" />
+            <UToggle v-else-if="field.type === 'boolean' || uiType(field) === 'boolean' || uiType(field) === 'toggle'" v-model="formData.config[field.field_name]" size="xs" color="primary" />
+            <textarea v-else-if="uiType(field) === 'textarea'" v-model="formData.config[field.field_name]" :id="field.field_name" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm" :placeholder="field.title || field.field_name" rows="3" />
+            <input v-else-if="uiType(field) === 'password' || field.type === 'password'" type="password" v-model="formData.config[field.field_name]" :id="field.field_name" class="block w-full px-3 py-1.5 border border-gray-300 rounded-md focus:outline-none focus:border-primary-500 text-sm" :placeholder="field.title || field.field_name" />
+            <input v-else type="text" v-model="formData.config[field.field_name]" :id="field.field_name" class="block w-full px-3 py-1.5 border border-gray-300 rounded-md focus:outline-none focus:border-primary-500 text-sm" :placeholder="field.title || field.field_name" />
           </div>
         </div>
 
@@ -37,7 +37,7 @@
                 v-if="credentialsLocked"
                 type="button"
                 @click="unlockCredentials"
-                class="text-xs text-blue-600 hover:text-blue-700 font-medium"
+                class="text-xs text-primary-600 hover:text-primary-700 font-medium"
               >
                 Change
               </button>
@@ -68,15 +68,15 @@
           <template v-if="!credentialsLocked">
             <div v-if="showSystemCredentialFields" v-for="field in credentialFields" :key="field.field_name" class="mb-2" @change="clearTestResult()">
               <label :for="field.field_name" class="block text-xs text-gray-700 mb-1">{{ field.title || field.field_name }}</label>
-              <input v-if="uiType(field) === 'string'" type="text" v-model="formData.credentials[field.field_name]" :id="field.field_name" class="block w-full px-3 py-1.5 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 text-sm" :placeholder="field.title || field.field_name" />
-              <UToggle v-else-if="field.type === 'boolean' || uiType(field) === 'boolean' || uiType(field) === 'toggle'" v-model="formData.credentials[field.field_name]" size="xs" color="blue" />
-              <textarea v-else-if="uiType(field) === 'textarea'" v-model="formData.credentials[field.field_name]" :id="field.field_name" class="block w-full px-3 py-1.5 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 text-sm" :placeholder="field.title || field.field_name" rows="3" />
-              <input v-else-if="uiType(field) === 'password' || field.type === 'password'" type="password" v-model="formData.credentials[field.field_name]" :id="field.field_name" class="block w-full px-3 py-1.5 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 text-sm" :placeholder="field.title || field.field_name" />
+              <input v-if="uiType(field) === 'string'" type="text" v-model="formData.credentials[field.field_name]" :id="field.field_name" class="block w-full px-3 py-1.5 border border-gray-300 rounded-md focus:outline-none focus:border-primary-500 text-sm" :placeholder="field.title || field.field_name" />
+              <UToggle v-else-if="field.type === 'boolean' || uiType(field) === 'boolean' || uiType(field) === 'toggle'" v-model="formData.credentials[field.field_name]" size="xs" color="primary" />
+              <textarea v-else-if="uiType(field) === 'textarea'" v-model="formData.credentials[field.field_name]" :id="field.field_name" class="block w-full px-3 py-1.5 border border-gray-300 rounded-md focus:outline-none focus:border-primary-500 text-sm" :placeholder="field.title || field.field_name" rows="3" />
+              <input v-else-if="uiType(field) === 'password' || field.type === 'password'" type="password" v-model="formData.credentials[field.field_name]" :id="field.field_name" class="block w-full px-3 py-1.5 border border-gray-300 rounded-md focus:outline-none focus:border-primary-500 text-sm" :placeholder="field.title || field.field_name" />
             </div>
           </template>
 
           <div v-if="showRequireUserAuth && (isCreateMode || isCreateConnectionOnly || isConnectionEdit)" class="flex items-center gap-2 mb-2 mt-4">
-            <UToggle color="blue" v-model="require_user_auth" @change="clearTestResult()" />
+            <UToggle color="primary" v-model="require_user_auth" @change="clearTestResult()" />
             <span class="text-xs text-gray-700">Require user authentication</span>
           </div>
 
@@ -84,7 +84,7 @@
 
         <div class="pt-1">
           <div v-if="showLLMToggle !== false" class="flex items-center gap-2 mb-2">
-            <UToggle color="blue" v-model="use_llm_onboarding" />
+            <UToggle color="primary" v-model="use_llm_onboarding" />
             <span class="text-xs text-gray-700">Use LLM to learn data source</span>
           </div>
           <div v-if="testResultOk !== null" class="mb-2">
@@ -106,7 +106,7 @@
             </UTooltip>
 
             <UTooltip :text="!connectionTestPassed ? 'Pass the connection test first' : ''">
-              <button type="submit" :disabled="submitting || !connectionTestPassed" class="bg-blue-500 hover:bg-blue-600 text-white text-xs font-medium py-1.5 px-3 rounded disabled:opacity-50">
+              <button type="submit" :disabled="submitting || !connectionTestPassed" class="bg-primary-500 hover:bg-primary-600 text-white text-xs font-medium py-1.5 px-3 rounded disabled:opacity-50">
                 <span v-if="submitting">Saving...</span>
                 <span v-else>Save and Continue</span>
               </button>

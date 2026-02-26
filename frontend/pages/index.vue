@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col min-h-screen bg-white relative">
+  <div class="flex flex-col min-h-screen relative">
 
     <!-- Add background div with grid -->
     <div class="absolute inset-0 pointer-events-none" 
@@ -12,7 +12,7 @@
     <!-- Top bar -->
     <div class="flex justify-between items-center p-3">
         <div class="logo md:hidden">
-            <img src="/assets/logo.png" alt="MetricChat" class="h-7" />
+            <img src="/assets/logo.svg" alt="MetricChat" class="h-7" />
         </div>
         <div class="flex items-center gap-4 ml-auto">
             <div class="hamburger md:hidden">
@@ -24,8 +24,8 @@
     </div>
 
     <div v-if="isLoading" class="flex flex-col items-center justify-center flex-grow py-20">
-      <Spinner class="h-4 w-4 text-gray-400" />
-      <p class="text-sm text-gray-500 mt-2">Loading...</p>
+      <Spinner class="h-4 w-4 text-stone-400" />
+      <p class="text-sm text-stone-500 mt-2">Loading...</p>
     </div>
 
     <div v-else class="flex flex-col p-4 flex-grow md:w-2/3 text-center md:mx-auto mt-14">
@@ -37,13 +37,13 @@
           <span class="flex items-center">Setup complete — you can now start asking questions in natural language.</span>
         </div>
       </div>
-      <img :src="orgIconUrl || '/assets/logo-128.png'" alt="MetricChat" class="max-h-12 max-w-[180px] object-contain mx-auto" />
+      <img :src="orgIconUrl || '/assets/logo-icon.svg'" alt="MetricChat" class="max-h-12 max-w-[180px] object-contain mx-auto" />
       <h1 class="text-5xl mt-5 font-bold">
-        {{ orgAIAnalystName || 'AI Analyst' }}
+        {{ orgAIAnalystName || 'AI Data Analyst' }}
       </h1>
-      <div class="w-full mx-auto mt-2 space-x-3 space-y-3 bg-red-100">
+      <div class="w-full mx-auto mt-2 space-x-3 space-y-3">
       </div>
-      <p class="text-lg mt-5 font-light text-gray-500">
+      <p class="text-lg mt-5 font-light text-stone-500">
           Create reports, dashboards, and simply get the data you need
       </p>
       <div class="w-full md:w-4/5 mx-auto mt-10 rounded-lg relative z-10">
@@ -69,7 +69,7 @@
     <!-- Existing content -->
     <div v-if="!isLoading" class="flex flex-col p-4 flex-grow md:w-1/3 md:mx-auto relative z-10">
      
-      <div class="flex cursor-pointer flex-col text-sm w-full text-left mt-4 p-2 bg-white rounded-md border border-gray-200 hover:shadow-md hover:border-blue-300"
+      <div class="flex cursor-pointer flex-col text-sm w-full text-left mt-4 p-2 bg-white rounded-md border border-stone-200 hover:shadow-md hover:border-primary-300"
         v-if="models.length === 0"
         @click="router.push('/settings/models')"
       >
@@ -91,7 +91,7 @@
 
         <div 
         @click="router.push('/data')" 
-        class="flex hidden cursor-pointer flex-col text-sm w-full text-left mt-4 p-2 bg-white rounded-md border border-gray-200 hover:shadow-md hover:border-blue-300">
+        class="flex hidden cursor-pointer flex-col text-sm w-full text-left mt-4 p-2 bg-white rounded-md border border-stone-200 hover:shadow-md hover:border-primary-300">
             <div class="flex">
 
                 <div class="w-4/5 pr-4">
@@ -313,7 +313,7 @@ await signOut({
 
 <style scoped>
 .gradient-glow {
-    background-image: linear-gradient(45deg, #BE93C5, #7BC6CC, #DBE6F6);
+    background-image: linear-gradient(45deg, #0C7C7C, #33A7A7, #C4841D);
     border-radius: 9999px;
     filter: blur(60px);
     height: 160px;

@@ -9,7 +9,7 @@
         </UTooltip>
       </div>
       <UTooltip v-if="!props.hideArtifactSwitch" text="Switch to Artifact view">
-        <button @click="$emit('toggleArtifactView')" class="font-medium text-gray-700 hover:text-blue-600 flex items-center gap-1">
+        <button @click="$emit('toggleArtifactView')" class="font-medium text-gray-700 hover:text-primary-600 flex items-center gap-1">
           Dashboard
           <Icon name="heroicons:code-bracket" class="w-3.5 h-3.5 opacity-50" />
         </button>

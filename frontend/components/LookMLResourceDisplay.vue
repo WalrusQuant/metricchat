@@ -174,7 +174,7 @@ function formatFieldType(resourceType: string): string {
 function getFieldTypeClass(resourceType: string): string {
   const type = resourceType?.toLowerCase() || '';
   if (type.includes('dimension')) {
-    return 'bg-blue-100 text-blue-700';
+    return 'bg-primary-100 text-primary-700';
   } else if (type.includes('measure')) {
     return 'bg-green-100 text-green-700';
   } else if (type.includes('parameter')) {

@@ -18,7 +18,7 @@
                                 v-model="searchTerm"
                                 type="text"
                                 placeholder="Search reports..."
-                                class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                             />
                             <UIcon
                                 name="i-heroicons-magnifying-glass"
@@ -29,7 +29,7 @@
 
                     <div class="flex items-center justify-end gap-2 w-full md:w-auto">
                         <UButton
-                            color="blue"
+                            color="primary"
                             variant="solid"
                             size="xs"
                             icon="i-heroicons-plus"
@@ -47,7 +47,7 @@
                         <button
                             class="whitespace-nowrap border-b-2 py-2 px-1 text-sm flex items-center"
                             :class="activeFilter === 'my'
-                                ? 'border-blue-500 text-blue-600'
+                                ? 'border-primary-500 text-primary-600'
                                 : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'"
                             @click="setActiveFilter('my')"
                         >
@@ -56,7 +56,7 @@
                         <button
                             class="whitespace-nowrap border-b-2 py-2 px-1 text-sm flex items-center"
                             :class="activeFilter === 'published'
-                                ? 'border-blue-500 text-blue-600'
+                                ? 'border-primary-500 text-primary-600'
                                 : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'"
                             @click="setActiveFilter('published')"
                         >
@@ -189,7 +189,7 @@
                                                 <Icon name="heroicons:chat-bubble-left-right" class="h-4 w-4 text-gray-400 inline mr-1.5" />
                                             </UTooltip>                                            <NuxtLink
                                                 :to="`/reports/${report.id}`"
-                                                class="text-blue-500 hover:underline"
+                                                class="text-primary-500 hover:underline"
                                             >
                                                 {{ report.title }}
                                             </NuxtLink>
@@ -339,7 +339,7 @@
                                 :class="[
                                     'px-3 py-1.5 text-xs font-medium rounded-md border transition-colors min-w-[36px]',
                                     page === currentPage
-                                        ? 'bg-blue-500 text-white border-blue-500'
+                                        ? 'bg-primary-500 text-white border-primary-500'
                                         : 'bg-white text-gray-700 hover:bg-gray-50 border-gray-300'
                                 ]"
                             >

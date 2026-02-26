@@ -2,12 +2,12 @@
     <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
         <div class="p-6 border-b border-gray-50">
             <h3 class="text-lg font-semibold text-gray-900">Recent Instructions</h3>
-            <p class="text-sm text-gray-500 mt-1">Latest instruction updates - for more go to <nuxt-link to="/console/instructions" class="text-blue-600 hover:text-blue-800">instructions</nuxt-link> page</p>
+            <p class="text-sm text-gray-500 mt-1">Latest instruction updates - for more go to <nuxt-link to="/console/instructions" class="text-primary-600 hover:text-primary-800">instructions</nuxt-link> page</p>
         </div>
         <div class="p-0">
             <div v-if="isLoading" class="flex items-center justify-center h-40">
                 <div class="flex items-center space-x-2">
-                    <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
+                    <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-primary-600"></div>
                     <span class="text-gray-600">Loading instructions...</span>
                 </div>
             </div>
@@ -216,7 +216,7 @@ const getCategoryIcon = (category: string) => {
 
 const getCategoryIconClass = (category: string) => {
     const categoryClasses = {
-        code_gen: 'bg-blue-500',
+        code_gen: 'bg-primary-500',
         data_modeling: 'bg-green-500',
         general: 'bg-purple-500',
         system: 'bg-orange-500',

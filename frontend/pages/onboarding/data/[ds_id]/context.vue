@@ -74,7 +74,7 @@
                     :key="page"
                     @click="currentPage = page"
                     class="w-6 h-6 text-xs rounded-full transition-colors"
-                    :class="currentPage === page ? 'bg-blue-500 text-white' : 'text-gray-500 hover:bg-gray-100'"
+                    :class="currentPage === page ? 'bg-primary-500 text-white' : 'text-gray-500 hover:bg-gray-100'"
                   >
                     {{ page }}
                   </button>
@@ -83,7 +83,7 @@
                 <div class="flex items-center justify-between mt-4">
                   <div class="flex items-center gap-2">
                     <UButton
-                      color="blue"
+                      color="primary"
                       variant="outline"
                       size="xs"
                       @click="openInstructionModal"
@@ -108,11 +108,11 @@
 
             <!-- Git Integration Card -->
             <div 
-              class="bg-blue-50/50 border border-blue-100 rounded-lg p-4 cursor-pointer hover:bg-blue-50 transition-colors"
+              class="bg-primary-50/50 border border-primary-100 rounded-lg p-4 cursor-pointer hover:bg-primary-50 transition-colors"
               @click="showGitModal = true"
             >
               <div class="flex items-center gap-3">
-                <GitBranchIcon class="w-5 h-5 text-blue-500 shrink-0" />
+                <GitBranchIcon class="w-5 h-5 text-primary-500 shrink-0" />
                 <div class="flex-1">
                   <div class="flex items-center gap-2">
                     <h3 class="text-sm font-semibold text-gray-900">Integrate Git</h3>
@@ -155,7 +155,7 @@
               <button 
                 @click="handleSave" 
                 :disabled="saving"
-                class="bg-blue-500 hover:bg-blue-600 text-white text-xs font-medium py-1.5 px-3 rounded disabled:opacity-50"
+                class="bg-primary-500 hover:bg-primary-600 text-white text-xs font-medium py-1.5 px-3 rounded disabled:opacity-50"
               >
                 <span v-if="saving">Saving...</span>
                 <span v-else>Save & Continue</span>

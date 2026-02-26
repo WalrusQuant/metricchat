@@ -60,7 +60,7 @@
                                 v-for="instruction in instructions" 
                                 :key="instruction.id"
                                 class="hover:bg-gray-50 transition-colors cursor-pointer"
-                                :class="{ 'bg-blue-50': selectable && selectedIds?.has(instruction.id) }"
+                                :class="{ 'bg-primary-50': selectable && selectedIds?.has(instruction.id) }"
                                 @click="handleRowClick(instruction, $event)"
                             >
                                 <!-- Checkbox -->
@@ -99,7 +99,7 @@
                                             v-if="instruction.text && instruction.text.length > 150"
                                             @click.stop="toggleExpand(instruction.id)"
                                             :class="compact ? 'text-[9px]' : 'text-[10px]'"
-                                            class="text-blue-500 hover:text-blue-700 mt-0.5 font-medium"
+                                            class="text-primary-500 hover:text-primary-700 mt-0.5 font-medium"
                                         >
                                             {{ expandedRows.has(instruction.id) ? 'less' : 'more' }}
                                         </button>
@@ -129,7 +129,7 @@
                                                     class="w-5 h-5"
                                                     :class="{
                                                         'text-amber-500': helpers.getSourceType(instruction) === 'ai',
-                                                        'text-blue-500': helpers.getSourceType(instruction) === 'user'
+                                                        'text-primary-500': helpers.getSourceType(instruction) === 'user'
                                                     }"
                                                 />
                                             </template>
@@ -190,9 +190,9 @@
                                                     :class="compact ? 'text-[8px] px-1 py-0.5' : 'text-[9px] px-1.5 py-0.5'"
                                                     class="inline-flex items-center gap-1 rounded-full border font-medium"
                                                     :style="{
-                                                        borderColor: label.color || '#CBD5F5',
-                                                        backgroundColor: label.color ? `${label.color}15` : '#F9FAFB',
-                                                        color: '#374151'
+                                                        borderColor: label.color || '#D6D3CD',
+                                                        backgroundColor: label.color ? `${label.color}15` : '#FAFAF8',
+                                                        color: '#1C1917'
                                                     }"
                                                 >
                                                     <span :class="compact ? 'w-1 h-1' : 'w-1.5 h-1.5'" class="rounded-full" :style="{ backgroundColor: label.color || '#94A3B8' }"></span>

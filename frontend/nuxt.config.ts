@@ -4,13 +4,27 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   ssr: false,
 
+  app: {
+    head: {
+      link: [
+        { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
+        { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' },
+        {
+          rel: 'stylesheet',
+          href: 'https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=JetBrains+Mono:wght@400;500&display=swap',
+        },
+      ],
+    },
+  },
+
+  css: ['~/assets/css/brand.css'],
+
   modules: [
     "@nuxt/ui",
     "@sidebase/nuxt-auth",
     'nuxt-tiptap-editor',
     '@nuxtjs/mdc',
     '@nuxt-alt/proxy',
-    'nuxt-3-intercom',
     'nuxt-echarts',
     'nuxt-monaco-editor'
   ],
@@ -51,11 +65,6 @@ export default defineNuxtConfig({
       'ParallelComponent',
       'RadarComponent'
     ]
-  },
-
-  intercom: {
-    appId: 'ocwih86k',
-    autoBoot: false
   },
 
   tiptap: {

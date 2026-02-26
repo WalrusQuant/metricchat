@@ -51,7 +51,7 @@
                     Cancel
                 </UButton>
                 <UButton 
-                    color="blue" 
+                    color="primary" 
                     size="xs" 
                     @click="handleConfirm"
                     :disabled="selectedValues.length === 0"

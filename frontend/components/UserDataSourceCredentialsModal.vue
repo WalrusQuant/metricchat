@@ -32,7 +32,7 @@
         <UButton size="xs" color="gray" variant="soft" :loading="testing" @click="onTest">Test connection</UButton>
         <div class="space-x-2">
           <UButton size="xs" color="gray" variant="soft" @click="emit('update:modelValue', false)">Cancel</UButton>
-          <UButton size="xs" color="blue" variant="solid" :loading="saving" @click="onSave">Save</UButton>
+          <UButton size="xs" color="primary" variant="solid" :loading="saving" @click="onSave">Save</UButton>
         </div>
       </div>
 

@@ -108,7 +108,7 @@
         </p>
         <a
           href="#"
-          class="text-xs text-blue-600 hover:text-blue-700"
+          class="text-xs text-primary-600 hover:text-primary-700"
         >
           Learn more →
         </a>

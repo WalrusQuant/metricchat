@@ -59,7 +59,7 @@
                         @click="handleFilterChange(filter)"
                         :class="[
                             selectedFilter.value === filter.value
-                                ? 'border-blue-500 text-blue-600'
+                                ? 'border-primary-500 text-primary-600'
                                 : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300',
                             'whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm'
                         ]"
@@ -69,7 +69,7 @@
                             v-if="filter.count !== undefined && filter.count >= 0"
                             :class="[
                                 selectedFilter.value === filter.value
-                                    ? 'bg-blue-100 text-blue-600'
+                                    ? 'bg-primary-100 text-primary-600'
                                     : 'bg-gray-100 text-gray-600',
                                 'ml-2 py-0.5 px-2 rounded-full text-xs font-medium'
                             ]"
@@ -84,7 +84,7 @@
         <!-- Loading state -->
         <div v-if="isLoading" class="flex items-center justify-center py-12">
             <div class="flex items-center space-x-2">
-                <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
+                <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-primary-600"></div>
                 <span class="text-gray-600">Loading diagnosis data...</span>
             </div>
         </div>
@@ -164,7 +164,7 @@
                                 </div>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <a v-if="item.report_link" :href="item.report_link" class="text-blue-600 hover:underline" @click.stop>
+                                <a v-if="item.report_link" :href="item.report_link" class="text-primary-600 hover:underline" @click.stop>
                                     {{ item.report_name || item.report_id }}
                                 </a>
                                 <span v-else>{{ item.report_name || item.report_id }}</span>
@@ -215,7 +215,7 @@
                     <UButton
                         v-for="page in visiblePages"
                         :key="page"
-                        :color="page === currentPage ? 'blue' : 'gray'"
+                        :color="page === currentPage ? 'primary' : 'gray'"
                         :variant="page === currentPage ? 'solid' : 'ghost'"
                         size="sm"
                         @click="currentPage = page"

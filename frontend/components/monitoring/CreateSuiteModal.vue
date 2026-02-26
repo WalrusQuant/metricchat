@@ -20,7 +20,7 @@
             <template #footer>
                 <div class="flex items-center justify-end gap-2">
                     <UButton color="gray" variant="soft" @click="close">Cancel</UButton>
-                    <UButton :loading="isLoading" class="!bg-blue-500 !text-white" @click="create">Create</UButton>
+                    <UButton :loading="isLoading" class="!bg-primary-500 !text-white" @click="create">Create</UButton>
                 </div>
             </template>
         </UCard>

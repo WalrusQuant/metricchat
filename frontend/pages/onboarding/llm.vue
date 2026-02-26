@@ -31,23 +31,23 @@
               <div v-if="selectedProvider.type !== 'new_provider'" class="space-y-4">
                 <div>
                   <label class="text-sm font-medium text-gray-700 mb-2">API Key</label>
-                  <input v-model="selectedProvider.credentials.api_key" type="text" placeholder="Keep blank to use stored key" class="mt-2 border border-gray-300 rounded-lg px-4 py-2 w-full h-9 text-sm focus:outline-none focus:border-blue-500" @change="clearTestResult()" />
+                  <input v-model="selectedProvider.credentials.api_key" type="text" placeholder="Keep blank to use stored key" class="mt-2 border border-gray-300 rounded-lg px-4 py-2 w-full h-9 text-sm focus:outline-none focus:border-primary-500" @change="clearTestResult()" />
                 </div>
 
                 <div v-if="selectedProvider?.provider_type === 'azure' || selectedProvider?.type === 'azure'">
                   <label class="text-sm font-medium text-gray-700 mb-2">Endpoint URL</label>
-                  <input v-model="selectedProvider.credentials.endpoint_url" type="text" placeholder="e.g. https://[resource].openai.azure.com" class="mt-2 border border-gray-300 rounded-lg px-4 py-2 w-full h-9 text-sm focus:outline-none focus:border-blue-500" @change="clearTestResult()" />
+                  <input v-model="selectedProvider.credentials.endpoint_url" type="text" placeholder="e.g. https://[resource].openai.azure.com" class="mt-2 border border-gray-300 rounded-lg px-4 py-2 w-full h-9 text-sm focus:outline-none focus:border-primary-500" @change="clearTestResult()" />
                 </div>
 
                 <div v-if="selectedProvider?.provider_type === 'openai' || selectedProvider?.type === 'openai'">
                   <div class="mt-1">
-                    <button type="button" @click="toggleBaseUrl" class="text-xs text-blue-600 hover:underline">
+                    <button type="button" @click="toggleBaseUrl" class="text-xs text-primary-600 hover:underline">
                       {{ showBaseUrl ? 'Use default base URL' : 'Set custom base URL' }}
                     </button>
                   </div>
                   <div v-if="showBaseUrl" class="mt-2">
                     <label class="text-sm font-medium text-gray-700 mb-2">Base URL (optional)</label>
-                    <input v-model="selectedProvider.credentials.base_url" type="text" placeholder="e.g. https://my-openai-proxy.example.com/v1" class="mt-2 border border-gray-300 rounded-lg px-4 py-2 w-full h-9 text-sm focus:outline-none focus:border-blue-500" @change="clearTestResult()" />
+                    <input v-model="selectedProvider.credentials.base_url" type="text" placeholder="e.g. https://my-openai-proxy.example.com/v1" class="mt-2 border border-gray-300 rounded-lg px-4 py-2 w-full h-9 text-sm focus:outline-none focus:border-primary-500" @change="clearTestResult()" />
                   </div>
                 </div>
 
@@ -64,10 +64,10 @@
                     </div>
 
                     <!-- Custom models for existing provider -->
-                    <div v-for="(customModel, index) in existingProviderCustomModels" :key="`existing-custom-${index}`" class="flex items-center gap-2 p-2 border border-blue-200 rounded-lg bg-blue-50">
+                    <div v-for="(customModel, index) in existingProviderCustomModels" :key="`existing-custom-${index}`" class="flex items-center gap-2 p-2 border border-primary-200 rounded-lg bg-primary-50">
                       <UCheckbox v-model="customModel.is_enabled" @change="clearTestResult()" />
                       <div class="flex-1">
-                        <input v-model="customModel.model_id" type="text" placeholder="Model ID" class="text-sm border border-gray-300 rounded px-2 py-1 w-full focus:outline-none focus:border-blue-500" @change="clearTestResult()" />
+                        <input v-model="customModel.model_id" type="text" placeholder="Model ID" class="text-sm border border-gray-300 rounded px-2 py-1 w-full focus:outline-none focus:border-primary-500" @change="clearTestResult()" />
                       </div>
                       <button type="button" @click="removeExistingProviderCustomModel(index)" class="text-red-500 hover:text-red-700">
                         <Icon name="heroicons:trash" class="w-4 h-4" />
@@ -75,7 +75,7 @@
                     </div>
 
                     <div class="pt-2">
-                      <button type="button" @click="addExistingProviderCustomModel" class="text-sm text-blue-500 hover:text-blue-700 underline flex items-center gap-1">
+                      <button type="button" @click="addExistingProviderCustomModel" class="text-sm text-primary-500 hover:text-primary-700 underline flex items-center gap-1">
                         <Icon name="heroicons:plus-circle" class="w-4 h-4" />
                         Add Custom Model
                       </button>
@@ -91,17 +91,17 @@
                 <div v-if="providerForm.provider_type">
                   <div class="flex flex-col mb-4">
                     <label class="text-sm font-medium text-gray-700 mb-2">Name</label>
-                    <input v-model="providerForm.name" type="text" required :placeholder="`Provider Name (e.g. ${providerForm.provider_type} production)`" class="border border-gray-300 rounded-lg px-4 py-2 w-full h-9 text-sm focus:outline-none focus:border-blue-500" @change="clearTestResult()" />
+                    <input v-model="providerForm.name" type="text" required :placeholder="`Provider Name (e.g. ${providerForm.provider_type} production)`" class="border border-gray-300 rounded-lg px-4 py-2 w-full h-9 text-sm focus:outline-none focus:border-primary-500" @change="clearTestResult()" />
                   </div>
                   <div v-for="(field, index) in credentialFieldsForNewProvider" :key="field.key">
                     <label class="text-sm font-medium text-gray-700 mb-2 mt-2">{{ field.title }}</label>
-                    <input v-model="providerForm.credentials[field.key]" type="text" :required="!!field.required" :placeholder="field.description || ''" class="border border-gray-300 rounded-lg px-4 py-2 w-full h-9 text-sm focus:outline-none focus:border-blue-500" @change="clearTestResult()" />
+                    <input v-model="providerForm.credentials[field.key]" type="text" :required="!!field.required" :placeholder="field.description || ''" class="border border-gray-300 rounded-lg px-4 py-2 w-full h-9 text-sm focus:outline-none focus:border-primary-500" @change="clearTestResult()" />
                   </div>
                   <div v-if="providerForm.provider_type === 'openai'" class="mt-1">
-                    <button type="button" @click="toggleBaseUrlNewProvider" class="text-xs text-blue-600 hover:underline">{{ showBaseUrlNew ? 'Use default base URL' : 'Set custom base URL' }}</button>
+                    <button type="button" @click="toggleBaseUrlNewProvider" class="text-xs text-primary-600 hover:underline">{{ showBaseUrlNew ? 'Use default base URL' : 'Set custom base URL' }}</button>
                     <div v-if="showBaseUrlNew" class="mt-2">
                       <label class="text-sm font-medium text-gray-700 mb-2">Base URL (optional)</label>
-                      <input v-model="providerForm.credentials.base_url" type="text" placeholder="e.g. https://my-openai-proxy.example.com/v1" class="border border-gray-300 rounded-lg px-4 py-2 w-full h-9 text-sm focus:outline-none focus:border-blue-500" @change="clearTestResult()" />
+                      <input v-model="providerForm.credentials.base_url" type="text" placeholder="e.g. https://my-openai-proxy.example.com/v1" class="border border-gray-300 rounded-lg px-4 py-2 w-full h-9 text-sm focus:outline-none focus:border-primary-500" @change="clearTestResult()" />
                     </div>
                   </div>
                 </div>
@@ -125,10 +125,10 @@
                   </template>
 
                   <!-- Custom Models -->
-                  <div v-for="(customModel, index) in customModels" :key="`custom-${index}`" class="flex items-center gap-2 p-2 border border-blue-200 rounded-lg bg-blue-50">
+                  <div v-for="(customModel, index) in customModels" :key="`custom-${index}`" class="flex items-center gap-2 p-2 border border-primary-200 rounded-lg bg-primary-50">
                     <UCheckbox v-model="customModel.is_enabled" @change="clearTestResult()" />
                     <div class="flex-1">
-                      <input v-model="customModel.model_id" type="text" placeholder="Model ID" class="text-sm border border-gray-300 rounded px-2 py-1 w-full focus:outline-none focus:border-blue-500" @change="clearTestResult()" />
+                      <input v-model="customModel.model_id" type="text" placeholder="Model ID" class="text-sm border border-gray-300 rounded px-2 py-1 w-full focus:outline-none focus:border-primary-500" @change="clearTestResult()" />
                     </div>
                     <button type="button" @click="removeCustomModel(index)" class="text-red-500 hover:text-red-700">
                       <Icon name="heroicons:trash" class="w-4 h-4" />
@@ -136,7 +136,7 @@
                   </div>
 
                   <div class="pt-2">
-                    <button type="button" @click="addCustomModel" class="text-sm text-blue-500 hover:text-blue-700 underline flex items-center gap-1">
+                    <button type="button" @click="addCustomModel" class="text-sm text-primary-500 hover:text-primary-700 underline flex items-center gap-1">
                       <Icon name="heroicons:plus-circle" class="w-4 h-4" />
                       Add Custom Model
                     </button>
@@ -168,7 +168,7 @@
                 </UTooltip>
                 
                 <UTooltip :text="!connectionTestPassed ? 'Pass the connection test first' : ''">
-                  <UButton type="button" class="!bg-blue-500 !text-white text-xs py-1.5 px-3" :disabled="isSaving || !providerForm.provider_type || !connectionTestPassed" @click="handleSave">
+                  <UButton type="button" class="!bg-primary-500 !text-white text-xs py-1.5 px-3" :disabled="isSaving || !providerForm.provider_type || !connectionTestPassed" @click="handleSave">
                     <template v-if="isSaving">
                       <Spinner class="w-4 h-4 mr-2 inline-block align-[-0.125em]" />
                       Saving...

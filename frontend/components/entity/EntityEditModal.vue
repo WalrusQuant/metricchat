@@ -8,8 +8,8 @@
       <div class="flex-1 flex overflow-hidden min-h-0">
         <aside class="w-32 bg-white border-r">
           <nav class="p-2">
-            <button class="w-full text-left px-2 py-1.5 text-xs rounded mb-1 transition-colors" :class="editTab==='details' ? 'bg-blue-50 text-blue-700' : 'text-gray-600 hover:bg-gray-50'" @click="editTab='details'">Details</button>
-            <button class="w-full text-left px-2 py-1.5 text-xs rounded transition-colors" :class="editTab==='code' ? 'bg-blue-50 text-blue-700' : 'text-gray-600 hover:bg-gray-50'" @click="editTab='code'">Code</button>
+            <button class="w-full text-left px-2 py-1.5 text-xs rounded mb-1 transition-colors" :class="editTab==='details' ? 'bg-primary-50 text-primary-700' : 'text-gray-600 hover:bg-gray-50'" @click="editTab='details'">Details</button>
+            <button class="w-full text-left px-2 py-1.5 text-xs rounded transition-colors" :class="editTab==='code' ? 'bg-primary-50 text-primary-700' : 'text-gray-600 hover:bg-gray-50'" @click="editTab='code'">Code</button>
           </nav>
         </aside>
         <section class="flex-1 flex flex-col overflow-hidden min-h-0">
@@ -19,7 +19,7 @@
             </div>
             <div class="mt-3 flex items-center justify-end gap-2">
               <button class="bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-xs hover:bg-gray-50" @click="close">Cancel</button>
-              <button class="bg-blue-500 hover:bg-blue-600 text-white text-xs font-medium py-1.5 px-3 rounded-lg disabled:opacity-50" :disabled="saving" @click="saveEdit">
+              <button class="bg-primary-500 hover:bg-primary-600 text-white text-xs font-medium py-1.5 px-3 rounded-lg disabled:opacity-50" :disabled="saving" @click="saveEdit">
                 <span v-if="saving">Saving...</span>
                 <span v-else>Save</span>
               </button>
@@ -39,7 +39,7 @@
               </ClientOnly>
               <div v-if="codeErrorMsg" class="mt-2 text-xs text-red-600 px-1">{{ codeErrorMsg }}</div>
               <div class="mt-2 flex items-center justify-end gap-2">
-                <button class="bg-blue-500 hover:bg-blue-600 text-white text-xs font-medium py-1.5 px-3 rounded-lg disabled:opacity-50" :disabled="running" @click="runAndSave">
+                <button class="bg-primary-500 hover:bg-primary-600 text-white text-xs font-medium py-1.5 px-3 rounded-lg disabled:opacity-50" :disabled="running" @click="runAndSave">
                   <span v-if="running && runMode === 'save'">Saving...</span>
                   <span v-else>Save</span>
                 </button>

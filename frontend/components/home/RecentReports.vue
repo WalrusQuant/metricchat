@@ -17,7 +17,7 @@
           <UIcon name="i-heroicons-chevron-down-20-solid" class="w-5 h-5 text-gray-400 ml-1" />
         </template>
       </USelectMenu>
-      <NuxtLink to="/reports" class="text-sm text-blue-600 hover:text-blue-800 hover:underline">
+      <NuxtLink to="/reports" class="text-sm text-primary-600 hover:text-primary-800 hover:underline">
         View All Reports
       </NuxtLink>
     </div>

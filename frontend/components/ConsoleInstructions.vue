@@ -38,7 +38,7 @@
                 <!-- Add Instruction button -->
                 <UButton
                     icon="i-heroicons-plus"
-                    color="blue"
+                    color="primary"
                     size="xs"
                     @click="addInstruction"
                 >

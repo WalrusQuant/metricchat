@@ -19,7 +19,7 @@
                         Email is not configured on this instance. Please contact your administrator for account verification.
                     </p>
                     <div class="mt-5">
-                        <NuxtLink to="/users/sign-in" class="text-blue-400 hover:text-blue-600">
+                        <NuxtLink to="/users/sign-in" class="text-primary-400 hover:text-primary-600">
                             Back to Sign in
                         </NuxtLink>
                     </div>

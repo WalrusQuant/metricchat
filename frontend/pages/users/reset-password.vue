@@ -13,7 +13,7 @@
               id="password" 
               v-model="password" 
               type="password"
-              class="border border-gray-300 rounded-lg px-4 py-2 w-full h-9 text-sm focus:outline-none focus:border-blue-500"
+              class="border border-gray-300 rounded-lg px-4 py-2 w-full h-9 text-sm focus:outline-none focus:border-primary-500"
               required
               minlength="6"
             />
@@ -24,7 +24,7 @@
               id="confirmPassword" 
               v-model="confirmPassword" 
               type="password"
-              class="border border-gray-300 rounded-lg px-4 py-2 w-full h-9 text-sm focus:outline-none focus:border-blue-500"
+              class="border border-gray-300 rounded-lg px-4 py-2 w-full h-9 text-sm focus:outline-none focus:border-primary-500"
               required
               minlength="6"
             />
@@ -34,7 +34,7 @@
             <button 
               type="submit" 
               :disabled="isLoading || !isValid"
-              class="px-3 py-2 text-sm font-medium text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg text-center disabled:opacity-50 disabled:cursor-not-allowed"
+              class="px-3 py-2 text-sm font-medium text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 rounded-lg text-center disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {{ isLoading ? 'Resetting...' : 'Reset Password' }}
             </button>
@@ -42,7 +42,7 @@
         </form>
         <div class="mt-3 block text-sm text-center">
           Remember your password? 
-          <NuxtLink to="/users/sign-in" class="text-blue-400">
+          <NuxtLink to="/users/sign-in" class="text-primary-400">
             Sign in
           </NuxtLink>
         </div>
@@ -54,7 +54,7 @@
           <p class="mt-3 text-sm text-gray-700">
             Your password has been updated. You can now sign in with your new password.
           </p>
-          <NuxtLink to="/users/sign-in" class="text-blue-400 mt-4 block text-center text-sm hover:underline">
+          <NuxtLink to="/users/sign-in" class="text-primary-400 mt-4 block text-center text-sm hover:underline">
             Sign in
           </NuxtLink>
         </div>

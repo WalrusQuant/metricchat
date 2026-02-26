@@ -4,7 +4,7 @@
       <div class="mt-6">
 
         <!-- Run header -->
-         <NuxtLink :to="'/evals'" class="text-blue-600 text-sm hover:underline ml-2 mt-2" >
+         <NuxtLink :to="'/evals'" class="text-primary-600 text-sm hover:underline ml-2 mt-2" >
           <Icon name="heroicons-arrow-left" class="w-4 h-4" />
           Back to Evals
         </NuxtLink>
@@ -95,7 +95,7 @@
                             v-if="row.result.report_id"
                             :to="`/reports/${row.result.report_id}`"
                             target="_blank"
-                            class="ml-2 text-blue-600 hover:underline text-[10px]"
+                            class="ml-2 text-primary-600 hover:underline text-[10px]"
                           >
                             Open report
                           </NuxtLink>
@@ -806,7 +806,7 @@ const cmpSymbol = (op?: string) => {
 }
 const badgeClassesFor = (catLabel: string): string => {
   const map: Record<string, string> = {
-    'Create Data': 'bg-blue-50 text-blue-700 border-blue-100',
+    'Create Data': 'bg-primary-50 text-primary-700 border-primary-100',
     'Clarify': 'bg-amber-50 text-amber-700 border-amber-100',
     'Describe Table': 'bg-teal-50 text-teal-700 border-teal-100',
     'Metadata': 'bg-slate-50 text-slate-700 border-slate-100',
@@ -873,7 +873,7 @@ const completionStatus = (resultId: string): { text: string, className: string }
     else if (logs.some(l => l.event === 'completion.finished')) text = 'Finished'
     else if (logs.some(l => l.event === 'completion.started')) text = 'Running'
     const classMap: Record<string, string> = {
-      'Running': 'bg-blue-100 text-blue-800',
+      'Running': 'bg-primary-100 text-primary-800',
       'Finished': 'bg-green-100 text-green-800',
       'Error': 'bg-red-100 text-red-800',
       '—': 'bg-gray-100 text-gray-800'

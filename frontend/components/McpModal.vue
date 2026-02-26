@@ -36,7 +36,7 @@
                         :class="[
                             'px-4 py-2 text-sm font-medium border-b-2 -mb-px transition-colors',
                             activeTab === 'mcp'
-                                ? 'border-blue-500 text-blue-600'
+                                ? 'border-primary-500 text-primary-600'
                                 : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                         ]"
                     >
@@ -47,7 +47,7 @@
                         :class="[
                             'px-4 py-2 text-sm font-medium border-b-2 -mb-px transition-colors',
                             activeTab === 'claude-web'
-                                ? 'border-blue-500 text-blue-600'
+                                ? 'border-primary-500 text-primary-600'
                                 : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                         ]"
                     >
@@ -65,7 +65,7 @@
                         </div>
                         <UButton
                             size="xs"
-                            color="blue"
+                            color="primary"
                             @click="regenerateToken"
                             :loading="creating"
                         >
@@ -110,7 +110,7 @@
                             <p class="text-sm text-gray-500 mb-3">No access token generated yet</p>
                             <UButton
                                 size="sm"
-                                color="blue"
+                                color="primary"
                                 @click="regenerateToken"
                                 :loading="creating"
                             >
@@ -197,7 +197,7 @@
                             <UButton
                                 v-if="oauthClients.length > 0"
                                 size="xs"
-                                color="blue"
+                                color="primary"
                                 @click="rotateOAuthSecret"
                                 :loading="oauthCreating"
                             >
@@ -211,7 +211,7 @@
                             <p class="text-sm text-gray-500 mb-3">No OAuth credentials generated yet</p>
                             <UButton
                                 size="sm"
-                                color="blue"
+                                color="primary"
                                 @click="generateOAuthClient"
                                 :loading="oauthCreating"
                             >

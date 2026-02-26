@@ -1,7 +1,7 @@
 <template>
   <NuxtLink
     :to="reportLink"
-    class="group block bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-lg hover:border-blue-300 transition-all duration-200"
+    class="group block bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-lg hover:border-primary-300 transition-all duration-200"
   >
     <!-- Thumbnail -->
     <div class="aspect-[4/3] relative overflow-hidden" :class="!thumbnailUrl || imageError ? badgeStyle.cardBg : ''">
@@ -122,7 +122,7 @@ const badgeStyle = computed(() => {
     return { bg: 'bg-purple-100', text: 'text-purple-700', label: 'Slides', cardBg: 'bg-purple-50', iconColor: 'text-purple-300' }
   }
   if (hasDashboard.value) {
-    return { bg: 'bg-blue-100', text: 'text-blue-700', label: 'Dashboard', cardBg: 'bg-blue-50', iconColor: 'text-blue-300' }
+    return { bg: 'bg-primary-100', text: 'text-primary-700', label: 'Dashboard', cardBg: 'bg-primary-50', iconColor: 'text-primary-300' }
   }
   return { bg: 'bg-gray-100', text: 'text-gray-700', label: 'Chat', cardBg: 'bg-gray-50', iconColor: 'text-gray-300' }
 })

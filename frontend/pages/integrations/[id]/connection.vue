@@ -71,7 +71,7 @@
                                 <UIcon name="heroicons-exclamation-circle" class="w-3 h-3 mr-1" />
                                 User credentials required
                             </span>
-                            <UButton size="xs" color="blue" variant="soft" @click="openAddCredentials">Connect</UButton>
+                            <UButton size="xs" color="primary" variant="soft" @click="openAddCredentials">Connect</UButton>
                         </template>
                     </div>
                 </div>

@@ -190,7 +190,7 @@
                         <UInput
                             v-model="llmConfirmText"
                             placeholder="I AM SURE"
-                            color="blue"
+                            color="primary"
                             class="w-full"
                             @keyup.enter="confirmLlmChange"
                         />
@@ -203,7 +203,7 @@
                             Cancel
                         </UButton>
                         <UButton
-                            :color="pendingLlmValue ? 'blue' : 'red'"
+                            :color="pendingLlmValue ? 'primary' : 'red'"
                             :disabled="llmConfirmText !== 'I AM SURE'"
                             @click="confirmLlmChange"
                         >

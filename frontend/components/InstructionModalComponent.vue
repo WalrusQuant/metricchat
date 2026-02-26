@@ -79,7 +79,7 @@
                                 <!-- Panel header -->
                                 <div class="px-4 py-3 border-b border-gray-100 flex items-center justify-between shrink-0">
                                     <h3 class="text-sm font-semibold text-gray-800">Analysis</h3>
-                                    <UButton size="xs" variant="ghost" color="blue" @click="refreshAnalysis">
+                                    <UButton size="xs" variant="ghost" color="primary" @click="refreshAnalysis">
                                         <Icon name="heroicons:arrow-path" class="w-3.5 h-3.5 mr-1" />
                                         Refresh
                                     </UButton>
@@ -113,7 +113,7 @@
                                                             <span class="text-[10px] text-gray-500">by {{ inst.createdByName }}</span>
                                                             <button
                                                                 @click="expandedInstructionId = inst.id"
-                                                                class="text-[10px] text-blue-600 hover:text-blue-800 hover:underline"
+                                                                class="text-[10px] text-primary-600 hover:text-primary-800 hover:underline"
                                                             >
                                                                 Read more
                                                             </button>
@@ -132,7 +132,7 @@
                                                             <span class="text-[10px] text-gray-500">by {{ inst.createdByName }}</span>
                                                             <button
                                                                 @click="expandedInstructionId = null"
-                                                                class="text-[10px] text-blue-600 hover:text-blue-800 hover:underline"
+                                                                class="text-[10px] text-primary-600 hover:text-primary-800 hover:underline"
                                                             >
                                                                 Show less
                                                             </button>
@@ -150,7 +150,7 @@
                                         <div class="flex items-center gap-2">
                                             <h3 class="text-sm font-medium text-gray-900">Impact</h3>
                                             <UTooltip :text="impactTotalCount ? `${impactMatchedCount} of ${impactTotalCount} prompts relevant` : 'No prompts analyzed'">
-                                                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-700">
+                                                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-primary-100 text-primary-700">
                                                     {{ Math.round(impactScore * 100) }}%
                                                 </span>
                                             </UTooltip>

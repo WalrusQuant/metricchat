@@ -23,12 +23,12 @@
                     >
                         <div 
                             class="w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-medium transition-colors"
-                            :class="step <= currentStep ? 'bg-blue-500 text-white' : 'bg-gray-100 text-gray-400'"
+                            :class="step <= currentStep ? 'bg-primary-500 text-white' : 'bg-gray-100 text-gray-400'"
                         >
                             <UIcon v-if="step < currentStep" name="i-heroicons-check" class="w-3 h-3" />
                             <span v-else>{{ step }}</span>
                         </div>
-                        <div v-if="step < 3" class="w-6 h-0.5" :class="step < currentStep ? 'bg-blue-500' : 'bg-gray-200'" />
+                        <div v-if="step < 3" class="w-6 h-0.5" :class="step < currentStep ? 'bg-primary-500' : 'bg-gray-200'" />
                     </div>
                 </div>
             </template>
@@ -79,7 +79,7 @@
                         <p class="text-xs text-gray-400 mt-1">Connect a repository to sync instructions from Git.</p>
                         <UButton
                             icon="i-heroicons-plus"
-                            color="blue"
+                            color="primary"
                             size="sm"
                             class="mt-4"
                             @click="startNewConnection"
@@ -131,7 +131,7 @@
                         <div class="pt-2 border-t border-gray-100">
                             <UButton
                                 icon="i-heroicons-plus"
-                                color="blue"
+                                color="primary"
                                 variant="soft"
                                 size="sm"
                                 block
@@ -201,11 +201,11 @@
                                     <UIcon :name="connectedRepo.can_create_pr ? 'i-heroicons-check-circle' : 'i-heroicons-x-circle'" class="w-3.5 h-3.5" />
                                     <span>Create PR</span>
                                 </div>
-                                <div class="flex items-center gap-1" :class="connectedRepo.has_ssh_key ? 'text-blue-600' : 'text-gray-400'">
+                                <div class="flex items-center gap-1" :class="connectedRepo.has_ssh_key ? 'text-primary-600' : 'text-gray-400'">
                                     <UIcon name="i-heroicons-key" class="w-3.5 h-3.5" />
                                     <span>SSH</span>
                                 </div>
-                                <div class="flex items-center gap-1" :class="connectedRepo.has_access_token ? 'text-blue-600' : 'text-gray-400'">
+                                <div class="flex items-center gap-1" :class="connectedRepo.has_access_token ? 'text-primary-600' : 'text-gray-400'">
                                     <UIcon name="i-heroicons-lock-closed" class="w-3.5 h-3.5" />
                                     <span>PAT</span>
                                 </div>
@@ -219,13 +219,13 @@
                         <!-- Indexing Progress Bar -->
                         <div v-if="isReindexing" class="mt-2 space-y-1">
                             <div class="flex items-center gap-2">
-                                <Spinner class="w-3 h-3 text-blue-500 flex-shrink-0" />
+                                <Spinner class="w-3 h-3 text-primary-500 flex-shrink-0" />
                                 <div class="flex-1 min-w-0">
                                     <div class="flex items-center justify-between text-xs text-gray-500 mb-1">
                                         <span class="truncate">{{ indexingPhase || 'Indexing...' }}</span>
                                         <span class="ml-2 flex-shrink-0">{{ indexingProgress }}%</span>
                                     </div>
-                                    <UProgress :value="indexingProgress" size="xs" color="blue" />
+                                    <UProgress :value="indexingProgress" size="xs" color="primary" />
                                 </div>
                             </div>
                         </div>
@@ -241,7 +241,7 @@
                                 <p class="text-xs text-gray-400">Publish automatically</p>
                             </div>
                             <UToggle 
-                                color="blue" 
+                                color="primary" 
                                 v-model="editSettings.autoPublish" 
                                 size="sm" 
                                 :disabled="!canEditSettings"
@@ -258,7 +258,7 @@
                                 option-attribute="label"
                                 size="sm"
                                 class="w-full"
-                                color="blue"
+                                color="primary"
                                 :disabled="!canEditSettings"
                                 :ui="{ option: { base: 'text-sm', active: 'text-sm', inactive: 'text-sm' } }"
                                 @change="updateSettings"
@@ -272,7 +272,7 @@
                                 <p class="text-xs text-gray-400">Allow pushing builds to Git and creating PRs</p>
                             </div>
                             <UToggle 
-                                color="blue" 
+                                color="primary" 
                                 v-model="editSettings.writeEnabled" 
                                 size="sm" 
                                 :disabled="!canEditSettings"
@@ -300,7 +300,7 @@
                                 type="button"
                                 class="p-3 rounded border text-sm flex flex-col items-center gap-1.5 transition-colors"
                                 :class="selectedProvider === provider.type 
-                                    ? 'border-blue-500 bg-blue-50 text-blue-700' 
+                                    ? 'border-primary-500 bg-primary-50 text-primary-700' 
                                     : 'border-gray-200 bg-white text-gray-500 hover:bg-gray-50'"
                             >
                                 <UIcon :name="provider.icon" class="w-5 h-5" />
@@ -317,7 +317,7 @@
                                 v-model="formData.customHost"
                                 type="text"
                                 placeholder="git.customdomain.com"
-                                class="mt-1.5 border border-gray-200 rounded px-3 py-2 w-full text-sm focus:outline-none focus:border-blue-500"
+                                class="mt-1.5 border border-gray-200 rounded px-3 py-2 w-full text-sm focus:outline-none focus:border-primary-500"
                             />
                         </div>
 
@@ -329,13 +329,13 @@
                                     v-model="formData.repoUrl"
                                     type="text"
                                     placeholder="git@github.com:user/repo.git"
-                                    class="flex-1 border border-gray-200 rounded px-3 py-2 text-sm focus:outline-none focus:border-blue-500"
+                                    class="flex-1 border border-gray-200 rounded px-3 py-2 text-sm focus:outline-none focus:border-primary-500"
                                 />
                                 <input 
                                     v-model="formData.branch"
                                     type="text"
                                     placeholder="main"
-                                    class="w-24 border border-gray-200 rounded px-3 py-2 text-sm focus:outline-none focus:border-blue-500"
+                                    class="w-24 border border-gray-200 rounded px-3 py-2 text-sm focus:outline-none focus:border-primary-500"
                                 />
                             </div>
                         </div>
@@ -348,7 +348,7 @@
                                     type="button"
                                     class="flex-1 px-3 py-2 text-sm rounded border transition-colors"
                                     :class="authMethod === 'ssh' 
-                                        ? 'border-blue-500 bg-blue-50 text-blue-700' 
+                                        ? 'border-primary-500 bg-primary-50 text-primary-700' 
                                         : 'border-gray-200 bg-white text-gray-500 hover:bg-gray-50'"
                                     @click="authMethod = 'ssh'"
                                 >
@@ -361,7 +361,7 @@
                                     type="button"
                                     class="flex-1 px-3 py-2 text-sm rounded border transition-colors"
                                     :class="authMethod === 'pat' 
-                                        ? 'border-blue-500 bg-blue-50 text-blue-700' 
+                                        ? 'border-primary-500 bg-primary-50 text-primary-700' 
                                         : 'border-gray-200 bg-white text-gray-500 hover:bg-gray-50'"
                                     @click="authMethod = 'pat'"
                                 >
@@ -378,7 +378,7 @@
                             <label class="text-xs font-medium text-gray-400 uppercase tracking-wider">SSH Private Key <span class="text-gray-300 font-normal">(optional for public repos)</span></label>
                             <UTextarea
                                 v-model="formData.privateKey"
-                                color="blue"
+                                color="primary"
                                 :rows="3"
                                 size="sm"
                                 placeholder="-----BEGIN OPENSSH PRIVATE KEY-----"
@@ -396,7 +396,7 @@
                                     v-model="formData.accessToken"
                                     type="password"
                                     placeholder="ghp_xxxx or glpat-xxxx"
-                                    class="mt-1.5 border border-gray-200 rounded px-3 py-2 w-full text-sm focus:outline-none focus:border-blue-500 font-mono"
+                                    class="mt-1.5 border border-gray-200 rounded px-3 py-2 w-full text-sm focus:outline-none focus:border-primary-500 font-mono"
                                 />
                                 <p class="text-xs text-gray-400 mt-1">Enables clone/push via HTTPS and PR creation.</p>
                             </div>
@@ -408,7 +408,7 @@
                                     v-model="formData.accessTokenUsername"
                                     type="text"
                                     placeholder="your-username"
-                                    class="mt-1.5 border border-gray-200 rounded px-3 py-2 w-full text-sm focus:outline-none focus:border-blue-500"
+                                    class="mt-1.5 border border-gray-200 rounded px-3 py-2 w-full text-sm focus:outline-none focus:border-primary-500"
                                 />
                                 <p class="text-xs text-gray-400 mt-1">Required for Bitbucket Cloud App Passwords.</p>
                             </div>
@@ -446,7 +446,7 @@
                             <div>
                                 <p class="text-sm text-gray-700">Auto-publish instructions</p>
                             </div>
-                            <UToggle color="blue" v-model="formData.autoPublish" size="sm" />
+                            <UToggle color="primary" v-model="formData.autoPublish" size="sm" />
                         </div>
 
                         <div>
@@ -458,7 +458,7 @@
                                 option-attribute="label"
                                 size="sm"
                                 class="w-full"
-                                color="blue"
+                                color="primary"
                                 :ui="{ option: { base: 'text-sm', active: 'text-sm', inactive: 'text-sm' } }"
                             />
                         </div>
@@ -469,7 +469,7 @@
                                 <p class="text-sm text-gray-700">Enable write access</p>
                                 <p class="text-xs text-gray-400">Allow pushing builds to Git and creating PRs</p>
                             </div>
-                            <UToggle color="blue" v-model="formData.writeEnabled" size="sm" />
+                            <UToggle color="primary" v-model="formData.writeEnabled" size="sm" />
                         </div>
                     </div>
                 </div>
@@ -479,7 +479,7 @@
                     <div class="py-3">
                         <div v-if="isIndexing || isReindexing" class="space-y-2">
                             <div class="flex items-center justify-center gap-2">
-                                <Spinner class="w-4 h-4 text-blue-500" />
+                                <Spinner class="w-4 h-4 text-primary-500" />
                                 <p class="text-sm font-medium text-gray-700">Indexing Repository...</p>
                             </div>
                             <div class="px-4">
@@ -487,7 +487,7 @@
                                     <span>{{ indexingPhase || 'Processing...' }}</span>
                                     <span>{{ indexingProgress }}%</span>
                                 </div>
-                                <UProgress :value="indexingProgress" size="sm" color="blue" />
+                                <UProgress :value="indexingProgress" size="sm" color="primary" />
                             </div>
                         </div>
                         <div v-else class="text-center space-y-1">
@@ -533,7 +533,7 @@
                         <!-- Connected repo actions -->
                         <template v-else-if="connectedRepo">
                             <UButton
-                                color="blue"
+                                color="primary"
                                 variant="soft"
                                 size="sm"
                                 :loading="isReindexing"
@@ -549,7 +549,7 @@
                         <template v-else-if="currentStep === 1">
                             <UButton color="gray" variant="soft" size="sm" @click="gitModalOpen = false">Cancel</UButton>
                             <UButton 
-                                color="blue" 
+                                color="primary" 
                                 size="sm"
                                 :loading="isLoading"
                                 :disabled="!canTestConnection"
@@ -563,7 +563,7 @@
                         <template v-else-if="currentStep === 2">
                             <UButton color="gray" variant="soft" size="sm" @click="gitModalOpen = false">Cancel</UButton>
                             <UButton 
-                                color="blue" 
+                                color="primary" 
                                 size="sm"
                                 :loading="isLoading"
                                 @click="saveAndIndex"
@@ -574,7 +574,7 @@
 
                         <!-- Step 3 actions -->
                         <template v-else-if="currentStep === 3">
-                            <UButton color="blue" size="sm" @click="finishWizard">Done</UButton>
+                            <UButton color="primary" size="sm" @click="finishWizard">Done</UButton>
                         </template>
                     </div>
                 </div>
@@ -749,14 +749,14 @@ const statusText = computed(() => {
 })
 
 const statusClass = computed(() => {
-    if (isReindexing.value) return 'text-blue-600'
+    if (isReindexing.value) return 'text-primary-600'
     // Check repo status first (for org-level repos), then metadata_resources (for data-source-scoped)
     const repoStatus = connectedRepo.value?.status
     const metaStatus = metadata_resources.value?.status
     const status = repoStatus || metaStatus
     if (status === 'completed') return 'text-green-600'
     if (status === 'failed') return 'text-red-600'
-    if (status === 'running' || status === 'indexing') return 'text-blue-600'
+    if (status === 'running' || status === 'indexing') return 'text-primary-600'
     return 'text-gray-600'
 })
 

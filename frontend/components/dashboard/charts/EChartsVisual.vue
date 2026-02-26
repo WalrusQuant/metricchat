@@ -106,7 +106,7 @@ function getColors(): any[] {
   if (Array.isArray(themePalette) && themePalette.length) return themePalette
   
   // Default fallback
-  return ['#2563eb', '#16a34a', '#ea580c', '#dc2626', '#7c3aed', '#0891b2', '#db2777', '#84cc16']
+  return ['#0C7C7C', '#16a34a', '#ea580c', '#dc2626', '#7c3aed', '#0891b2', '#db2777', '#84cc16']
 }
 
 function resolveColorInput(input: any): any {

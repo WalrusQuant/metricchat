@@ -166,7 +166,7 @@
                         </UButton>
                         <UButton 
                             size="xs" 
-                            color="blue"
+                            color="primary"
                             @click="isViewMode = false"
                         >
                             <Icon name="heroicons:pencil" class="w-3.5 h-3.5 mr-1" />
@@ -190,7 +190,7 @@
                         placeholder="TITLE (optional, e.g. REVENUE_RULES)"
                         class="w-full px-3 py-2 text-sm font-mono uppercase tracking-wide
                                border border-gray-200 rounded-lg
-                               focus:ring-2 focus:ring-blue-100 focus:border-blue-400 focus:outline-none
+                               focus:ring-2 focus:ring-primary-100 focus:border-primary-400 focus:outline-none
                                placeholder:text-gray-400 placeholder:normal-case placeholder:tracking-normal"
                         @input="instructionForm.title = ($event.target as HTMLInputElement).value.toUpperCase()"
                     />
@@ -198,7 +198,7 @@
                 </div>
 
                 <!-- Hero Textarea / Code Editor -->
-                <div class="border border-gray-200 rounded-xl overflow-hidden focus-within:ring-2 focus-within:ring-blue-100 focus-within:border-blue-400">
+                <div class="border border-gray-200 rounded-xl overflow-hidden focus-within:ring-2 focus-within:ring-primary-100 focus-within:border-primary-400">
                     <!-- Header with file path, git sync status, and code view toggle -->
                     <div class="flex items-center justify-between px-3 py-1.5 bg-white border-b border-gray-100">
                         <div class="flex items-center gap-2 min-w-0">
@@ -232,7 +232,7 @@
                                     >
                                         <button 
                                             type="button"
-                                            class="text-[10px] text-blue-500 hover:text-blue-600 transition-colors"
+                                            class="text-[10px] text-primary-500 hover:text-primary-600 transition-colors"
                                             @click="$emit('relink-to-git')"
                                         >
                                             Relink
@@ -298,14 +298,14 @@ Tip: Type @ to reference other instructions"
                                 type="button"
                                 :data-mention-idx="index"
                                 class="w-full text-left px-3 py-2 text-xs hover:bg-gray-50 flex items-start gap-2 border-b border-gray-100 last:border-0"
-                                :class="{ 'bg-blue-50': index === mentionState.selectedIndex }"
+                                :class="{ 'bg-primary-50': index === mentionState.selectedIndex }"
                                 @mousedown.prevent="selectMention(item)"
                             >
                                 <!-- Icon based on type -->
                                 <Icon
                                     :name="item.type === 'instruction' ? 'heroicons:cube' : 'heroicons:table-cells'"
                                     class="w-3.5 h-3.5 mt-0.5 shrink-0"
-                                    :class="item.type === 'instruction' ? 'text-indigo-500' : 'text-blue-500'"
+                                    :class="item.type === 'instruction' ? 'text-indigo-500' : 'text-primary-500'"
                                 />
                                 <div class="flex-1 min-w-0">
                                     <!-- Instruction -->
@@ -483,7 +483,7 @@ Tip: Type @ to reference other instructions"
                         <template #option="{ option }">
                             <div
                                 v-if="option.__isAdd"
-                                class="flex items-center w-full py-0.5 text-blue-600 hover:text-blue-800 cursor-pointer"
+                                class="flex items-center w-full py-0.5 text-primary-600 hover:text-primary-800 cursor-pointer"
                                 @mousedown.prevent
                                 @click.stop="openAddLabelModal"
                             >
@@ -629,7 +629,7 @@ Tip: Type @ to reference other instructions"
                         <UButton 
                             type="submit" 
                             size="xs" 
-                            color="blue"
+                            color="primary"
                             :loading="isSubmitting"
                         >
                             {{ isEditing ? 'Update' : 'Create' }}
@@ -665,7 +665,7 @@ Tip: Type @ to reference other instructions"
                 <UButton color="gray" variant="ghost" size="xs" @click="showUnlinkConfirm = false">
                     Cancel
                 </UButton>
-                <UButton color="blue" size="xs" @click="confirmUnlinkAndSave">
+                <UButton color="primary" size="xs" @click="confirmUnlinkAndSave">
                     Unlink & Save
                 </UButton>
             </div>
@@ -1436,7 +1436,7 @@ const getSourceTypeIconClass = () => {
     const sourceType = props.instruction?.source_type || 'user'
     if (sourceType === 'ai') return 'text-amber-500'
     if (sourceType === 'git') return 'text-gray-500'
-    return 'text-blue-500'
+    return 'text-primary-500'
 }
 
 const getCreatorDisplayName = () => {
@@ -2012,7 +2012,7 @@ watch(isViewMode, (newVal) => {
     
     /* Regular links - but not inside headings */
     a { 
-        @apply text-blue-600 hover:text-blue-800 underline;
+        @apply text-primary-600 hover:text-primary-800 underline;
     }
     
     blockquote { 

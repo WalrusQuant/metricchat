@@ -74,18 +74,18 @@
                           <div class="text-sm font-medium text-gray-800 mb-1">No rules yet</div>
                           <div class="text-[11px] text-gray-500 mb-3">Define expectations for your test. Add your first rule to get started.</div>
                           <div class="flex items-center justify-center">
-                            <UButton color="blue" size="xs" variant="soft" icon="i-heroicons-plus" @click="addCategory">Add rule</UButton>
+                            <UButton color="primary" size="xs" variant="soft" icon="i-heroicons-plus" @click="addCategory">Add rule</UButton>
                           </div>
                           <div class="text-[11px] text-gray-500 mt-2" v-if="catalogLoading">Loading catalog…</div>
                         </div>
                         <template v-else>
                           <div class="flex items-center gap-2">
-                              <UButton color="blue" size="xs" variant="soft" icon="i-heroicons-plus" @click="addCategory">Add rule</UButton>
+                              <UButton color="primary" size="xs" variant="soft" icon="i-heroicons-plus" @click="addCategory">Add rule</UButton>
                               <div class="text-[11px] text-gray-500 ml-auto" v-if="catalogLoading">Loading catalog…</div>
                           </div>
                           <!-- Category list -->
                           <div class="space-y-3">
-                            <div v-for="cat in categoryRules" :key="cat.key" class="rounded-md border border-blue-200">
+                            <div v-for="cat in categoryRules" :key="cat.key" class="rounded-md border border-primary-200">
                             <!-- Header: Category anchor + remove -->
                             <div class="flex items-center gap-2 px-3 py-2">
                               <div class="w-56">
@@ -156,7 +156,7 @@
                                           <span class="font-medium truncate">{{ m.name || m.model_id }}</span>
                                           <span class="text-gray-500 text-[10px] truncate">{{ m.provider?.name || m.provider_name || '' }}</span>
                                         </div>
-                                        <Icon v-if="(getJudgeRule(cat, 'model_id').matcher as any).value === (m.model_id || m.value)" name="heroicons-check" class="w-4 h-4 text-blue-500 ml-2 flex-shrink-0" />
+                                        <Icon v-if="(getJudgeRule(cat, 'model_id').matcher as any).value === (m.model_id || m.value)" name="heroicons-check" class="w-4 h-4 text-primary-500 ml-2 flex-shrink-0" />
                                       </div>
                                     </div>
                                   </template>
@@ -261,8 +261,8 @@
             <template #footer>
                 <div class="flex items-center justify-end space-x-2">
                     <UButton color="gray" variant="soft" @click="close">Cancel</UButton>
-                    <UButton :loading="isSaving" color="blue" @click="save">Save</UButton>
-                    <UButton :loading="isRunning" color="blue" variant="soft" @click="runNow">Save and Run</UButton>
+                    <UButton :loading="isSaving" color="primary" @click="save">Save</UButton>
+                    <UButton :loading="isRunning" color="primary" variant="soft" @click="runNow">Save and Run</UButton>
                 </div>
             </template>
         </UCard>

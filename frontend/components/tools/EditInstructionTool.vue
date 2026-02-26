@@ -11,9 +11,9 @@
           Editing instruction...
         </span>
         <span v-else-if="isSuccess" class="text-gray-600 flex items-center">
-          <Icon name="heroicons-cube" class="w-3 h-3 mr-1.5 text-blue-500" />
+          <Icon name="heroicons-cube" class="w-3 h-3 mr-1.5 text-primary-500" />
           <span class="truncate max-w-[300px]">Edited: {{ truncatedText }}</span>
-          <span v-if="versionNumber" class="ml-1.5 px-1.5 py-0.5 bg-blue-100 text-blue-700 rounded text-[10px] shrink-0">v{{ versionNumber }}</span>
+          <span v-if="versionNumber" class="ml-1.5 px-1.5 py-0.5 bg-primary-100 text-primary-700 rounded text-[10px] shrink-0">v{{ versionNumber }}</span>
           <Icon
             :name="isExpanded ? 'heroicons-chevron-down' : 'heroicons-chevron-right'"
             class="w-3 h-3 ml-1 text-gray-400 shrink-0"
@@ -104,7 +104,7 @@
           <div v-if="displayLoadMode" class="flex items-center gap-1">
             <span class="text-gray-500">Load:</span>
             <span class="px-1.5 py-0.5 rounded text-[9px] font-medium"
-              :class="displayLoadMode === 'always' ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-600'"
+              :class="displayLoadMode === 'always' ? 'bg-primary-100 text-primary-700' : 'bg-gray-100 text-gray-600'"
             >
               {{ displayLoadMode }}
             </span>
@@ -148,7 +148,7 @@
               @click.stop="handleEdit"
               class="flex items-center px-2 py-1 text-[10px] font-medium text-gray-700 bg-gray-50 hover:bg-gray-100 rounded transition-colors"
             >
-              <Icon name="heroicons:pencil" class="w-3 h-3 text-blue-600 mr-1" />
+              <Icon name="heroicons:pencil" class="w-3 h-3 text-primary-600 mr-1" />
               <span>Edit</span>
             </button>
             <button

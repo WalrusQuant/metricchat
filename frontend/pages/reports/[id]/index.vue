@@ -10,7 +10,7 @@
 	<div v-else-if="reportNotFound" class="h-screen w-full flex flex-col items-center justify-center text-gray-400">
 		<span class="text-5xl font-light">404</span>
 		<span class="mt-2 text-sm">Report not found</span>
-		<NuxtLink to="/reports" class="mt-4 text-sm text-blue-500 hover:underline">Back to reports</NuxtLink>
+		<NuxtLink to="/reports" class="mt-4 text-sm text-primary-500 hover:underline">Back to reports</NuxtLink>
 	</div>
 
 	<SplitScreenLayout v-else
@@ -66,7 +66,7 @@
 									</div>
 									<!-- User avatar on the right (hidden on mobile) -->
 									<div class="flex-shrink-0 hidden md:block md:w-[28px]">
-										<div class="h-7 w-7 uppercase flex items-center justify-center text-xs border border-blue-200 bg-blue-100 rounded-full inline-block">
+										<div class="h-7 w-7 uppercase flex items-center justify-center text-xs border border-primary-200 bg-primary-100 rounded-full inline-block">
 											{{ report.user.name.charAt(0) }}
 										</div>
 									</div>
@@ -77,7 +77,7 @@
 							<template v-else>
 								<!-- AI avatar (hidden on mobile) -->
 								<div class="w-[28px] mr-2 flex-shrink-0 hidden md:block">
-									<div class="h-7 w-7 flex font-bold items-center justify-center text-xs rounded-lg inline-block bg-contain bg-center bg-no-repeat" style="background-image: url('/assets/logo-128.png')">
+									<div class="h-7 w-7 flex font-bold items-center justify-center text-xs rounded-lg inline-block bg-contain bg-center bg-no-repeat" style="background-image: url('/assets/logo-icon.svg')">
 									</div>
 								</div>
 								<div class="w-full ml-4 max-w-2xl">
@@ -290,7 +290,7 @@
 			</div>
 		<div v-if="report.external_platform?.platform_type === 'mcp'" class="mx-auto px-4 mt-2 mb-2" :class="isSplitScreen ? 'w-full' : 'md:w-1/2 w-full'">
 			<div class="text-xs flex items-center">
-				<span class="font-medium bg-blue-50 text-blue-700 px-3 py-2 rounded-md flex items-center gap-2">
+				<span class="font-medium bg-primary-50 text-primary-700 px-3 py-2 rounded-md flex items-center gap-2">
 					<img src="/icons/mcp.png" class="h-4 w-4" />
 					<span>This session was created via MCP. The conversation reflects tool calls made by an external AI assistant. You can view the generated data and visualizations above.</span>
 				</span>
@@ -298,7 +298,7 @@
 		</div>
 		<div v-if="report.external_platform?.platform_type === 'slack'" class="mx-auto px-4 mt-2 mb-2" :class="isSplitScreen ? 'w-full' : 'md:w-1/2 w-full'">
 			<div class="text-xs flex items-center">
-				<span class="font-medium bg-blue-50 text-blue-700 px-3 py-2 rounded-md flex items-center gap-2">
+				<span class="font-medium bg-primary-50 text-primary-700 px-3 py-2 rounded-md flex items-center gap-2">
 					<img src="/icons/slack.png" class="h-4 w-4" />
 					<span>This session was created via Slack.</span>
 				</span>
@@ -306,7 +306,7 @@
 		</div>
 		<div v-if="report.external_platform?.platform_type === 'teams'" class="mx-auto px-4 mt-2 mb-2" :class="isSplitScreen ? 'w-full' : 'md:w-1/2 w-full'">
 			<div class="text-xs flex items-center">
-				<span class="font-medium bg-blue-50 text-blue-700 px-3 py-2 rounded-md flex items-center gap-2">
+				<span class="font-medium bg-primary-50 text-primary-700 px-3 py-2 rounded-md flex items-center gap-2">
 					<img src="/icons/teams.png" class="h-4 w-4" />
 					<span>This session was created via Microsoft Teams.</span>
 				</span>
@@ -2498,7 +2498,7 @@ onMounted(async () => {
     display: inline-block;
     width: 2px;
     height: 1.1em;
-    background: #3b82f6;
+    background: #109090;
     margin-left: 1px;
     vertical-align: text-bottom;
     border-radius: 1px;

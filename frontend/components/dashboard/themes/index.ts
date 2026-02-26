@@ -7,18 +7,18 @@ export const themes: Record<string, ThemeDefinition> = {
     tokens: {
       // Clean hex colors - enables beautiful area chart gradients via hexToRGBA
       palette: [
-        '#2563eb', // blue
-        '#059669', // emerald  
-        '#f59e0b', // amber
+        '#0C7C7C', // teal primary
+        '#059669', // emerald
+        '#C4841D', // accent gold
         '#ef4444', // rose/red
         '#7c3aed'  // violet
       ] as any,
       background: '#ffffff',
-      textColor: '#0f172a',
+      textColor: '#1C1917',
       cardBackground: '#ffffff',
-      cardBorder: '#e5e7eb',
-      fontFamily: 'Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial',
-      headingFontFamily: 'Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial',
+      cardBorder: '#D6D3CD',
+      fontFamily: 'DM Sans, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial',
+      headingFontFamily: 'DM Sans, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial',
       axis: {
         xLabelColor: '#475569', xLineColor: '#e2e8f0',
         yLabelColor: '#475569', yLineColor: '#e2e8f0',
@@ -48,14 +48,14 @@ export const themes: Record<string, ThemeDefinition> = {
         { type: 'linear', x: 0, y: 1, x2: 1, y2: 0, colorStops: [ { offset: 0, color: '#10B981' }, { offset: 1, color: '#047857' } ], global: false }, // avocado -> forest
         { type: 'linear', x: 0, y: 0, x2: 1, y2: 1, colorStops: [ { offset: 0, color: '#FCD34D' }, { offset: 1, color: '#F59E0B' } ], global: false }, // sunflower
         { type: 'linear', x: 1, y: 0, x2: 0, y2: 1, colorStops: [ { offset: 0, color: '#F472B6' }, { offset: 1, color: '#DB2777' } ], global: false }, // magenta
-        { type: 'linear', x: 0, y: 0, x2: 0, y2: 1, colorStops: [ { offset: 0, color: '#60A5FA' }, { offset: 1, color: '#2563EB' } ], global: false }, // cornflower -> royal
+        { type: 'linear', x: 0, y: 0, x2: 0, y2: 1, colorStops: [ { offset: 0, color: '#33A7A7' }, { offset: 1, color: '#0C7C7C' } ], global: false }, // teal light -> teal
       ] as any,
       background: '#faf7f2',
       textColor: '#1f2937',
       cardBackground: '#fffaf3',
       cardBorder: '#e5d5b8',
-      fontFamily: 'Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial',
-      headingFontFamily: 'Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial',
+      fontFamily: 'DM Sans, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial',
+      headingFontFamily: 'DM Sans, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial',
       axis: {
         xLabelColor: '#6b7280', xLineColor: '#e5d5b8',
         yLabelColor: '#6b7280', yLineColor: '#e5d5b8',
@@ -114,7 +114,7 @@ export const themes: Record<string, ThemeDefinition> = {
     tokens: {
       // Clean academic vibe
       palette: [
-        '#2563eb', '#0ea5e9', '#059669', '#7c3aed', '#f59e0b'
+        '#0C7C7C', '#0ea5e9', '#059669', '#7c3aed', '#f59e0b'
       ] as any,
       background: '#f7f7fb',
       textColor: '#0f172a',

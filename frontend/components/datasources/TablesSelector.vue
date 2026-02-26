@@ -37,7 +37,7 @@
           @input="onSearchInput"
           type="text" 
           placeholder="Search tables..." 
-          class="border border-gray-300 rounded px-2 py-1.5 w-full h-7 text-xs focus:outline-none focus:border-blue-500" 
+          class="border border-gray-300 rounded px-2 py-1.5 w-full h-7 text-xs focus:outline-none focus:border-primary-500" 
         />
         
         <!-- Filter button (contains both status and schema filters) -->
@@ -46,7 +46,7 @@
           type="button"
           @click="toggleFilterMenu"
           class="h-7 w-7 inline-flex items-center justify-center rounded border"
-          :class="hasActiveFilters ? 'border-blue-500 bg-blue-50 text-blue-700' : 'border-gray-300 text-gray-700 hover:bg-gray-50'"
+          :class="hasActiveFilters ? 'border-primary-500 bg-primary-50 text-primary-700' : 'border-gray-300 text-gray-700 hover:bg-gray-50'"
           aria-label="Filter tables"
         >
           <UIcon name="heroicons-funnel" class="w-4 h-4" />
@@ -78,7 +78,7 @@
               @click="setSelectedFilter('selected')"
             >
               <span>Selected</span>
-              <UIcon v-if="filters.selectedState === 'selected'" name="heroicons-check" class="w-3 h-3 text-blue-600" />
+              <UIcon v-if="filters.selectedState === 'selected'" name="heroicons-check" class="w-3 h-3 text-primary-600" />
             </button>
             <button
               type="button"
@@ -86,7 +86,7 @@
               @click="setSelectedFilter('unselected')"
             >
               <span>Unselected</span>
-              <UIcon v-if="filters.selectedState === 'unselected'" name="heroicons-check" class="w-3 h-3 text-blue-600" />
+              <UIcon v-if="filters.selectedState === 'unselected'" name="heroicons-check" class="w-3 h-3 text-primary-600" />
             </button>
           </div>
           
@@ -114,7 +114,7 @@
                   type="checkbox"
                   :checked="selectedSchemas.includes(schema)"
                   @change="toggleSchemaFilter(schema)"
-                  class="mr-1.5 h-3 w-3 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                  class="mr-1.5 h-3 w-3 rounded border-gray-300 text-primary-600 focus:ring-primary-500"
                 />
                 <span class="truncate">{{ schema }}</span>
               </label>
@@ -144,7 +144,7 @@
                   type="checkbox"
                   :checked="selectedConnections.includes(conn.id)"
                   @change="toggleConnectionFilter(conn.id)"
-                  class="mr-1.5 h-3 w-3 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                  class="mr-1.5 h-3 w-3 rounded border-gray-300 text-primary-600 focus:ring-primary-500"
                 />
                 <span class="truncate">{{ conn.name }}</span>
                 <span class="ml-1 text-[9px] text-gray-400">({{ conn.type }})</span>
@@ -177,7 +177,7 @@
               @click="setSort('name')"
             >
               <span>Name</span>
-              <UIcon v-if="sort.key === 'name'" name="heroicons-check" class="w-3 h-3 text-blue-600" />
+              <UIcon v-if="sort.key === 'name'" name="heroicons-check" class="w-3 h-3 text-primary-600" />
             </button>
             <button
               type="button"
@@ -185,7 +185,7 @@
               @click="setSort('is_active')"
             >
               <span>Selected</span>
-              <UIcon v-if="sort.key === 'is_active'" name="heroicons-check" class="w-3 h-3 text-blue-600" />
+              <UIcon v-if="sort.key === 'is_active'" name="heroicons-check" class="w-3 h-3 text-primary-600" />
             </button>
             <button
               v-if="props.showStats"
@@ -194,7 +194,7 @@
               @click="setSort('usage')"
             >
               <span>Usage</span>
-              <UIcon v-if="sort.key === 'usage'" name="heroicons-check" class="w-3 h-3 text-blue-600" />
+              <UIcon v-if="sort.key === 'usage'" name="heroicons-check" class="w-3 h-3 text-primary-600" />
             </button>
           </div>
         </div>
@@ -255,7 +255,7 @@
               <div class="flex items-center">
                 <UCheckbox 
                   v-if="canUpdate" 
-                  color="blue" 
+                  color="primary" 
                   :model-value="isTableActive(table.name)"
                   @update:model-value="(val: boolean) => onTableToggle(table.name, val)"
                   class="mr-3" 
@@ -319,7 +319,7 @@
                     <div v-for="(fk, idx) in table.fks" :key="idx" class="text-xs px-2 py-1 text-gray-600">
                       <span class="text-gray-700">{{ fk.column?.name }}</span>
                       <span class="text-gray-400 mx-1">→</span>
-                      <span class="text-blue-600">{{ fk.references_name }}</span>
+                      <span class="text-primary-600">{{ fk.references_name }}</span>
                       <span class="text-gray-400">.</span>
                       <span class="text-gray-700">{{ fk.references_column?.name }}</span>
                     </div>
@@ -385,7 +385,7 @@
       <button 
         @click="onSave" 
         :disabled="saving" 
-        class="bg-blue-500 hover:bg-blue-600 text-white text-xs font-medium py-1.5 px-3 rounded disabled:opacity-50"
+        class="bg-primary-500 hover:bg-primary-600 text-white text-xs font-medium py-1.5 px-3 rounded disabled:opacity-50"
       >
         <span v-if="saving">Saving...</span>
         <span v-else>{{ saveLabel }}</span>

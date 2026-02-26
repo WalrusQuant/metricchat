@@ -307,7 +307,7 @@
                           <div class="flex items-center gap-1.5">
                             <span
                               class="px-1 py-0.5 text-[9px] rounded border flex-shrink-0"
-                              :class="entity.type === 'metric' ? 'text-emerald-700 border-emerald-200 bg-emerald-50' : 'text-blue-700 border-blue-200 bg-blue-50'"
+                              :class="entity.type === 'metric' ? 'text-emerald-700 border-emerald-200 bg-emerald-50' : 'text-primary-700 border-primary-200 bg-primary-50'"
                             >{{ (entity.type || 'entity').toUpperCase() }}</span>
                             <span class="truncate text-gray-800 font-medium">{{ entity.title || entity.slug }}</span>
                           </div>
@@ -615,7 +615,7 @@ watch(flyoutTab, async (tab) => {
 
   pre { @apply bg-gray-50 p-2 rounded-lg mb-2 overflow-x-auto text-[11px]; }
   code { @apply bg-gray-50 px-1 py-0.5 rounded text-[11px] font-mono; }
-  a { @apply text-blue-600 hover:text-blue-800 underline; }
+  a { @apply text-primary-600 hover:text-primary-800 underline; }
   blockquote { @apply border-l-4 border-gray-200 pl-3 italic my-2; }
   table { @apply w-full border-collapse mb-2; }
   table th, table td { @apply border border-gray-200 p-1 text-[11px] bg-white; }

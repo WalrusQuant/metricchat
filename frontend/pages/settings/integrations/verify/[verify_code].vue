@@ -9,8 +9,8 @@
       <p class="mt-3 text-sm text-gray-700 text-center mb-6">
         Please follow the instructions below to activate your {{ platformLabel }} integration.
       </p>
-      <div v-if="loading" class="text-blue-500 font-medium">Verifying...</div>
-      <div v-else-if="success && alreadyVerified" class="text-blue-600 font-medium text-center">
+      <div v-if="loading" class="text-primary-500 font-medium">Verifying...</div>
+      <div v-else-if="success && alreadyVerified" class="text-primary-600 font-medium text-center">
         <Icon name="heroicons:information-circle" class="inline w-6 h-6 mr-1" />
         {{ message || 'Your account is already verified.' }}
       </div>
@@ -83,5 +83,5 @@ onMounted(verify)
 <style scoped>
 .text-green-600 { color: #16a34a; }
 .text-red-600 { color: #dc2626; }
-.text-blue-600 { color: #2563eb; }
+.text-primary-600 { color: #0C7C7C; }
 </style>

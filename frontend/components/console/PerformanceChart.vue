@@ -13,7 +13,7 @@
             <div class="h-80">
                 <div v-if="isLoading" class="flex items-center justify-center h-full">
                     <div class="flex items-center space-x-2">
-                        <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
+                        <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-primary-600"></div>
                         <span class="text-gray-600">Loading chart...</span>
                     </div>
                 </div>
@@ -139,10 +139,10 @@ const chartOptions = computed((): EChartsOption | null => {
             showSymbol: false,
             lineStyle: {
                 width: 3,
-                color: '#3b82f6'
+                color: '#109090'
             },
             itemStyle: {
-                color: '#3b82f6'
+                color: '#109090'
             }
         } as SeriesOption)
     }

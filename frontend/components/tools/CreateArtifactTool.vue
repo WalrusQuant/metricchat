@@ -19,7 +19,7 @@
           'ml-2 px-1.5 py-0.5 rounded text-[10px] font-medium',
           artifactMode === 'slides'
             ? 'bg-purple-100 text-purple-700'
-            : 'bg-blue-100 text-blue-700'
+            : 'bg-primary-100 text-primary-700'
         ]"
       >
         {{ artifactMode === 'slides' ? 'Slides' : 'Dashboard' }}
@@ -53,7 +53,7 @@
                 slide.status === 'done'
                   ? 'bg-green-100 text-green-700'
                   : slide.status === 'generating'
-                    ? 'bg-blue-100 text-blue-700 animate-pulse'
+                    ? 'bg-primary-100 text-primary-700 animate-pulse'
                     : 'bg-gray-100 text-gray-400'
               ]"
             >
@@ -112,16 +112,16 @@
             <div
               :class="[
                 'w-8 h-8 rounded flex-shrink-0 flex items-center justify-center',
-                artifactMode === 'slides' ? 'bg-slate-800' : 'bg-blue-50'
+                artifactMode === 'slides' ? 'bg-slate-800' : 'bg-primary-50'
               ]"
             >
-              <Spinner v-if="status === 'running'" class="w-4 h-4 text-blue-500" />
+              <Spinner v-if="status === 'running'" class="w-4 h-4 text-primary-500" />
               <Icon
                 v-else
                 :name="artifactMode === 'slides' ? 'heroicons:presentation-chart-bar' : 'heroicons:chart-bar-square'"
                 :class="[
                   'w-4 h-4',
-                  artifactMode === 'slides' ? 'text-slate-400' : 'text-blue-500'
+                  artifactMode === 'slides' ? 'text-slate-400' : 'text-primary-500'
                 ]"
               />
             </div>

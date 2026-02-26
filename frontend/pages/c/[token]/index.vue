@@ -62,7 +62,7 @@
                                     </div>
                                     <!-- User avatar -->
                                     <div class="w-[28px] flex-shrink-0">
-                                        <div class="h-7 w-7 uppercase flex items-center justify-center text-xs border border-blue-200 bg-blue-100 rounded-full">
+                                        <div class="h-7 w-7 uppercase flex items-center justify-center text-xs border border-primary-200 bg-primary-100 rounded-full">
                                             {{ conversation.user_name?.charAt(0) || '?' }}
                                         </div>
                                     </div>
@@ -72,7 +72,7 @@
                             <!-- System message (left-aligned) -->
                             <template v-else>
                                 <div class="w-[28px] mr-2 flex-shrink-0">
-                                    <div class="h-7 w-7 flex font-bold items-center justify-center text-xs rounded-lg bg-contain bg-center bg-no-repeat" style="background-image: url('/assets/logo-128.png')">
+                                    <div class="h-7 w-7 flex font-bold items-center justify-center text-xs rounded-lg bg-contain bg-center bg-no-repeat" style="background-image: url('/assets/logo-icon.svg')">
                                     </div>
                                 </div>
                                 <div class="w-full ml-4 max-w-2xl">

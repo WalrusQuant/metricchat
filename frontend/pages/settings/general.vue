@@ -29,7 +29,7 @@
                         <Icon v-else name="heroicons:building-office" class="w-6 h-6 text-gray-400" />
                     </div>
                     <div class="space-x-2">
-                        <UButton size="sm" variant="outline" color="blue" @click="selectIcon">{{ form.icon_url ? 'Change' : 'Upload' }} Icon</UButton>
+                        <UButton size="sm" variant="outline" color="primary" @click="selectIcon">{{ form.icon_url ? 'Change' : 'Upload' }} Icon</UButton>
                         <UButton v-if="form.icon_url" size="sm" color="red" variant="soft" @click="queueRemoveIcon">Remove</UButton>
                         <input ref="fileInput" type="file" accept="image/*" class="hidden" @change="onIconSelected" />
                     </div>
@@ -52,7 +52,7 @@
             </div>
 
             <div class="md:w-2/3 pt-2">
-                <UButton color="blue" @click="saveAll" :loading="saving">Save changes</UButton>
+                <UButton color="primary" @click="saveAll" :loading="saving">Save changes</UButton>
             </div>
         </div>
     </div>

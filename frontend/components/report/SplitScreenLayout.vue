@@ -13,7 +13,7 @@
 
         <!-- Resizer -->
         <div v-if="isSplitScreen" 
-             class="w-1 bg-gray-200 cursor-col-resize hover:bg-blue-500 active:bg-blue-700 z-20"
+             class="w-1 bg-gray-200 cursor-col-resize hover:bg-primary-500 active:bg-primary-700 z-20"
              @mousedown="$emit('startResize', $event)">
         </div>
 

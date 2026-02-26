@@ -31,7 +31,7 @@
           <UCheckbox
             v-if="!isBuildPublished && d.id"
             :model-value="selectedIds.has(d.id)"
-            color="blue"
+            color="primary"
             @update:model-value="toggleSelection(d.id, $event)"
             class="mt-0.5"
           />
@@ -69,7 +69,7 @@
     <div v-if="drafts.length > 0 && !isLoading && !isBuildPublished && canCreateInstructions" class="mt-2">
       <UButton
         variant="soft"
-        color="blue"
+        color="primary"
         size="xs"
         :disabled="isPublishingBuild || selectedIds.size === 0"
         @click="handlePublishBuild"

@@ -2,7 +2,7 @@
   <div class="flex h-screen justify-center py-20 px-5 sm:px-0">
     <div class="w-full text-center sm:w-[420px]">
       <div>
-        <img src="/assets/logo-128.png" alt="MetricChat" class="h-10 w-10 mx-auto" />
+        <img src="/assets/logo-icon.svg" alt="MetricChat" class="h-10 w-10 mx-auto" />
       </div>
 
       <!-- Loading -->
@@ -52,7 +52,7 @@
             <button
               @click="approve"
               :disabled="approving"
-              class="flex-1 px-4 py-2.5 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors flex items-center justify-center"
+              class="flex-1 px-4 py-2.5 text-sm font-medium text-white bg-primary-600 rounded-lg hover:bg-primary-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors flex items-center justify-center"
             >
               <template v-if="approving">
                 <Spinner class="h-4 w-4 mr-2" />

@@ -7,7 +7,7 @@
             <div v-else class="md:w-2/3 ">
                 <div class="flex items-center gap-2">
                     <div class="text-xs uppercase tracking-wide text-gray-400">Description</div>
-                    <button v-if="useCan('update_data_source')" @click="openEditDescription" class="text-[10px] text-blue-600 hover:underline">Edit</button>
+                    <button v-if="useCan('update_data_source')" @click="openEditDescription" class="text-[10px] text-primary-600 hover:underline">Edit</button>
                 </div>
                 <div class="mt-3 markdown-wrapper text-sm leading-relaxed text-left text-gray-600" v-if="computedDescription">
                     <MDC :value="computedDescription" class="markdown-content" />
@@ -15,7 +15,7 @@
                 <div class="mt-8">
                     <div class="flex items-center gap-2">
                         <div class="text-xs uppercase tracking-wide text-gray-400">Conversation starters</div>
-                        <button v-if="useCan('update_data_source')" @click="openEditStarters" class="text-[10px] text-blue-600 hover:underline">Edit</button>
+                        <button v-if="useCan('update_data_source')" @click="openEditStarters" class="text-[10px] text-primary-600 hover:underline">Edit</button>
                     </div>
                     <div class="mt-3 flex flex-wrap gap-2">
                         <div v-for="starter in displayDataSource?.conversation_starters" :key="starter"
@@ -42,11 +42,11 @@
                         <div class="space-y-1">
                             <div>
                                 <label class="block text-[11px] text-gray-500 mb-0.5">Title</label>
-                                <input v-model="item.title" type="text" class="w-full h-8 text-sm border border-gray-200 rounded-md px-2 focus:outline-none focus:ring-2 focus:ring-blue-200" placeholder="e.g. Overview of Snowflake" />
+                                <input v-model="item.title" type="text" class="w-full h-8 text-sm border border-gray-200 rounded-md px-2 focus:outline-none focus:ring-2 focus:ring-primary-200" placeholder="e.g. Overview of Snowflake" />
                             </div>
                             <div>
                                 <label class="block text-[11px] text-gray-500 mb-0.5">Prompt</label>
-                                <textarea v-model="item.prompt" rows="2" class="w-full text-sm border border-gray-200 rounded-md px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-200" placeholder="Optional extra instructions"></textarea>
+                                <textarea v-model="item.prompt" rows="2" class="w-full text-sm border border-gray-200 rounded-md px-2 py-1 focus:outline-none focus:ring-2 focus:ring-primary-200" placeholder="Optional extra instructions"></textarea>
                             </div>
                         </div>
                     </div>
@@ -57,7 +57,7 @@
                 
                 <div class="flex justify-end gap-2 mt-4">
                     <button @click="onCancelEdit" class="px-3 py-1.5 text-xs border border-gray-300 text-gray-700 rounded-lg">Cancel</button>
-                    <button @click="onSaveStarters" :disabled="savingStarters" class="px-3 py-1.5 text-xs border border-blue-300 text-blue-700 rounded-lg hover:bg-blue-50">{{ savingStarters ? 'Saving…' : 'Save' }}</button>
+                    <button @click="onSaveStarters" :disabled="savingStarters" class="px-3 py-1.5 text-xs border border-primary-300 text-primary-700 rounded-lg hover:bg-primary-50">{{ savingStarters ? 'Saving…' : 'Save' }}</button>
                 </div>
             </div>
         </UModal>
@@ -69,12 +69,12 @@
 
                 <div class="mt-3">
                     <label class="block text-[11px] text-gray-500 mb-0.5">Description</label>
-                    <textarea v-model="descForm" rows="6" class="w-full text-sm border border-gray-200 rounded-md px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-200" placeholder="Write a concise description…"></textarea>
+                    <textarea v-model="descForm" rows="6" class="w-full text-sm border border-gray-200 rounded-md px-2 py-1 focus:outline-none focus:ring-2 focus:ring-primary-200" placeholder="Write a concise description…"></textarea>
                 </div>
 
                 <div class="flex justify-end gap-2 mt-4">
                     <button @click="onCancelDesc" class="px-3 py-1.5 text-xs border border-gray-300 text-gray-700 rounded-lg">Cancel</button>
-                    <button @click="onSaveDesc" :disabled="savingDesc" class="px-3 py-1.5 text-xs border border-blue-300 text-blue-700 rounded-lg hover:bg-blue-50">{{ savingDesc ? 'Saving…' : 'Save' }}</button>
+                    <button @click="onSaveDesc" :disabled="savingDesc" class="px-3 py-1.5 text-xs border border-primary-300 text-primary-700 rounded-lg hover:bg-primary-50">{{ savingDesc ? 'Saving…' : 'Save' }}</button>
                 </div>
             </div>
         </UModal>
@@ -237,7 +237,7 @@ function onCancelDesc() {
 
 	pre { @apply bg-gray-50 p-4 rounded-lg mb-4 overflow-x-auto; }
 	code { @apply bg-gray-50 px-1 py-0.5 rounded text-sm font-mono; }
-	a { @apply text-blue-600 hover:text-blue-800 underline; }
+	a { @apply text-primary-600 hover:text-primary-800 underline; }
 	blockquote { @apply border-l-4 border-gray-200 pl-4 italic my-4; }
 	table { @apply w-full border-collapse mb-4; }
 	table th, table td { @apply border border-gray-200 p-2 text-xs bg-white; }

@@ -13,7 +13,7 @@
         </p>
         <a
           href="#"
-          class="text-xs text-blue-600 hover:text-blue-700"
+          class="text-xs text-primary-600 hover:text-primary-700"
         >
           Learn more →
         </a>
@@ -296,7 +296,7 @@ const getActionClass = (action: string) => {
     case 'removed':
       return 'bg-red-50 text-red-700'
     case 'published':
-      return 'bg-blue-50 text-blue-700'
+      return 'bg-primary-50 text-primary-700'
     case 'invited':
       return 'bg-purple-50 text-purple-700'
     default:
