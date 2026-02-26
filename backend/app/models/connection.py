@@ -2,7 +2,7 @@ from sqlalchemy import Column, String, Boolean, JSON, DateTime, Text, ForeignKey
 from sqlalchemy.orm import relationship
 from app.models.base import BaseSchema
 from importlib import import_module
-from cryptography.fernet import Fernet
+from cryptography.fernet import Fernet, InvalidToken
 from app.settings.config import settings
 import json
 
@@ -117,5 +117,12 @@ class Connection(BaseSchema):
         if not self.credentials:
             return {}
         fernet = Fernet(settings.app_config.encryption_key)
-        return json.loads(fernet.decrypt(self.credentials.encode()).decode())
+        try:
+            return json.loads(fernet.decrypt(self.credentials.encode()).decode())
+        except InvalidToken:
+            raise ValueError(
+                f"Failed to decrypt credentials for connection '{self.name}'. "
+                "The encryption key has changed since these credentials were saved. "
+                "Please re-enter your credentials in Settings > Data Sources."
+            )
 

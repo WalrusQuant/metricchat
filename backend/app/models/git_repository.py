@@ -1,7 +1,7 @@
 from sqlalchemy import Column, String, DateTime, Text, ForeignKey, Boolean
 from sqlalchemy.orm import relationship
 from app.models.base import BaseSchema
-from cryptography.fernet import Fernet
+from cryptography.fernet import Fernet, InvalidToken
 from app.settings.config import settings
 import json
 from sqlalchemy.ext.declarative import declared_attr
@@ -60,7 +60,14 @@ class GitRepository(BaseSchema):
         if not self.ssh_key:
             return None
         fernet = Fernet(settings.app_config.encryption_key)
-        return fernet.decrypt(self.ssh_key.encode()).decode()
+        try:
+            return fernet.decrypt(self.ssh_key.encode()).decode()
+        except InvalidToken:
+            raise ValueError(
+                "Failed to decrypt SSH key for git repository. "
+                "The encryption key has changed since this key was saved. "
+                "Please re-enter your SSH key in Settings."
+            )
 
     def encrypt_access_token(self, token: str):
         """Encrypt PAT/access token before storing"""
@@ -72,7 +79,14 @@ class GitRepository(BaseSchema):
         if not self.access_token:
             return None
         fernet = Fernet(settings.app_config.encryption_key)
-        return fernet.decrypt(self.access_token.encode()).decode()
+        try:
+            return fernet.decrypt(self.access_token.encode()).decode()
+        except InvalidToken:
+            raise ValueError(
+                "Failed to decrypt access token for git repository. "
+                "The encryption key has changed since this token was saved. "
+                "Please re-enter your access token in Settings."
+            )
 
     # ==================== Capability Properties ====================
     

@@ -4,12 +4,21 @@
 export ENVIRONMENT=production
 export NODE_ENV=production
 
-# Generate MC_ENCRYPTION_KEY if not provided (must happen BEFORE workers fork)
+# Persist MC_ENCRYPTION_KEY so credentials survive container restarts.
+# Priority: env var > persisted file > generate new key and save it.
+ENCRYPTION_KEY_FILE="/app/backend/db/.encryption_key"
+
 if [ -z "$MC_ENCRYPTION_KEY" ]; then
-    export MC_ENCRYPTION_KEY=$(python3 -c "from cryptography.fernet import Fernet; print(Fernet.generate_key().decode())")
-    echo "⚠️  WARNING: No MC_ENCRYPTION_KEY provided. Generated a temporary key."
-    echo "⚠️  Users will be logged out if the container restarts!"
-    echo "⚠️  For production, set: -e MC_ENCRYPTION_KEY=<your-persistent-key>"
+    if [ -f "$ENCRYPTION_KEY_FILE" ]; then
+        export MC_ENCRYPTION_KEY=$(cat "$ENCRYPTION_KEY_FILE")
+        echo "🔑 Loaded encryption key from $ENCRYPTION_KEY_FILE"
+    else
+        export MC_ENCRYPTION_KEY=$(python3 -c "from cryptography.fernet import Fernet; print(Fernet.generate_key().decode())")
+        mkdir -p "$(dirname "$ENCRYPTION_KEY_FILE")"
+        echo "$MC_ENCRYPTION_KEY" > "$ENCRYPTION_KEY_FILE"
+        chmod 600 "$ENCRYPTION_KEY_FILE"
+        echo "🔑 Generated and saved encryption key to $ENCRYPTION_KEY_FILE"
+    fi
 fi
 
 # =============================================================================

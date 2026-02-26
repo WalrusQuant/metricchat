@@ -2,7 +2,7 @@ from sqlalchemy import Column, String, JSON, ForeignKey, Boolean, Text, UniqueCo
 from sqlalchemy.orm import relationship
 from app.models.base import BaseSchema
 import json
-from cryptography.fernet import Fernet
+from cryptography.fernet import Fernet, InvalidToken
 from app.settings.config import settings
 from app.schemas.llm_schema import AnthropicCredentials, OpenAICredentials, GoogleCredentials, BowCredentials, AzureCredentials, CustomCredentials
 
@@ -85,4 +85,11 @@ class LLMProvider(BaseSchema):
 
     def decrypt_credentials(self) -> dict:
         fernet = Fernet(settings.app_config.encryption_key)
-        return json.loads(fernet.decrypt(self.api_key.encode()).decode()), json.loads(fernet.decrypt(self.api_secret.encode()).decode())
+        try:
+            return json.loads(fernet.decrypt(self.api_key.encode()).decode()), json.loads(fernet.decrypt(self.api_secret.encode()).decode())
+        except InvalidToken:
+            raise ValueError(
+                f"Failed to decrypt credentials for LLM provider '{self.name}'. "
+                "The encryption key has changed since these credentials were saved. "
+                "Please re-enter your API key in Settings > LLM."
+            )

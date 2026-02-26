@@ -62,6 +62,7 @@ services:
       - MC_CONFIG_PATH=/app/metricchat.yaml
     volumes:
       - ./metricchat.yaml:/app/metricchat.yaml:ro
+      - app_data:/app/backend/db
       - uploads_data:/app/backend/uploads
       - branding_data:/app/backend/branding_uploads
       - logs_data:/app/backend/logs
@@ -98,6 +99,8 @@ services:
 
 volumes:
   postgres_data:
+    driver: local
+  app_data:
     driver: local
   uploads_data:
     driver: local

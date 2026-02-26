@@ -85,7 +85,7 @@ Then open [http://localhost:3000](http://localhost:3000) and connect your first 
 ```bash
 docker run -p 3000:3000 \
   -e MC_DATABASE_URL=postgresql://user:password@host:5432/dbname \
-  metricchat/metricchat
+  walrusquant/metricchat
 ```
 
 </details>

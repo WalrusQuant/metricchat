@@ -1,7 +1,7 @@
 from sqlalchemy import Column, String, ForeignKey, Boolean, JSON, Text
 from sqlalchemy.orm import relationship
 from app.models.base import BaseSchema
-from cryptography.fernet import Fernet
+from cryptography.fernet import Fernet, InvalidToken
 from app.settings.config import settings
 import json
 
@@ -29,7 +29,14 @@ class ExternalPlatform(BaseSchema):
         if not self.credentials:
             return {}
         fernet = Fernet(settings.app_config.encryption_key)
-        return json.loads(fernet.decrypt(self.credentials.encode()).decode())
+        try:
+            return json.loads(fernet.decrypt(self.credentials.encode()).decode())
+        except InvalidToken:
+            raise ValueError(
+                f"Failed to decrypt credentials for platform '{self.platform_type}'. "
+                "The encryption key has changed since these credentials were saved. "
+                "Please re-enter your credentials in Settings."
+            )
     
     def __repr__(self):
         return f"<ExternalPlatform {self.platform_type}:{self.id} - {self.organization.name}>"
