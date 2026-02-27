@@ -39,12 +39,16 @@ pytest -s -m e2e --db=sqlite                # end-to-end tests
 pytest -s -m e2e --db=postgres              # e2e with testcontainers PostgreSQL
 pytest -s -m unit --db=sqlite               # unit tests
 pytest -s -m ai --db=sqlite                 # AI agent tests (needs OPENAI_API_KEY_TEST)
+pytest -s -m e2e --db=sqlite tests/e2e/test_report.py              # single file
+pytest -s -m e2e --db=sqlite tests/e2e/test_report.py::test_name   # single test
 
 # Frontend (from frontend/)
 npx playwright test                         # all e2e tests
 npx playwright test auth                    # single test file
 npx playwright test --headed                # with browser visible
 ```
+
+Test fixtures live in `tests/fixtures/` and are auto-imported via `conftest.py`. Each test function gets fresh migrations (per-function isolation). No linter or formatter is configured for either backend or frontend.
 
 ### Database Migrations
 ```bash
