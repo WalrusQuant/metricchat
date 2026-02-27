@@ -4,7 +4,7 @@ base_url: http://0.0.0.0:3000
 
 # Feature Flags
 features:
-  allow_uninvited_signups: false
+  allow_uninvited_signups: true
   allow_multiple_organizations: false 
   verify_emails: false
 
