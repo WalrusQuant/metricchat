@@ -265,7 +265,7 @@
 
 				<hr class="my-4">
 				<p class="text-gray-500 text-sm"><span class="font-semibold">Tip:</span> <br />
-					Not sure what to ask? You can ask the AI Analyst to suggest questions about a specific topic.
+					Not sure what to ask? You can ask the Data Agent to suggest questions about a specific topic.
 				</p>
 
 			</div>
@@ -486,6 +486,7 @@ interface ChatMessage {
 	system_completion_id?: string
 	sigkill?: string | null
 	feedback_score?: number
+	user_feedback?: { id: string; direction: number; message?: string; user_id?: string; completion_id: string } | null
 	// Transient streaming error message (set from SSE completion.error)
 	error_message?: string
 	// Optional structured error
@@ -582,18 +583,18 @@ let chunkIdCounter = 0
 const MAX_ACTIVE_CHUNKS = 15 // Keep only last N chunks animated, commit older ones
 
 // Refs for reasoning content elements (used for dynamic ref binding)
-const reasoningRefs = ref<Map<string, HTMLElement | null>>(new Map())
+const reasoningRefs = new Map<string, HTMLElement>()
 
-function setReasoningRef(blockId: string, el: HTMLElement | null) {
-	if (el) {
-		reasoningRefs.value.set(blockId, el)
+function setReasoningRef(blockId: string, el: Element | ComponentPublicInstance | null) {
+	if (el instanceof HTMLElement) {
+		reasoningRefs.set(blockId, el)
 	} else {
-		reasoningRefs.value.delete(blockId)
+		reasoningRefs.delete(blockId)
 	}
 }
 
 function scrollReasoningToBottom(blockId: string) {
-	const el = reasoningRefs.value.get(blockId)
+	const el = reasoningRefs.get(blockId)
 	if (el) {
 		el.scrollTop = el.scrollHeight
 	}
@@ -1843,7 +1844,7 @@ onUnmounted(() => {
 	blockChunks.value.clear()
 	committedBlockText.value.clear()
 	// Clear reasoning refs
-	reasoningRefs.value.clear()
+	reasoningRefs.clear()
 })
 
 

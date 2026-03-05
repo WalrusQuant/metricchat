@@ -56,7 +56,7 @@ class Settings(BaseSettings):
                 # Extract env var name from ${VAR_NAME}
                 env_var_name = config[2:-1]
                 env_value = os.environ.get(env_var_name)
-                if env_value is not None:
+                if env_value:
                     return env_value
                 # If env var is not set and this is encryption key, generate one
                 if env_var_name in ("MC_ENCRYPTION_KEY", "BOW_ENCRYPTION_KEY"):
@@ -64,7 +64,7 @@ class Settings(BaseSettings):
                     new_key = generate_fernet_key()
                     os.environ[env_var_name] = new_key  # Save for future use
                     return new_key
-                return None  # Env var not set — return None instead of raw placeholder
+                return config  # Keep placeholder for other env vars
             return config
 
         with open(yaml_path, "r") as yaml_file:

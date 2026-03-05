@@ -42,7 +42,7 @@
             <!-- AI Analyst Name -->
             <div class="md:w-2/3 space-y-2">
                 <div class="text-sm font-medium text-gray-800">AI analyst name</div>
-                <UInput v-model="form.ai_analyst_name" :maxlength="50" placeholder="AI Analyst" />
+                <UInput v-model="form.ai_analyst_name" :maxlength="50" placeholder="MetricChat Data Agent" />
             </div>
 
             <!-- Credit toggle -->
@@ -77,8 +77,8 @@ definePageMeta({ auth: true, permissions: ['manage_organization_settings'], layo
 
 const loading = ref(true)
 const error = ref('')
-const general = ref<GeneralConfig>({ ai_analyst_name: 'AI Analyst', show_credit: true })
-const form = ref<{ organization_name?: string } & GeneralConfig>({ ai_analyst_name: 'AI Analyst', show_credit: true })
+const general = ref<GeneralConfig>({ ai_analyst_name: 'MetricChat Data Agent', show_credit: true })
+const form = ref<{ organization_name?: string } & GeneralConfig>({ ai_analyst_name: 'MetricChat Data Agent', show_credit: true })
 const pendingIconFile = ref<File | null>(null)
 const removeIcon = ref(false)
 const saving = ref(false)
@@ -92,7 +92,7 @@ const fetchSettings = async () => {
         const response = await useMyFetch('/api/organization/settings')
         if (response.status.value !== 'success') throw new Error(response.error?.value?.data?.message || 'Failed to fetch settings')
         const cfg = (response.data.value as SettingsResponse)?.config
-        general.value = cfg?.general || { ai_analyst_name: 'AI Analyst', show_credit: true }
+        general.value = cfg?.general || { ai_analyst_name: 'MetricChat Data Agent', show_credit: true }
         // Fetch current organization name from session if available
         const { organization } = useOrganization()
         form.value = { organization_name: organization.value?.name, ...general.value }

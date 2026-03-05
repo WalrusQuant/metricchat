@@ -192,7 +192,7 @@ const orgAIAnalystName = computed(() => {
   const orgId = organization.value?.id
   const orgs = (currentUser.value as any)?.organizations || []
   const org = orgs.find((o: any) => o.id === orgId) || orgs[0]
-  return org?.ai_analyst_name || "AI Analyst"
+  return org?.ai_analyst_name || "MetricChat Data Agent"
 })
 
 definePageMeta({ 
