@@ -36,15 +36,15 @@
                         </span>
                     </div>
                     <div v-if="selectedProvider.type !== 'new_provider'" class="space-y-4">
-                        <div class="">
+                        <div class="" v-if="selectedProvider?.provider_type !== 'bedrock' && selectedProvider?.type !== 'bedrock'">
                             <label class="text-sm font-medium text-gray-700 mb-2">
                                 API Key
                             </label>
-                            <input 
-                                v-model="selectedProvider.credentials.api_key" 
-                                type="text" 
+                            <input
+                                v-model="selectedProvider.credentials.api_key"
+                                type="text"
                                 placeholder="Keep blank to use stored key"
-                                class="mt-2 border border-gray-300 rounded-lg px-4 py-2 w-full h-9 text-sm focus:outline-none focus:border-primary-500" 
+                                class="mt-2 border border-gray-300 rounded-lg px-4 py-2 w-full h-9 text-sm focus:outline-none focus:border-primary-500"
                             />
                         </div>
                         <div class="" v-if="selectedProvider?.provider_type === 'azure' || selectedProvider?.type === 'azure'">
@@ -78,6 +78,19 @@
                                 <p class="text-xs text-gray-400 mt-0.5 ml-6">Disable for self-signed certificates</p>
                             </div>
                         </div>
+                        <template v-if="selectedProvider?.provider_type === 'bedrock' || selectedProvider?.type === 'bedrock'">
+                          <div>
+                            <label class="text-sm font-medium text-gray-700 mb-2">Region <span class="text-red-500">*</span></label>
+                            <input v-model="selectedProvider.credentials.region" type="text" placeholder="e.g. us-east-1" class="mt-2 border border-gray-300 rounded-lg px-4 py-2 w-full h-9 text-sm focus:outline-none focus:border-primary-500" @change="clearTestResult()" />
+                          </div>
+                          <div>
+                            <label class="text-sm font-medium text-gray-700 mb-2">Authentication</label>
+                            <div class="flex gap-2 mt-2">
+                              <span class="px-3 py-1.5 text-sm rounded-lg border border-primary-500 bg-primary-50 text-primary-700">IAM (from environment)</span>
+                            </div>
+                            <p class="text-xs text-gray-500 mt-1.5">Uses the AWS credential chain (IRSA, env vars, instance role, etc.)</p>
+                          </div>
+                        </template>
                         <div class="" v-if="selectedProvider?.provider_type === 'openai' || selectedProvider?.type === 'openai'">
                             <div class="mt-1">
                                 <button type="button" @click="toggleBaseUrl" class="text-xs text-primary-600 hover:underline">
@@ -213,6 +226,15 @@
                                     :placeholder="getFieldPlaceholder(field)"
                                     class="border border-gray-300 rounded-lg px-4 py-2 w-full h-9 text-sm focus:outline-none focus:border-primary-500" />
                             </div>
+                            <template v-if="providerForm.provider_type === 'bedrock'">
+                              <div class="mt-3">
+                                <label class="text-sm font-medium text-gray-700 mb-2">Authentication</label>
+                                <div class="flex gap-2 mt-2">
+                                  <span class="px-3 py-1.5 text-sm rounded-lg border border-primary-500 bg-primary-50 text-primary-700">IAM (from environment)</span>
+                                </div>
+                                <p class="text-xs text-gray-500 mt-1.5">Uses the AWS credential chain (IRSA, env vars, instance role, etc.)</p>
+                              </div>
+                            </template>
                             <div v-if="providerForm.provider_type === 'custom'" class="mt-2">
                                 <UCheckbox
                                     v-model="providerForm.credentials.verify_ssl"
@@ -408,6 +430,13 @@ const canTestConnection = computed(() => {
         // Existing provider: must have provider_type and some credential (api_key may be blank to use stored)
         return !!selectedProvider.value.provider_type;
     }
+    // Bedrock new provider: only region is required
+    if (providerForm.value.provider_type === 'bedrock') {
+        const creds = providerForm.value.credentials;
+        if (!creds?.region) return false;
+        if (creds.auth_mode === 'api_key') return !!creds.api_key;
+        return true;
+    }
     // New provider form: need type and at least api_key
     return !!providerForm.value.provider_type && !!providerForm.value.credentials && typeof providerForm.value.credentials.api_key !== 'undefined';
 });
@@ -422,10 +451,10 @@ function fieldsForProvider(providerType: string): CredentialField[] {
 const credentialFieldsForNewProvider = computed<CredentialField[]>(() => {
     const providerType = providerForm.value.provider_type;
     const all = fieldsForProvider(providerType);
-    if (providerType === 'openai') {
-        return all.filter(f => f.key !== 'base_url');
-    }
-    return all;
+    const filtered = all.filter(f => f.key !== 'verify_ssl');
+    if (providerType === 'openai') return filtered.filter(f => f.key !== 'base_url');
+    if (providerType === 'bedrock') return filtered.filter(f => f.key === 'region');
+    return filtered;
 });
 
 function getFieldPlaceholder(field: CredentialField): string {
@@ -541,6 +570,15 @@ watch(providerModalOpen, (newValue) => {
                     (selectedProvider.value.credentials as any).verify_ssl = selectedProvider.value.additional_config?.verify_ssl ?? true;
                 }
             }
+            // Hydrate Bedrock region and auth_mode for edit
+            if ((selectedProvider.value.provider_type === 'bedrock' || selectedProvider.value.type === 'bedrock')) {
+                const cfg = (selectedProvider.value as any)?.additional_config || {};
+                if (cfg.region) (selectedProvider.value.credentials as any).region = cfg.region;
+                (selectedProvider.value.credentials as any).auth_mode = cfg.auth_mode || 'iam';
+                if (cfg.auth_mode !== 'api_key') {
+                    (selectedProvider.value.credentials as any).api_key = null;
+                }
+            }
         }
     }
 });
@@ -591,6 +629,15 @@ watch(() => props.editProviderId, (newId) => {
                 }
                 if (selectedProvider.value.credentials.verify_ssl === undefined) {
                     (selectedProvider.value.credentials as any).verify_ssl = selectedProvider.value.additional_config?.verify_ssl ?? true;
+                }
+            }
+            // Hydrate Bedrock region and auth_mode for edit
+            if ((selectedProvider.value.provider_type === 'bedrock' || selectedProvider.value.type === 'bedrock')) {
+                const cfg = (selectedProvider.value as any)?.additional_config || {};
+                if (cfg.region) (selectedProvider.value.credentials as any).region = cfg.region;
+                (selectedProvider.value.credentials as any).auth_mode = cfg.auth_mode || 'iam';
+                if (cfg.auth_mode !== 'api_key') {
+                    (selectedProvider.value.credentials as any).api_key = null;
                 }
             }
         }
