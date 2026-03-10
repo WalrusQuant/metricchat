@@ -196,6 +196,7 @@ See [DEV.md](./DEV.md) for local development setup (Python 3.12+, Node 18+, Yarn
 
 ```bash
 # Backend
+source venv/bin/activate
 cd backend && python main.py       # http://localhost:8000
 
 # Frontend

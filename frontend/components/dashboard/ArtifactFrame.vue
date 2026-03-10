@@ -551,6 +551,12 @@ function handleIframeMessage(event: MessageEvent) {
     iframeReady.value = true;
     sendDataToIframe();
   }
+  // Also handle request_artifact_data from LLM-generated artifact code
+  if (event.data?.type === 'request_artifact_data') {
+    console.log('[ArtifactFrame] Iframe requested data (legacy protocol)');
+    iframeReady.value = true;
+    sendDataToIframe();
+  }
 }
 
 // Send data to iframe via postMessage
@@ -562,9 +568,17 @@ function sendDataToIframe() {
     visualizations: visualizationsData.value
   };
 
+  // Clone to plain objects to avoid structured clone errors with Vue proxies
+  const cloneable = JSON.parse(JSON.stringify(payload));
+
+  // Send in both formats: uppercase for our protocol, lowercase for LLM-generated code
   iframeRef.value.contentWindow.postMessage({
     type: 'ARTIFACT_DATA',
-    payload
+    payload: cloneable
+  }, '*');
+  iframeRef.value.contentWindow.postMessage({
+    type: 'artifact_data',
+    payload: cloneable
   }, '*');
 
   dataReady.value = true;
@@ -636,9 +650,15 @@ async function refreshAll() {
   await fetchData(selectedArtifactId.value);
 }
 
-// Called when iframe loads
+// Called when iframe loads — proactively send data since LLM-generated code
+// may use postMessage within its own window (not reaching the parent)
 function onIframeLoad() {
-  // Iframe loaded, but we wait for ARTIFACT_READY message
+  console.log('[ArtifactFrame] Iframe loaded');
+  // Give Babel a moment to transpile and execute the artifact code
+  setTimeout(() => {
+    iframeReady.value = true;
+    sendDataToIframe();
+  }, 300);
 }
 
 // Sample React code for when no artifact exists
@@ -1039,6 +1059,15 @@ const iframeSrcdoc = computed(() => {
     window.useReducer = React.useReducer;
     window.useContext = React.useContext;
     console.log('[Artifact] Data loaded:', window.ARTIFACT_DATA?.visualizations?.length || 0, 'visualizations');
+    // Auto-dispatch artifact_data message so LLM-generated useArtifactData()
+    // hooks that listen for postMessage will receive the embedded data.
+    // Use JSON parse/stringify to ensure plain objects (no proxy issues).
+    setTimeout(function() {
+      try {
+        var cloneable = JSON.parse(JSON.stringify(window.ARTIFACT_DATA));
+        window.postMessage({ type: 'artifact_data', payload: cloneable }, '*');
+      } catch(e) { console.warn('[Artifact] postMessage clone failed:', e); }
+    }, 500);
   ${SC}
 
   ${artifactCode}

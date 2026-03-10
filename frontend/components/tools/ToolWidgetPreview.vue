@@ -434,7 +434,14 @@ const filteredStep = computed(() => {
 // Normalize the view to ensure it's in the v2 format { view: {...}, version: 'v2' }
 const normalizedView = computed(() => {
   const v = visualization.value?.view || (step.value as any)?.view
-  if (!v) return null
+  if (!v) {
+    // No explicit view yet (e.g. SSE only sent visualization IDs, hydration pending).
+    // Build a minimal view from data_model.type so the chart can render immediately
+    // with auto-detected encoding; it will update when hydration completes.
+    const dmType = effectiveStep.value?.data_model?.type
+    if (dmType) return { view: { type: dmType }, version: 'v2' }
+    return null
+  }
   // Already in v2 format (has .view.type)
   if (v.view?.type) return v
   // Flat format - wrap it

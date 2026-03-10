@@ -14,24 +14,32 @@ except Exception as _exc:  # pragma: no cover
 
 
 _DEFAULT_ENCODING = "cl100k_base"
+_encoding_cache: dict[Optional[str], object] = {}
+_warned_models: set[str] = set()
 
 
 def _get_encoding(model_name: Optional[str]):
     if tiktoken is None:
         return None
+    cache_key = model_name or _DEFAULT_ENCODING
+    if cache_key in _encoding_cache:
+        return _encoding_cache[cache_key]
     try:
         if model_name and hasattr(tiktoken, "encoding_for_model"):
             enc = tiktoken.encoding_for_model(model_name)
-            logger.debug("tiktoken encoding loaded for model=%s", model_name)
+            _encoding_cache[cache_key] = enc
             return enc
     except Exception as e:
-        logger.debug("tiktoken encoding_for_model failed for model=%s: %s, falling back to %s", model_name, e, _DEFAULT_ENCODING)
+        if model_name not in _warned_models:
+            logger.debug("tiktoken: no tokenizer for %s, using %s fallback", model_name, _DEFAULT_ENCODING)
+            _warned_models.add(model_name)
     try:
         enc = tiktoken.get_encoding(_DEFAULT_ENCODING)
-        logger.debug("tiktoken using fallback encoding=%s", _DEFAULT_ENCODING)
+        _encoding_cache[cache_key] = enc
         return enc
     except Exception as e:
         logger.warning("tiktoken failed to load fallback encoding=%s: %s", _DEFAULT_ENCODING, e)
+        _encoding_cache[cache_key] = None
         return None
 
 
