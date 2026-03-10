@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BOW Visualization</title>
+  <title>MetricChat Visualization</title>
 
   <!-- ECharts for chart rendering (vendored locally by scripts/download-vendor-libs.sh) -->
   <script src="/libs/echarts-5.min.js"></script>
@@ -179,7 +179,7 @@
       // 1. Send ui/initialize
       var initResult = await sendRequest('ui/initialize', {
         appCapabilities: {},
-        appInfo: { name: 'bow-visualization', version: '1.0.0' },
+        appInfo: { name: 'metricchat-visualization', version: '1.0.0' },
         protocolVersion: '2026-01-26'
       });
 

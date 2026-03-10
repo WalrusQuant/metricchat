@@ -15,6 +15,7 @@ from sqlalchemy.orm import selectinload
 from app.ai.tools.mcp.base import MCPTool
 from app.models.user import User
 from app.models.organization import Organization
+from app.models.report import Report
 from app.models.visualization import Visualization
 from app.models.query import Query
 from app.models.step import Step
@@ -61,13 +62,16 @@ class GetVisualizationMCPTool(MCPTool):
             return {"error": "visualization_id is required"}
 
         # Fetch visualization with query and default step eagerly loaded
+        # Join through report to verify org ownership
         result = await db.execute(
             select(Visualization)
+            .join(Visualization.report)
             .options(
                 selectinload(Visualization.query).selectinload(Query.default_step),
                 selectinload(Visualization.query).selectinload(Query.steps),
             )
             .where(Visualization.id == visualization_id)
+            .where(Report.organization_id == str(organization.id))
         )
         viz = result.scalar_one_or_none()
 
@@ -134,11 +138,13 @@ class GetArtifactDataMCPTool(MCPTool):
         if not artifact_id:
             return {"error": "artifact_id is required"}
 
-        # Fetch artifact with report relationship
+        # Fetch artifact with report relationship, verify org ownership
         result = await db.execute(
             select(Artifact)
+            .join(Artifact.report)
             .options(selectinload(Artifact.report))
             .where(Artifact.id == artifact_id)
+            .where(Report.organization_id == str(organization.id))
         )
         artifact = result.scalar_one_or_none()
 

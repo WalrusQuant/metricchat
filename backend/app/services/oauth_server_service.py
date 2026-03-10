@@ -30,8 +30,8 @@ ACCESS_TOKEN_PREFIX = "bow_oauth_"
 REFRESH_TOKEN_PREFIX = "bow_rt_"
 
 # Token lifetimes
-ACCESS_TOKEN_LIFETIME = timedelta(days=365)
-REFRESH_TOKEN_LIFETIME = timedelta(days=365)
+ACCESS_TOKEN_LIFETIME = timedelta(days=7)
+REFRESH_TOKEN_LIFETIME = timedelta(days=30)
 AUTHORIZATION_CODE_LIFETIME = timedelta(minutes=5)
 
 # Claude's known callback URLs

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BOW Artifact</title>
+  <title>MetricChat Artifact</title>
 
   <!-- Vendored libs (downloaded by scripts/download-vendor-libs.sh) -->
   <!-- Tailwind CSS -->
@@ -57,7 +57,7 @@
 
   <script>
     // ===========================================
-    // BOW Artifact MCP App Runtime
+    // MetricChat Artifact MCP App Runtime
     // JSON-RPC 2.0 over postMessage (MCP Apps spec)
     // ===========================================
     (function() {
@@ -263,7 +263,7 @@
           // 1. Send ui/initialize
           var initResult = await sendRequest('ui/initialize', {
             appCapabilities: {},
-            appInfo: { name: 'bow-artifact', version: '1.0.0' },
+            appInfo: { name: 'metricchat-artifact', version: '1.0.0' },
             protocolVersion: '2026-01-26'
           });
 

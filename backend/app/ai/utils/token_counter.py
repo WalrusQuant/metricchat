@@ -7,7 +7,7 @@ logger = logging.getLogger(__name__)
 
 try:
     import tiktoken
-    logger.info("tiktoken loaded successfully")
+    logger.debug("tiktoken loaded successfully")
 except Exception as _exc:  # pragma: no cover
     tiktoken = None  # type: ignore
     logger.warning("tiktoken is not available, falling back to word-split token counting: %s", _exc)
