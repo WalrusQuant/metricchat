@@ -137,8 +137,8 @@ class SnowflakeClient(DataSourceClient):
         # Append semantic views (failures here should not affect regular tables)
         try:
             tables.extend(self._get_semantic_views())
-        except Exception:
-            pass
+        except Exception as e:
+            logger.debug("Semantic view discovery failed for %s: %s", self.database, e)
 
         return tables
 
@@ -156,7 +156,8 @@ class SnowflakeClient(DataSourceClient):
                     sv_results = conn.execute(
                         text(f"SHOW SEMANTIC VIEWS IN DATABASE {self.database}")
                     ).fetchall()
-                except Exception:
+                except Exception as e:
+                    logger.debug("SHOW SEMANTIC VIEWS failed for database %s: %s", self.database, e)
                     return tables
             else:
                 for schema in schemas:
@@ -165,7 +166,8 @@ class SnowflakeClient(DataSourceClient):
                             text(f"SHOW SEMANTIC VIEWS IN SCHEMA {self.database}.{schema}")
                         ).fetchall()
                         sv_results.extend(rows)
-                    except Exception:
+                    except Exception as e:
+                        logger.debug("SHOW SEMANTIC VIEWS failed for schema %s.%s: %s", self.database, schema, e)
                         continue
 
             for sv_row in sv_results:
@@ -226,8 +228,8 @@ class SnowflakeClient(DataSourceClient):
                             description=props.get("COMMENT"),
                             metadata=col_metadata,
                         ))
-                except Exception:
-                    pass
+                except Exception as e:
+                    logger.debug("DESC SEMANTIC VIEW failed for %s.%s.%s: %s", self.database, sv_schema, view_name, e)
 
                 tables.append(Table(
                     name=fqn,

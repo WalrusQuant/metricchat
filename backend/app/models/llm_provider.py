@@ -4,7 +4,7 @@ from app.models.base import BaseSchema
 import json
 from cryptography.fernet import Fernet, InvalidToken
 from app.settings.config import settings
-from app.schemas.llm_schema import AnthropicCredentials, OpenAICredentials, GoogleCredentials, BowCredentials, AzureCredentials, CustomCredentials, BedrockCredentials
+from app.schemas.llm_schema import AnthropicCredentials, OpenAICredentials, GoogleCredentials, MetricChatCredentials, AzureCredentials, CustomCredentials, BedrockCredentials
 
 # LLM Provider Classes
 
@@ -58,7 +58,7 @@ DEFAULT_PROVIDER_DETAILS = {
     "name": "MetricChat",
     "description": "MetricChat's API for accessing LLM models",
     "config": "AppConfig",
-    "credentials": BowCredentials.schema()
+    "credentials": MetricChatCredentials.schema()
 }
 
 

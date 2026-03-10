@@ -74,7 +74,7 @@ class OpenAICredentials(BaseModel):
     api_key: str
     base_url: Optional[str] = None
 
-class BowCredentials(BaseModel):
+class MetricChatCredentials(BaseModel):
     api_key: str
 
 class OpenAIConfig(BaseModel):
