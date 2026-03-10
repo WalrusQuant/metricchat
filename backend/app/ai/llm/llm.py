@@ -6,6 +6,7 @@ from .clients.openai_client import OpenAi
 from .clients.google_client import Google
 from .clients.anthropic_client import Anthropic
 from .clients.azure_client import AzureClient
+from .clients.bedrock_client import BedrockClient
 from .types import LLMResponse, LLMUsage, ImageInput
 from app.ai.utils.token_counter import count_tokens
 from app.models.llm_model import LLMModel
@@ -25,7 +26,26 @@ class LLM:
         self.model = model
         self.model_id = model.model_id
         self.provider = model.provider.provider_type
-        self.api_key = self.model.provider.decrypt_credentials()[0]
+        try:
+            self.api_key = self.model.provider.decrypt_credentials()[0]
+        except Exception as exc:
+            additional_config = getattr(self.model.provider, "additional_config", None) or {}
+            auth_mode = additional_config.get("auth_mode", "iam") if isinstance(additional_config, dict) else "iam"
+            if self.provider == "bedrock" and auth_mode != "api_key":
+                logger.warning(
+                    "Failed to decrypt credentials for Bedrock provider in '%s' auth mode; "
+                    "continuing without api_key. Error: %s",
+                    auth_mode,
+                    exc,
+                )
+                self.api_key = None
+            else:
+                logger.error(
+                    "Failed to decrypt credentials for provider '%s': %s",
+                    self.provider,
+                    exc,
+                )
+                raise
         self._usage_session_maker = usage_session_maker
         if self.provider == "openai":
             base_url = None
@@ -49,6 +69,19 @@ class LLM:
             # Use empty string for api_key if not provided (some local servers don't need auth)
             api_key = self.api_key or ""
             self.client = OpenAi(api_key=api_key, base_url=base_url, verify_ssl=verify_ssl)
+        elif self.provider == "bedrock":
+            additional_config = self.model.provider.additional_config or {}
+            region = additional_config.get("region")
+            if not region:
+                raise ValueError("Bedrock provider requires region in additional_config")
+            auth_mode = additional_config.get("auth_mode", "iam")
+            if auth_mode == "api_key" and not self.api_key:
+                raise ValueError("Bedrock provider with auth_mode 'api_key' requires provider credentials")
+            self.client = BedrockClient(
+                region=region,
+                auth_mode=auth_mode,
+                api_key=self.api_key if auth_mode == "api_key" else None,
+            )
         else:
             raise ValueError(f"Provider {self.provider} not supported")
 
@@ -177,15 +210,8 @@ class LLM:
         )
 
     async def test_connection(self, prompt: str = "Hello, how are you?"):
+        logger.info("Testing LLM connection: provider=%s, model=%s", self.provider, self.model_id)
         try:
-            test_inference = self.inference(prompt, should_record=False)
-
-            if not isinstance(test_inference, str) or not test_inference.strip():
-                return {
-                    "success": False,
-                    "message": "No response from the model, regular inference request failed",
-                }
-
             test_stream = ""
             async for chunk in self.inference_stream(prompt, should_record=False):
                 if not chunk:
@@ -195,17 +221,20 @@ class LLM:
                     break
 
             if not test_stream:
+                logger.warning("LLM test connection returned empty response: provider=%s, model=%s", self.provider, self.model_id)
                 return {
                     "success": False,
                     "message": "No response from the model, streaming request failed",
                 }
 
         except Exception as e:
+            logger.error("LLM test connection failed: provider=%s, model=%s, error=%s", self.provider, self.model_id, e, exc_info=True)
             return {
                 "success": False,
                 "message": str(e),
             }
 
+        logger.info("LLM test connection successful: provider=%s, model=%s", self.provider, self.model_id)
         return {
             "success": True,
             "message": "Successfully connected to LLM",

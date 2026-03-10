@@ -3,7 +3,11 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 from sqlalchemy.pool import NullPool
 from app.settings.config import settings
+from app.settings.db_auth import get_auth_provider
+import logging
 import os
+
+logger = logging.getLogger(__name__)
 
 
 def _set_sqlite_pragmas(dbapi_connection, connection_record):
@@ -91,6 +95,23 @@ def create_async_database_engine():
                 pool_recycle=1800,     # recycle connections every 30min (avoids stale connections)
                 pool_pre_ping=True,    # check connection health before use
             )
+
+            # Wire up IAM auth if configured — replaces password at connect time
+            db_config = settings.app_config.database
+            auth_provider = get_auth_provider(db_config)
+            if hasattr(auth_provider, '_region'):  # IAM provider, not static
+                from urllib.parse import urlparse
+                parsed = urlparse(db_config.url)
+                _iam_host = parsed.hostname or "localhost"
+                _iam_port = parsed.port or 5432
+                _iam_user = parsed.username or "postgres"
+
+                @event.listens_for(engine.sync_engine, "do_connect")
+                def _inject_iam_password(dialect, conn_rec, cargs, cparams):
+                    cparams["password"] = auth_provider.get_password(
+                        _iam_host, _iam_port, _iam_user
+                    )
+                logger.info("Database IAM auth enabled (region=%s)", auth_provider._region)
         else:
             # SQLite: no connection pooling supported
             if "sqlite" in settings.app_config.database.url:

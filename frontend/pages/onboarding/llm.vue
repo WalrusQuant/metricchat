@@ -97,6 +97,19 @@
                     <label class="text-sm font-medium text-gray-700 mb-2 mt-2">{{ field.title }}</label>
                     <input v-model="providerForm.credentials[field.key]" type="text" :required="!!field.required" :placeholder="field.description || ''" class="border border-gray-300 rounded-lg px-4 py-2 w-full h-9 text-sm focus:outline-none focus:border-primary-500" @change="clearTestResult()" />
                   </div>
+                  <template v-if="providerForm.provider_type === 'bedrock'">
+                    <div class="mt-3">
+                      <label class="text-sm font-medium text-gray-700 mb-2">Authentication</label>
+                      <div class="flex gap-2 mt-2">
+                        <span class="px-3 py-1.5 text-sm rounded-lg border border-primary-500 bg-primary-50 text-primary-700">IAM (from environment)</span>
+                      </div>
+                      <p class="text-xs text-gray-500 mt-1.5">Uses the AWS credential chain (IRSA, env vars, instance role, etc.)</p>
+                    </div>
+                  </template>
+                  <div v-if="providerForm.provider_type === 'custom'" class="flex items-center gap-2 mt-3">
+                    <UCheckbox v-model="providerForm.credentials.verify_ssl" @change="clearTestResult()" />
+                    <label class="text-sm text-gray-700">Verify SSL</label>
+                  </div>
                   <div v-if="providerForm.provider_type === 'openai'" class="mt-1">
                     <button type="button" @click="toggleBaseUrlNewProvider" class="text-xs text-primary-600 hover:underline">{{ showBaseUrlNew ? 'Use default base URL' : 'Set custom base URL' }}</button>
                     <div v-if="showBaseUrlNew" class="mt-2">
@@ -288,8 +301,10 @@ function fieldsForProvider(providerType: string): CredentialField[] {
 const credentialFieldsForNewProvider = computed<CredentialField[]>(() => {
   const providerType = providerForm.value.provider_type
   const all = fieldsForProvider(providerType)
-  if (providerType === 'openai') return all.filter(f => f.key !== 'base_url')
-  return all
+  let filtered = all.filter(f => f.key !== 'verify_ssl')
+  if (providerType === 'openai') return filtered.filter(f => f.key !== 'base_url')
+  if (providerType === 'bedrock') return filtered.filter(f => f.key === 'region')
+  return filtered
 })
 
 function selectOption(option: any) {
@@ -321,6 +336,12 @@ const canTestConnection = computed(() => {
   if (selectedProvider.value && selectedProvider.value.type !== 'new_provider') {
     return !!selectedProvider.value.provider_type
   }
+  if (providerForm.value.provider_type === 'bedrock') {
+    const creds = providerForm.value.credentials
+    if (!creds?.region) return false
+    if (creds.auth_mode === 'api_key') return !!creds.api_key
+    return true
+  }
   return !!providerForm.value.provider_type && !!providerForm.value.credentials && typeof providerForm.value.credentials.api_key !== 'undefined'
 })
 
@@ -329,6 +350,9 @@ watch(() => providerForm.value.provider_type, (providerType: string) => {
     models.value
       .filter((m: AvailableModel) => m.provider_type === providerType)
       .forEach((m: AvailableModel) => { m.is_enabled = true })
+    if (providerType === 'custom') {
+      providerForm.value.credentials.verify_ssl = true
+    }
   }
   if (isNewProviderSelected.value) {
     if (providerType === 'openai') {
@@ -365,6 +389,14 @@ watch(selectedProvider, (newValue) => {
         (newValue.credentials as any).endpoint_url = existingEndpoint
       }
       if (newValue.credentials.endpoint_url === undefined) (newValue.credentials as any).endpoint_url = null
+    }
+    if ((newValue.provider_type === 'bedrock' || newValue.type === 'bedrock')) {
+      const cfg = (newValue as any)?.additional_config || {}
+      if (cfg.region) (newValue.credentials as any).region = cfg.region
+      ;(newValue.credentials as any).auth_mode = cfg.auth_mode || 'iam'
+      if (cfg.auth_mode !== 'api_key') {
+        (newValue.credentials as any).api_key = null
+      }
     }
     providerForm.value = { name: '', provider_type: '', credentials: {} }
   }

@@ -99,6 +99,10 @@ class LicenseConfig(BaseModel):
         return v
 
 
+class DatabaseAuth(BaseModel):
+    provider: str = "password"  # "password" or "aws_iam"
+    region: Optional[str] = None  # AWS region for IAM auth
+
 class Database(BaseModel):
     url: str = Field(
         default_factory=lambda: os.getenv(
@@ -106,6 +110,7 @@ class Database(BaseModel):
             os.getenv("BOW_DATABASE_URL", "sqlite:////app/backend/db/app.db")
         )
     )
+    auth: Optional[DatabaseAuth] = None
 
 def generate_fernet_key():
     # Generate a valid Fernet-compatible key (32 url-safe base64-encoded bytes)

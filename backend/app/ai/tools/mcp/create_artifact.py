@@ -1,7 +1,7 @@
 """MCP Tool: create_artifact - Generate dashboards/slides from visualizations."""
 
 import logging
-from typing import Dict, Any, List
+from typing import Dict, Any, List, Optional
 
 from sqlalchemy import select, desc
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -15,7 +15,6 @@ from app.models.organization import Organization
 from app.models.artifact import Artifact
 from app.models.visualization import Visualization
 from app.models.query import Query
-from app.services.report_service import ReportService
 from app.schemas.mcp import MCPCreateArtifactInput, MCPCreateArtifactOutput
 from app.dependencies import async_session_maker
 
@@ -42,6 +41,10 @@ class CreateArtifactMCPTool(MCPTool):
     )
 
     @property
+    def meta(self) -> Optional[Dict[str, Any]]:
+        return {"ui": {"resourceUri": "ui://metricchat/artifact"}}
+
+    @property
     def input_schema(self) -> Dict[str, Any]:
         return MCPCreateArtifactInput.model_json_schema()
 
@@ -64,11 +67,9 @@ class CreateArtifactMCPTool(MCPTool):
                 error_message=f"Invalid mode '{input_data.mode}'. Must be 'page' or 'slides'.",
             ).model_dump()
 
-        report_service = ReportService()
-
-        # Load report
+        # Load report as ORM model (preserves Connection.get_credentials())
         try:
-            report = await report_service.get_report(db, input_data.report_id, user, organization)
+            report = await self._load_report(db, input_data.report_id)
         except Exception as e:
             return MCPCreateArtifactOutput(
                 report_id=input_data.report_id,
@@ -150,7 +151,7 @@ class CreateArtifactMCPTool(MCPTool):
         # LLM inference (non-streaming for MCP)
         llm = LLM(rich_ctx.model, usage_session_maker=async_session_maker)
         try:
-            response = await llm.inference(
+            response = llm.inference(
                 prompt,
                 usage_scope="mcp_create_artifact",
                 usage_scope_ref_id=str(report.id),
@@ -321,7 +322,6 @@ class CreateArtifactMCPTool(MCPTool):
             report_title=report_title,
             allow_llm_see_data=allow_llm_see_data,
             messages_context="",
-            previous_artifacts=None,
         )
 
         # Add selection guidance at the beginning of the design request section
