@@ -33,7 +33,7 @@ const canUpdateDataSource = computed(() => useCan('update_data_source'))
 
 // Set schema mode based on permissions - wait for permissions to load
 watch([injectedIntegration, permissionsLoaded], ([ds, loaded]) => {
-    if (ds && loaded) {
+    if (ds && loaded === 'loaded') {
         schemaMode.value = canUpdateDataSource.value ? 'full' : 'user'
     }
 }, { immediate: true })

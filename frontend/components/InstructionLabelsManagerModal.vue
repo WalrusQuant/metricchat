@@ -161,9 +161,9 @@ const isOpen = computed({
     set: (value) => emit('update:modelValue', value)
 })
 
-const canCreate = computed(() => permissionsLoaded.value && useCan('create_instructions'))
-const canEdit = computed(() => permissionsLoaded.value && useCan('update_instructions'))
-const canDelete = computed(() => permissionsLoaded.value && useCan('delete_instructions'))
+const canCreate = computed(() => permissionsLoaded.value === 'loaded' && useCan('create_instructions'))
+const canEdit = computed(() => permissionsLoaded.value === 'loaded' && useCan('update_instructions'))
+const canDelete = computed(() => permissionsLoaded.value === 'loaded' && useCan('delete_instructions'))
 
 const labels = ref<InstructionLabel[]>([])
 const isLoading = ref(false)

@@ -14,7 +14,7 @@ export default defineNuxtPlugin(async (nuxtApp) => {
 
       if (!session) {
         console.warn('Session data is undefined. Ensure the user is authenticated.')
-        permissionsLoaded.value = true
+        permissionsLoaded.value = 'error'
         return
       }
 
@@ -24,14 +24,14 @@ export default defineNuxtPlugin(async (nuxtApp) => {
         )?.role
         const rolePermissions = getPermissionsForRole(userRole)
         permissions.value = rolePermissions
-        permissionsLoaded.value = true
+        permissionsLoaded.value = 'loaded'
       } else {
         console.warn('No organizations found in session data.')
-        permissionsLoaded.value = true
+        permissionsLoaded.value = 'error'
       }
     } catch (error) {
       console.error('Error fetching session data:', error)
-      permissionsLoaded.value = true
+      permissionsLoaded.value = 'error'
     }
   }
 
@@ -44,9 +44,9 @@ export default defineNuxtPlugin(async (nuxtApp) => {
     router.afterEach(async (to, from) => {
       // Only reload permissions if we're navigating to a different route
       // and permissions were previously loaded
-      if (to.path !== from.path && permissionsLoaded.value) {
+      if (to.path !== from.path && permissionsLoaded.value === 'loaded') {
         //console.log('Navigation detected, reloading permissions...')
-        permissionsLoaded.value = false // Reset loaded state
+        permissionsLoaded.value = 'loading' // Reset loaded state
         await loadPermissions()
       }
     })

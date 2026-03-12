@@ -629,23 +629,18 @@ const actionsDropdownItems = computed(() => {
     ]
 })
 
+const { selectedDomainObjects } = useDomain()
+
 const createNewReport = async () => {
     try {
-        // Match default layout behavior: pre-fetch data sources and attach them
-        const dsResponse: any = await useMyFetch('/data_sources', {
-            method: 'GET',
-        })
-        if (dsResponse?.error?.value) {
-            throw new Error('Could not fetch data sources')
-        }
-        const list = ((dsResponse?.data?.value || []) as Array<{ id: string | number }>)
+        const dataSourceIds = selectedDomainObjects.value.map((ds: any) => ds.id)
 
         const response: any = await useMyFetch('/reports', {
             method: 'POST',
             body: JSON.stringify({
                 title: 'untitled report',
                 files: [],
-                data_sources: list.map((ds) => ds.id),
+                data_sources: dataSourceIds,
             }),
         })
 

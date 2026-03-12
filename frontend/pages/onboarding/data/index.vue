@@ -183,7 +183,7 @@ function backToList() {
 function onCreateSuccess(ds: any) {
   const dsId = ds?.id
   updateOnboarding({ current_step: 'schema_selected' as any })
-  navigateTo(dsId ? `/onboarding/data/${dsId}/schema` : '/onboarding/data/schema')
+  navigateTo(dsId ? `/onboarding/data/${dsId}/schema` : '/onboarding/data')
 }
 
 const fileInput = ref<HTMLInputElement | null>(null)
@@ -228,7 +228,7 @@ async function handleFileUpload(e: Event) {
     // 3. Navigate to schema selection (same as demo install and connector creation)
     const dsId = (dsData.value as any).data_source_id
     updateOnboarding({ current_step: 'schema_selected' as any })
-    navigateTo(dsId ? `/onboarding/data/${dsId}/schema` : '/onboarding/data/schema')
+    navigateTo(dsId ? `/onboarding/data/${dsId}/schema` : '/onboarding/data')
   } finally {
     uploadingFile.value = false
     input.value = '' // reset so same file can be re-selected

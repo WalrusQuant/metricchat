@@ -21,11 +21,21 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
 
   // Check if permissions have been loaded
   const permissionsLoaded = usePermissionsLoaded()
-  
-  // If permissions haven't loaded yet, don't block - let the page load
-  // The permissions plugin will handle loading them
-  if (!permissionsLoaded.value) {
-    return
+
+  // Wait for permissions to finish loading (up to 5s)
+  if (permissionsLoaded.value === 'loading') {
+    const start = Date.now()
+    while (permissionsLoaded.value === 'loading' && Date.now() - start < 5000) {
+      await new Promise(resolve => setTimeout(resolve, 50))
+    }
+  }
+
+  // If still loading or errored, redirect to home with no permission check
+  if (permissionsLoaded.value !== 'loaded') {
+    if (to.path === '/' || to.path === '') {
+      return
+    }
+    return navigateTo('/')
   }
 
   // Check if user has all required permissions
@@ -43,7 +53,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
     if (to.path === '/' || to.path === '') {
       return
     }
-    
+
     // Redirect to home for protected pages user can't access
     return navigateTo('/')
   }

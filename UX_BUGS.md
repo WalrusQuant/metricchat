@@ -18,21 +18,21 @@
 
 ## 🟡 Important
 
-- [ ] **8. Two "New Report" buttons behave differently** — Sidebar (`layouts/default.vue:364-392`) creates empty report with no error toast. Reports list (`pages/reports/index.vue:648`) has proper error handling. Home page prompt auto-submits on arrival. Inconsistent behavior.
+- [x] **8. Two "New Report" buttons behave differently** — Sidebar (`layouts/default.vue:364-392`) creates empty report with no error toast. Reports list (`pages/reports/index.vue:648`) has proper error handling. Home page prompt auto-submits on arrival. Inconsistent behavior. **Fixed:** Added error toast to sidebar `createNewReport` and `PromptBoxV2.createReport`. Reports list now uses `useDomain()` `selectedDomainObjects` instead of fetching all data sources.
 
-- [ ] **9. Organization loading has no timeout** — `composables/useOrganization.ts:14-22` — `getSession({ force: true })` has no timeout. If `/api/users/whoami` hangs, entire app hangs since every API call goes through `ensureOrganization()`.
+- [x] **9. Organization loading has no timeout** — `composables/useOrganization.ts:14-22` — `getSession({ force: true })` has no timeout. If `/api/users/whoami` hangs, entire app hangs since every API call goes through `ensureOrganization()`. **Fixed:** Wrapped `getSession()` in `Promise.race` with 5s timeout and try-catch fallback.
 
-- [ ] **10. Permissions bypass on first page load** — `middleware/permissions.global.ts:22-29` — `permissionsLoaded === false` on initial state causes middleware to return early, allowing any page to render before redirect.
+- [x] **10. Permissions bypass on first page load** — `middleware/permissions.global.ts:22-29` — `permissionsLoaded === false` on initial state causes middleware to return early, allowing any page to render before redirect. **Fixed:** Changed `permissionsLoaded` from boolean to tri-state (`'loading' | 'loaded' | 'error'`). Middleware now polls up to 5s for permissions to load before redirecting to `/`.
 
-- [ ] **11. Error page has no safe recovery** — `error.vue` — Only "Go home" option. If home is broken, users get stuck in redirect loop. No "Go back", "Sign out", or "Try again".
+- [x] **11. Error page has no safe recovery** — `error.vue` — Only "Go home" option. If home is broken, users get stuck in redirect loop. No "Go back", "Sign out", or "Try again". **Fixed:** Added "Go back", "Reload page" (for 500s), and "Sign out" buttons alongside existing "Go home".
 
-- [ ] **12. Missing route: `/onboarding/data/schema`** — `pages/onboarding/data/index.vue:186` — Fallback navigates to route without `[ds_id]` param. Route doesn't exist, users hit 404.
+- [x] **12. Missing route: `/onboarding/data/schema`** — `pages/onboarding/data/index.vue:186` — Fallback navigates to route without `[ds_id]` param. Route doesn't exist, users hit 404. **Fixed:** Changed fallback to redirect to `/onboarding/data` instead of dead `/onboarding/data/schema` route.
 
-- [ ] **13. Connection test gate with no escape** — `components/datasources/ConnectForm.vue:184` — Must pass connection test before saving. If test fails (firewall, restricted access), complete dead end.
+- [x] **13. Connection test gate with no escape** — `components/datasources/ConnectForm.vue:184` — Must pass connection test before saving. If test fails (firewall, restricted access), complete dead end. **Fixed:** Removed `!connectionTestPassed` from submit disabled condition. Button shows "Save Without Testing" when untested, tooltip warns "Connection has not been tested".
 
-- [ ] **14. Domain selector state inconsistency** — `layouts/default.vue:369-370` — Sidebar "New Report" uses `selectedDomainObjects` from domain selector. Reports list page has its own selection. Different data sources depending on which button is clicked.
+- [x] **14. Domain selector state inconsistency** — `layouts/default.vue:369-370` — Sidebar "New Report" uses `selectedDomainObjects` from domain selector. Reports list page has its own selection. Different data sources depending on which button is clicked. **Fixed:** Reports list now uses `useDomain()` `selectedDomainObjects` instead of fetching all data sources from API.
 
-- [ ] **15. Permissions marked "loaded" even on error** — `plugins/fetchPermissions.client.ts` — On error, `permissionsLoaded = true` still set. Navigation proceeds with empty permissions, potentially granting access to restricted pages.
+- [x] **15. Permissions marked "loaded" even on error** — `plugins/fetchPermissions.client.ts` — On error, `permissionsLoaded = true` still set. Navigation proceeds with empty permissions, potentially granting access to restricted pages. **Fixed:** Error paths now set `permissionsLoaded = 'error'` instead of `true`. Only successful permission fetch sets `'loaded'`.
 
 ## 🔵 Suggestions
 
@@ -49,3 +49,13 @@
 - [x] **21. Remove "Upload a CSV or Excel file to query" link from home page** — `pages/index.vue:56-68` — Light text link and hidden file input on the home page. Remove the entire quick CSV upload block including the handler logic. **Fixed:** Removed template block, `uploadingCsv`, `toast`, `findFileUploadConnection()`, `handleCsvUpload()`, `useExcel` import, and unused `initDomain`/`selectDomains` destructuring.
 
 - [x] **22. Unused `KeyCode` import from monaco-editor on home page** — `pages/index.vue:135` — `import { KeyCode } from 'monaco-editor'` was imported but never referenced. Accidental leftover from upstream `onboarding` commit (`fa8159ee`). **Fixed:** Removed.
+
+## 🟠 TypeScript Errors (pre-existing)
+
+- [ ] **23. CompletionMessageComponent props untyped** — `components/CompletionMessageComponent.vue` — Props use bare `Object` type. Every property access (`.status`, `.role`, `.completion`, `.widget`, `.prompt`, `.sigkill`) fails typecheck. Needs a proper interface.
+
+- [ ] **24. ConnectForm mode type incomplete** — `components/datasources/ConnectForm.vue:133` / `components/AddConnectionModal.vue:130` — `mode` prop typed as `'onboarding' | 'create' | 'edit'` but `'create_connection_only'` is used at runtime. Union type needs updating.
+
+- [ ] **25. AgGridComponent loose types** — `components/AgGridComponent.vue` — Spread on `unknown` types, implicit `any` on `trace` parameter. Needs typed column definitions and error handler signature.
+
+- [ ] **26. Reports index untyped API responses** — `pages/reports/index.vue` — API response cast as `{}` instead of proper interface. Accessing `.reports` and `.meta` fails typecheck. Needs response type definitions.
