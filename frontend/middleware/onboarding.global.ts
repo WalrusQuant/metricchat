@@ -11,6 +11,12 @@ export default (defineNuxtRouteMiddleware(async (to) => {
     await fetchOnboarding({ in_onboarding: true })
     const ob = onboarding.value
     if (ob?.completed) return navigateTo('/')
+
+    // Non-admins can't create data sources — redirect away from data pages
+    if (to.path.startsWith('/onboarding/data')) {
+      const canCreate = useCan('create_data_source')
+      if (!canCreate) return navigateTo('/')
+    }
     return
   }
 
