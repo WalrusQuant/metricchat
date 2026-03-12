@@ -1,5 +1,14 @@
 // /composables/useMyFetch.ts
 
+let isRedirectingToLogin = false
+
+function handleAuthError() {
+  if (isRedirectingToLogin) return
+  isRedirectingToLogin = true
+  const { signOut } = useAuth()
+  signOut({ callbackUrl: '/users/sign-in' })
+}
+
 export const useMyFetch: typeof useFetch = async (request, opts?) => {
   const config = useRuntimeConfig()
   const { token } = useAuth()
@@ -35,6 +44,9 @@ export const useMyFetch: typeof useFetch = async (request, opts?) => {
         headers: opts.headers,
       }).then(response => {
         if (!response.ok) {
+          if (response.status === 401) {
+            handleAuthError()
+          }
           reject(new Error(`HTTP error! status: ${response.status}`))
         } else {
           resolve({ data: response })
@@ -58,7 +70,10 @@ export const useMyFetch: typeof useFetch = async (request, opts?) => {
         refresh: () => {},
         status: ref('success')
       }
-    } catch (error) {
+    } catch (error: any) {
+      if (error?.response?.status === 401 || error?.status === 401 || error?.statusCode === 401) {
+        handleAuthError()
+      }
       return {
         data: ref(null),
         error: ref(error),
@@ -69,11 +84,12 @@ export const useMyFetch: typeof useFetch = async (request, opts?) => {
     }
   }
 
-  return useFetch(request, { baseURL: config.public.baseURL, ...opts })
-    .then(response => {
-      return response
-    })
-    .catch(error => {
-      throw error
-    });
+  const response = await useFetch(request, { baseURL: config.public.baseURL, ...opts })
+  if (response.error.value) {
+    const statusCode = (response.error.value as any)?.statusCode || (response.error.value as any)?.status
+    if (statusCode === 401) {
+      handleAuthError()
+    }
+  }
+  return response
 };

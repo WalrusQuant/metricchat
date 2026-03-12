@@ -500,7 +500,7 @@ interface ChatMessage {
 }
 
 const route = useRoute()
-const report_id = (route.params.id as string) || ''
+let report_id = (route.params.id as string) || ''
 
 // Permissions
 const canViewConsole = computed(() => useCan('view_console'))
@@ -1721,12 +1721,10 @@ async function refreshDashboardFast() {
     }
 }
 
-// Ensure dashboard pane opens only when currently closed
-onMounted(() => {
-    window.addEventListener('dashboard:ensure_open', () => {
-        if (!isSplitScreen.value) toggleSplitScreen()
-    })
-})
+// Named handler so it can be removed on cleanup (Bug #2 fix)
+const handleDashboardEnsureOpen = () => {
+    if (!isSplitScreen.value) toggleSplitScreen()
+}
 
 // When a tool finishes saving a new step, broadcast the default step change if we have enough info
 // Track last dispatched step to avoid duplicate events during streaming
@@ -1823,18 +1821,27 @@ function stopResize() {
 	document.body.style.userSelect = 'auto'
 }
 
-onUnmounted(() => {
+// Shared cleanup function used by route watcher and onUnmounted
+function cleanupReportState() {
+	// Abort any active SSE stream (Bug #3 fix)
+	if (currentController) {
+		currentController.abort()
+		currentController = null
+	}
+	// Stop any polling timers (Bug #4 fix)
+	stopPollingInProgressCompletion()
+	// Remove event listeners
 	document.removeEventListener('mousemove', handleResize)
 	document.removeEventListener('mouseup', stopResize)
 	document.body.style.userSelect = 'auto'
-    window.removeEventListener('resize', safeScrollToBottom)
+	window.removeEventListener('resize', safeScrollToBottom)
+	window.removeEventListener('dashboard:ensure_open', handleDashboardEnsureOpen)
 	try { scrollContainer.value?.removeEventListener('scroll', onScroll) } catch {}
 	// Cancel any pending animation frame for scroll
 	if (scrollRAF !== null && typeof window !== 'undefined') {
 		window.cancelAnimationFrame(scrollRAF)
+		scrollRAF = null
 	}
-	// Stop any polling timers
-	stopPollingInProgressCompletion()
 	// Clear debounce timers
 	for (const timer of debounceTimers.values()) {
 		clearTimeout(timer)
@@ -1845,6 +1852,118 @@ onUnmounted(() => {
 	committedBlockText.value.clear()
 	// Clear reasoning refs
 	reasoningRefs.clear()
+	// Reset streaming state
+	isStreaming.value = false
+}
+
+// Shared initialization function used by route watcher and onMounted
+async function initReportPage() {
+	// Update report_id from current route
+	report_id = (route.params.id as string) || ''
+
+	// Reset all report-specific state
+	messages.value = []
+	hasMore.value = true
+	cursorBefore.value = null
+	promptText.value = ''
+	isStreaming.value = false
+	reportLoaded.value = false
+	reportNotFound.value = false
+	completionsLoaded.value = false
+	report.value = null
+	visualizations.value = []
+	textWidgetsIds.value = []
+	isSplitScreen.value = false
+	leftPanelWidth.value = 450
+	rightPanelView.value = 'artifact'
+	hasArtifacts.value = false
+	hasLegacyLayout.value = false
+	collapsedReasoning.value.clear()
+	expandedToolDetails.value.clear()
+	manuallyToggledReasoning.value.clear()
+	debouncedBlockContent.value.clear()
+	blockChunks.value.clear()
+	committedBlockText.value.clear()
+	showTraceModal.value = false
+	selectedCompletionForTrace.value = null
+	lastDispatchedStepId.value = null
+	showQueryEditor.value = false
+	isPolling.value = false
+	chunkIdCounter = 0
+	scrollRAF = null
+	isUserAtBottom.value = true
+	suppressAutoScroll.value = false
+	pendingScroll.value = false
+	reasoningRefs.clear()
+
+	// Re-attach event listeners
+	window.addEventListener('dashboard:ensure_open', handleDashboardEnsureOpen)
+
+	// Load data
+	await Promise.all([
+		loadReport(),
+		loadVisualizations(),
+		loadCompletions(),
+		checkHasArtifacts(),
+		loadActiveLayoutHasBlocks()
+	])
+
+	// Open split screen if report has artifacts or legacy layout
+	if (hasArtifacts.value || hasLegacyLayout.value) {
+		isSplitScreen.value = true
+	}
+
+	// Handle new_message query parameter after everything is loaded
+	if (route.query.new_message && messages.value.length == 0) {
+		let mentions: any[] = []
+		try {
+			const raw = typeof route.query.mentions === 'string' ? decodeURIComponent(route.query.mentions) : ''
+			if (raw) mentions = JSON.parse(raw)
+		} catch {}
+		const mode = typeof route.query.mode === 'string' ? route.query.mode : 'chat'
+		const model_id = typeof route.query.model_id === 'string' ? route.query.model_id : null
+		onSubmitCompletion({ text: route.query.new_message as string, mentions, mode, model_id: model_id || undefined })
+	}
+
+	// If a system message is still in progress (after refresh), begin polling until it finishes
+	if (!isStreaming.value && getLastInProgressSystem()) {
+		startPollingInProgressCompletion()
+	}
+
+	// Open dashboard pane if there are any published widgets
+	if (visualizations.value.some(viz => viz.status === 'published')) {
+		isSplitScreen.value = true
+		nextTick(() => setTimeout(safeScrollToBottom, 100))
+	}
+
+	// Aggressive initial scroll to handle async content mounting
+	scheduleInitialScroll()
+	window.addEventListener('resize', safeScrollToBottom)
+	// Attach scroll listener for infinite scroll up
+	try { scrollContainer.value?.addEventListener('scroll', onScroll) } catch {}
+	// Initialize scroll position state
+	try {
+		const c = scrollContainer.value
+		if (c) {
+			lastScrollTop.value = c.scrollTop
+			const dist = c.scrollHeight - (c.scrollTop + c.clientHeight)
+			isUserAtBottom.value = dist <= RETURN_TO_BOTTOM_PX
+			suppressAutoScroll.value = false
+		}
+	} catch {}
+}
+
+// Watch route params for navigation between reports (Bug #1 fix)
+// Vue reuses the component instance, so onMounted/onUnmounted don't fire on route change
+watch(() => route.params.id, (newId, oldId) => {
+	if (newId && newId !== oldId) {
+		cleanupReportState()
+		initReportPage().catch(e => console.error('Failed to init report on route change:', e))
+	}
+})
+
+onUnmounted(() => {
+	cleanupReportState()
 })
 
 
@@ -2239,59 +2358,7 @@ async function startPollingInProgressCompletion() {
 	pollHandle = window.setTimeout(tick, pollIntervalMs)
 }
 
-onMounted(async () => {
-	await Promise.all([
-		loadReport(),
-		loadVisualizations(),
-		loadCompletions(),
-		checkHasArtifacts(),
-		loadActiveLayoutHasBlocks()
-	])
-
-	// Open split screen if report has artifacts or legacy layout
-	if (hasArtifacts.value || hasLegacyLayout.value) {
-		isSplitScreen.value = true
-	}
-
-	// Handle new_message query parameter after everything is loaded
-	if (route.query.new_message && messages.value.length == 0) {
-		let mentions: any[] = []
-		try {
-			const raw = typeof route.query.mentions === 'string' ? decodeURIComponent(route.query.mentions) : ''
-			if (raw) mentions = JSON.parse(raw)
-		} catch {}
-		const mode = typeof route.query.mode === 'string' ? route.query.mode : 'chat'
-		const model_id = typeof route.query.model_id === 'string' ? route.query.model_id : null
-		onSubmitCompletion({ text: route.query.new_message as string, mentions, mode, model_id: model_id || undefined })
-	}
-
-	// If a system message is still in progress (after refresh), begin polling until it finishes
-	if (!isStreaming.value && getLastInProgressSystem()) {
-		startPollingInProgressCompletion()
-	}
-	
-	// Open dashboard pane if there are any published widgets
-	if (visualizations.value.some(viz => viz.status === 'published')) {
-		isSplitScreen.value = true
-		// Scroll to bottom when automatically opening dashboard
-    nextTick(() => setTimeout(safeScrollToBottom, 100))
-	}
-    // Aggressive initial scroll to handle async content mounting
-	scheduleInitialScroll()
-    window.addEventListener('resize', safeScrollToBottom)
-	// Attach scroll listener for infinite scroll up
-	try { scrollContainer.value?.addEventListener('scroll', onScroll) } catch {}
-    // Initialize scroll position state
-    try {
-        const c = scrollContainer.value
-        if (c) {
-            lastScrollTop.value = c.scrollTop
-            const dist = c.scrollHeight - (c.scrollTop + c.clientHeight)
-            isUserAtBottom.value = dist <= RETURN_TO_BOTTOM_PX
-            suppressAutoScroll.value = false
-        }
-    } catch {}
-})
+onMounted(() => initReportPage())
 
 </script>
 
