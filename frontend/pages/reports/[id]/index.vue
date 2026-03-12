@@ -950,9 +950,15 @@ function autoScrollIfNearBottom() {
   }
 }
 
+let scrollTimerIds: ReturnType<typeof setTimeout>[] = []
+
 function scheduleInitialScroll() {
+    scrollTimerIds.forEach(id => clearTimeout(id))
+    scrollTimerIds = []
     const delays = [0, 80, 160, 320, 640]
-    for (const delay of delays) setTimeout(safeScrollToBottom, delay)
+    for (const delay of delays) {
+        scrollTimerIds.push(setTimeout(safeScrollToBottom, delay))
+    }
 }
 
 // Keep scrolling to bottom across successive layout passes until height stabilizes
@@ -1842,6 +1848,9 @@ function cleanupReportState() {
 		window.cancelAnimationFrame(scrollRAF)
 		scrollRAF = null
 	}
+	// Cancel scroll timers
+	scrollTimerIds.forEach(id => clearTimeout(id))
+	scrollTimerIds = []
 	// Clear debounce timers
 	for (const timer of debounceTimers.values()) {
 		clearTimeout(timer)
@@ -1914,7 +1923,7 @@ async function initReportPage() {
 	}
 
 	// Handle new_message query parameter after everything is loaded
-	if (route.query.new_message && messages.value.length == 0) {
+	if (route.query.new_message && messages.value.length === 0) {
 		let mentions: any[] = []
 		try {
 			const raw = typeof route.query.mentions === 'string' ? decodeURIComponent(route.query.mentions) : ''

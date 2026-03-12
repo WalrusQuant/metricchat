@@ -34,6 +34,7 @@ const route = useRoute()
 const router = useRouter()
 
 const isServerError = computed(() => (error?.statusCode ?? 0) >= 500)
+const { signOut } = useAuth()
 
 function goBack() {
   if (window.history.length > 1) {
@@ -49,7 +50,6 @@ function reload() {
 
 async function handleSignOut() {
   try {
-    const { signOut } = useAuth()
     await signOut({ callbackUrl: '/users/sign-in' })
   } catch {
     window.location.href = '/users/sign-in'

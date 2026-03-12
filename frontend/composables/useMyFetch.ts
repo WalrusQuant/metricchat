@@ -6,7 +6,9 @@ function handleAuthError() {
   if (isRedirectingToLogin) return
   isRedirectingToLogin = true
   const { signOut } = useAuth()
-  signOut({ callbackUrl: '/users/sign-in' })
+  signOut({ callbackUrl: '/users/sign-in' }).finally(() => {
+    isRedirectingToLogin = false
+  })
 }
 
 export const useMyFetch: typeof useFetch = async (request, opts?) => {

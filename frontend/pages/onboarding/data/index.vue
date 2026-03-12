@@ -177,8 +177,13 @@ async function installDemo(demoId: string) {
 
 onMounted(async () => {
   await nextTick()
-  await Promise.all([getAvailableDataSources(), getDemoDataSources()])
-  loadingDataSources.value = false
+  try {
+    await Promise.all([getAvailableDataSources(), getDemoDataSources()])
+  } catch (e) {
+    console.error('Failed to load data sources', e)
+  } finally {
+    loadingDataSources.value = false
+  }
 })
 
 function selectDataSource(ds: any) {
