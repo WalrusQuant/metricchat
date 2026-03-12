@@ -445,7 +445,7 @@ const isLoadingRelated = ref(false)
 const selectedInstructionType = computed(() => {
     // Check permissions first - admins always use the global component for consistent UI
     const permissionsLoaded = usePermissionsLoaded()
-    if (!permissionsLoaded.value) {
+    if (permissionsLoaded.value !== 'loaded') {
         // Default to private to avoid flashing the admin UI. It will correct itself once permissions load.
         return 'private' 
     }

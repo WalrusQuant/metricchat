@@ -849,8 +849,11 @@ async function createReport() {
             })
         }
         text.value = ''
-    } catch (error) {
+    } catch (error: any) {
         console.error('Failed to create report:', error)
+        const toast = useToast()
+        const message = error?.data?.detail || error?.data?.message || error?.message || 'Failed to create report'
+        toast.add({ title: 'Failed to create report', description: String(message), color: 'red' })
     }
 }
 </script>

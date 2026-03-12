@@ -276,6 +276,7 @@
   
   // Domain management - use selectedDomainObjects for new report creation
   const { initDomain, selectedDomainObjects, domains, hasDomains } = useDomain()
+  const toast = useToast()
 
   
   const workspaceIconUrl = computed<string | null>(() => {
@@ -364,11 +365,11 @@
 const createNewReport = async () => {
   if (creatingReport.value) return
   creatingReport.value = true
-  
+
   try {
     // Use selected domains from DomainSelector, or all domains if none selected
     const dataSourceIds = selectedDomainObjects.value.map((ds: any) => ds.id)
-    
+
     const response = await useMyFetch('/reports', {
         method: 'POST',
         body: JSON.stringify({
@@ -386,6 +387,9 @@ const createNewReport = async () => {
     await router.push({
         path: `/reports/${data.id}`
     })
+  } catch (e: any) {
+    const message = e?.data?.detail || e?.data?.message || e?.message || 'Failed to create report'
+    toast.add({ title: 'Failed to create report', description: String(message), color: 'red' })
   } finally {
     creatingReport.value = false
   }

@@ -105,10 +105,11 @@
               </UButton>
             </UTooltip>
 
-            <UTooltip :text="!connectionTestPassed ? 'Pass the connection test first' : ''">
-              <button type="submit" :disabled="submitting || !connectionTestPassed" class="bg-primary-500 hover:bg-primary-600 text-white text-xs font-medium py-1.5 px-3 rounded disabled:opacity-50">
+            <UTooltip :text="!connectionTestPassed ? 'Connection has not been tested' : ''">
+              <button type="submit" :disabled="submitting" class="bg-primary-500 hover:bg-primary-600 text-white text-xs font-medium py-1.5 px-3 rounded disabled:opacity-50">
                 <span v-if="submitting">Saving...</span>
-                <span v-else>Save and Continue</span>
+                <span v-else-if="connectionTestPassed">Save and Continue</span>
+                <span v-else>Save Without Testing</span>
               </button>
             </UTooltip>
           </div>
@@ -130,7 +131,7 @@ function selectProvider(ds: any) {
   handleTypeChange()
 }
 const props = defineProps<{
-  mode?: 'onboarding'|'create'|'edit',
+  mode?: 'onboarding'|'create'|'edit'|'create_connection_only',
   initialType?: string,
   initialName?: string,
   dataSourceId?: string,

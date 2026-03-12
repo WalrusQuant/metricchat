@@ -53,20 +53,6 @@
               @update:modelValue="handlePromptUpdate"
           />
       </div>
-      <!-- Quick CSV upload -->
-      <div class="mt-3 flex justify-center">
-        <input type="file" ref="csvFileInput" @change="handleCsvUpload" class="hidden" accept=".csv,.xlsx,.xls" />
-        <button
-          @click="($refs.csvFileInput as HTMLInputElement).click()"
-          :disabled="uploadingCsv"
-          class="inline-flex items-center gap-1.5 text-xs text-gray-400 hover:text-gray-600 transition-colors disabled:opacity-50"
-        >
-          <Spinner v-if="uploadingCsv" class="w-3 h-3" />
-          <Icon v-else name="heroicons-arrow-up-tray" class="w-3.5 h-3.5" />
-          Upload a CSV or Excel file to query
-        </button>
-      </div>
-
       <div class="w-full mx-auto mt-0 space-x-3 space-y-3" v-if="selectedDataSources">
         <DataSourceQuestionsHome
             :data_sources="selectedDataSources"
@@ -140,14 +126,12 @@
 
 <script setup lang="ts">
 import { useRouter } from 'vue-router';
-import { useExcel } from '~/composables/useExcel';
 import { onMounted, nextTick } from 'vue';
 import Spinner from '@/components/Spinner.vue'
 import PromptBoxV2 from '~/components/prompt/PromptBoxV2.vue';
 import RecentReports from '~/components/home/RecentReports.vue';
 
 import { useCan } from '~/composables/usePermissions'
-import { KeyCode } from 'monaco-editor';
 const router = useRouter()
 const { onboarding, fetchOnboarding } = useOnboarding()
 const { selectedDomainObjects } = useDomain()
@@ -230,71 +214,6 @@ const menuItems = ref([
     signOff()
   } }],
 ])
-
-const { isExcel } = useExcel()
-const { initDomain, selectDomains } = useDomain()
-const uploadingCsv = ref(false)
-const toast = useToast()
-
-async function findFileUploadConnection(): Promise<string | null> {
-  try {
-    const { data } = await useMyFetch('/connections', { method: 'GET' })
-    const connections = (data.value as any[]) || []
-    const fileUploadConn = connections.find(
-      (c: any) => c.type === 'duckdb' && c.config?.is_file_upload === true
-    )
-    return fileUploadConn?.id || null
-  } catch {
-    return null
-  }
-}
-
-async function handleCsvUpload(e: Event) {
-  const input = e.target as HTMLInputElement
-  const file = input.files?.[0]
-  if (!file) return
-
-  uploadingCsv.value = true
-  try {
-    // Check if there's an existing file-upload connection
-    const existingConnId = await findFileUploadConnection()
-
-    // 1. Upload
-    const formData = new FormData()
-    formData.append('file', file)
-    const { data: uploadData, error: uploadError } = await useMyFetch('/files', {
-      method: 'POST',
-      body: formData,
-    })
-    if (uploadError.value || !uploadData.value) {
-      toast.add({ title: 'Upload failed', description: 'Could not upload file', color: 'red' })
-      return
-    }
-
-    // 2. Create data source (use existing connection if available)
-    const fileId = (uploadData.value as any).id
-    const url = existingConnId
-      ? `/files/${fileId}/create_data_source?connection_id=${existingConnId}`
-      : `/files/${fileId}/create_data_source`
-    const { data: dsData, error: dsError } = await useMyFetch(url, {
-      method: 'POST',
-    })
-    if (dsError.value || !dsData.value) {
-      toast.add({ title: 'Error', description: 'Could not create data source from file', color: 'red' })
-      return
-    }
-
-    const result = dsData.value as any
-    const displayName = result.data_source_name || result.table_name || file.name
-    toast.add({ title: 'Ready to query', description: `"${displayName}" has been added`, color: 'green' })
-
-    // Refresh domains without full page reload
-    await initDomain()
-  } finally {
-    uploadingCsv.value = false
-    input.value = ''
-  }
-}
 
 const textareaContent = ref('')
 

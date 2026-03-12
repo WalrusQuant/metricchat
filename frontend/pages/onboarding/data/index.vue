@@ -5,6 +5,13 @@
         <template #data>
           <div>
             <div v-if="!selectedDataSource">
+              <div v-if="loadingDataSources" class="flex items-center justify-center h-40">
+                <div class="flex items-center text-gray-500 text-sm">
+                  <Spinner class="w-4 h-4 mr-2" />
+                  Loading data sources...
+                </div>
+              </div>
+              <template v-else>
               <!-- Create Database card -->
               <div class="mt-3 mb-4">
                 <input type="file" ref="fileInput" @change="handleFileUpload" class="hidden" accept=".csv,.xlsx,.xls" />
@@ -78,6 +85,7 @@
                   </button>
                 </div>
               </div>
+              </template>
             </div>
 
             <div v-else class="bg-white rounded-lg border border-gray-200 p-4">
@@ -90,6 +98,7 @@
               </div>
 
               <ConnectForm
+                :key="selectedDataSource?.type + '-' + Date.now()"
                 mode="create"
                 :initialType="selectedDataSource.type"
                 :allowNameEdit="true"
@@ -130,6 +139,7 @@ const demo_ds = ref<any[]>([])
 const selectedDataSource = ref<any | null>(null)
 const installingDemo = ref<string | null>(null)
 const uploadingFile = ref(false)
+const loadingDataSources = ref(true)
 
 const uninstalledDemos = computed(() => (demo_ds.value || []).filter((demo: any) => !demo.installed))
 
@@ -166,10 +176,14 @@ async function installDemo(demoId: string) {
 }
 
 onMounted(async () => {
-  nextTick(async () => {
-    getAvailableDataSources()
-    getDemoDataSources()
-  })
+  await nextTick()
+  try {
+    await Promise.all([getAvailableDataSources(), getDemoDataSources()])
+  } catch (e) {
+    console.error('Failed to load data sources', e)
+  } finally {
+    loadingDataSources.value = false
+  }
 })
 
 function selectDataSource(ds: any) {
@@ -183,7 +197,7 @@ function backToList() {
 function onCreateSuccess(ds: any) {
   const dsId = ds?.id
   updateOnboarding({ current_step: 'schema_selected' as any })
-  navigateTo(dsId ? `/onboarding/data/${dsId}/schema` : '/onboarding/data/schema')
+  navigateTo(dsId ? `/onboarding/data/${dsId}/schema` : '/onboarding/data')
 }
 
 const fileInput = ref<HTMLInputElement | null>(null)
@@ -228,7 +242,7 @@ async function handleFileUpload(e: Event) {
     // 3. Navigate to schema selection (same as demo install and connector creation)
     const dsId = (dsData.value as any).data_source_id
     updateOnboarding({ current_step: 'schema_selected' as any })
-    navigateTo(dsId ? `/onboarding/data/${dsId}/schema` : '/onboarding/data/schema')
+    navigateTo(dsId ? `/onboarding/data/${dsId}/schema` : '/onboarding/data')
   } finally {
     uploadingFile.value = false
     input.value = '' // reset so same file can be re-selected

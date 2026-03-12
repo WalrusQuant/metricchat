@@ -12,11 +12,19 @@ export const useOrganization = () => {
 
   // Fetch organization from session data
   const fetchOrganizationFromSession = async () => {
-    const session = await getSession({ force: true })
-    if (session?.organizations?.length > 0) {
-      const firstOrg = session.organizations[0]
-      organization.value.id = firstOrg.id
-      organization.value.name = firstOrg.name
+    try {
+      const sessionPromise = getSession({ force: true })
+      const timeoutPromise = new Promise((_, reject) =>
+        setTimeout(() => reject(new Error('Session fetch timeout')), 5000)
+      )
+      const session = await Promise.race([sessionPromise, timeoutPromise]) as any
+      if (session?.organizations?.length > 0) {
+        const firstOrg = session.organizations[0]
+        organization.value.id = firstOrg.id
+        organization.value.name = firstOrg.name
+      }
+    } catch (error) {
+      console.error('Failed to fetch organization:', error)
     }
     return organization.value
   }

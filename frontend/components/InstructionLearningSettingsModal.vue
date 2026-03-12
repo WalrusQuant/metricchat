@@ -104,7 +104,7 @@ const toast = useToast()
 
 // Permission check - only users with modify_settings can edit
 const permissionsLoaded = usePermissionsLoaded()
-const canEdit = computed(() => permissionsLoaded.value && useCan('modify_settings'))
+const canEdit = computed(() => permissionsLoaded.value === 'loaded' && useCan('modify_settings'))
 
 const isOpen = computed({
     get: () => props.modelValue,
