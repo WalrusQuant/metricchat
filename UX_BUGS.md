@@ -38,13 +38,13 @@
 
 - [x] **16. Split-screen state persists across reports** — Opening report A in split-screen, then creating report B, lands in split-screen on B. **Fixed:** Resolved by Bug #1 fix — `initReportPage()` resets `isSplitScreen = false` before loading new report data.
 
-- [ ] **17. Non-admin users can reach onboarding forms** — `/onboarding` paths bypass permission middleware. Users without `create_data_source` permission see forms but fail on submit.
+- [x] **17. Non-admin users can reach onboarding forms** — `/onboarding` paths bypass permission middleware. Users without `create_data_source` permission see forms but fail on submit.
 
-- [ ] **18. No loading indicator during data source fetch** — `pages/onboarding/data/index.vue` renders before data sources load, causing brief empty grid flash.
+- [x] **18. No loading indicator during data source fetch** — `pages/onboarding/data/index.vue` renders before data sources load, causing brief empty grid flash.
 
-- [ ] **19. Form state not reset on back navigation** — Going back from connection form and re-selecting same data source retains old credential values.
+- [x] **19. Form state not reset on back navigation** — Going back from connection form and re-selecting same data source retains old credential values.
 
-- [ ] **20. Confusing dual URL hierarchy** — `/data/new/{id}/schema` vs `/data/{id}/schema` — two parallel paths for similar operations with no clear transition.
+- [skipped] **20. Confusing dual URL hierarchy** — `/data/new/{id}/schema` vs `/data/{id}/schema` — two parallel paths for similar operations with no clear transition.
 
 - [x] **21. Remove "Upload a CSV or Excel file to query" link from home page** — `pages/index.vue:56-68` — Light text link and hidden file input on the home page. Remove the entire quick CSV upload block including the handler logic. **Fixed:** Removed template block, `uploadingCsv`, `toast`, `findFileUploadConnection()`, `handleCsvUpload()`, `useExcel` import, and unused `initDomain`/`selectDomains` destructuring.
 
@@ -52,10 +52,10 @@
 
 ## 🟠 TypeScript Errors (pre-existing)
 
-- [ ] **23. CompletionMessageComponent props untyped** — `components/CompletionMessageComponent.vue` — Props use bare `Object` type. Every property access (`.status`, `.role`, `.completion`, `.widget`, `.prompt`, `.sigkill`) fails typecheck. Needs a proper interface.
+- [x] **23. CompletionMessageComponent props untyped** — `components/CompletionMessageComponent.vue` — Props use bare `Object` type. Every property access (`.status`, `.role`, `.completion`, `.widget`, `.prompt`, `.sigkill`) fails typecheck. Needs a proper interface.
 
-- [ ] **24. ConnectForm mode type incomplete** — `components/datasources/ConnectForm.vue:133` / `components/AddConnectionModal.vue:130` — `mode` prop typed as `'onboarding' | 'create' | 'edit'` but `'create_connection_only'` is used at runtime. Union type needs updating.
+- [x] **24. ConnectForm mode type incomplete** — `components/datasources/ConnectForm.vue:133` / `components/AddConnectionModal.vue:130` — `mode` prop typed as `'onboarding' | 'create' | 'edit'` but `'create_connection_only'` is used at runtime. Union type needs updating.
 
-- [ ] **25. AgGridComponent loose types** — `components/AgGridComponent.vue` — Spread on `unknown` types, implicit `any` on `trace` parameter. Needs typed column definitions and error handler signature.
+- [x] **25. AgGridComponent loose types** — `components/AgGridComponent.vue` — Spread on `unknown` types, implicit `any` on `trace` parameter. Needs typed column definitions and error handler signature.
 
-- [ ] **26. Reports index untyped API responses** — `pages/reports/index.vue` — API response cast as `{}` instead of proper interface. Accessing `.reports` and `.meta` fails typecheck. Needs response type definitions.
+- [x] **26. Reports index untyped API responses** — `pages/reports/index.vue` — API response cast as `{}` instead of proper interface. Accessing `.reports` and `.meta` fails typecheck. Needs response type definitions.

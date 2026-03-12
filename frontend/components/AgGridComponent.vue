@@ -12,23 +12,28 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, onMounted } from 'vue';
+import { ref, watch, onMounted, type PropType } from 'vue';
 import { AgGridVue } from 'ag-grid-vue3';
+import type { ColDef } from 'ag-grid-community';
 import CustomHeader from './CustomHeader.vue'; // Import the CustomHeader component
 import CustomLoadingRenderer from './CustomLoadingRenderer.vue'; // Import the CustomLoadingRenderer component
 import 'ag-grid-community/styles/ag-grid.css';
 //import 'ag-grid-community/styles/ag-theme-alpine.css';
 import 'ag-grid-community/styles/ag-theme-balham.css';
 
+interface ExtendedColDef extends ColDef {
+  trace?: Record<string, unknown>
+}
+
 const isLoading = ref(true);
 
 const props = defineProps({
   columnDefs: {
-    type: Array,
+    type: Array as PropType<ExtendedColDef[]>,
     required: true
   },
   rowData: {
-    type: Array,
+    type: Array as PropType<Record<string, unknown>[]>,
     required: true
   }
 
@@ -48,14 +53,14 @@ const gridOptions = ref({
   enableCellTextSelection: true
 });
 
-const formatDescription = (trace) => {
+const formatDescription = (trace: Record<string, unknown> | string | undefined) => {
   if (typeof trace === 'object') {
     return Object.entries(trace).map(([key, value]) => `${key}: ${value}`).join('<br />');
   }
   return trace;
 };
 
-const columnDefs = ref(props.columnDefs.map(col => ({
+const columnDefs = ref(props.columnDefs.map((col: ExtendedColDef) => ({
   ...col,
   headerComponent: CustomHeader,
   headerComponentParams: {
@@ -67,7 +72,7 @@ const columnDefs = ref(props.columnDefs.map(col => ({
 const rowData = ref(props.rowData);
 
 watch(() => props.columnDefs, (newVal) => {
-  columnDefs.value = newVal.map(col => ({
+  columnDefs.value = newVal.map((col: ExtendedColDef) => ({
     ...col,
     headerComponent: CustomHeader,
     headerComponentParams: {

@@ -85,7 +85,7 @@
                             </template>
                         </USelectMenu>
                         <USelectMenu
-                            :model-value="scheduledFilter"
+                            :model-value="(scheduledFilter as any)"
                             @update:model-value="setScheduledFilter"
                             :options="scheduleFilterOptions"
                             value-attribute="value"
@@ -368,6 +368,7 @@
 <script setup lang="ts">
 import GoBackChevron from '@/components/excel/GoBackChevron.vue'
 import Spinner from '@/components/Spinner.vue'
+import type { ReportListItem, PaginationMeta, ReportListResponse } from '~/types/report'
 
 const { data: currentUser } = useAuth()
 const toast = useToast()
@@ -375,11 +376,11 @@ const router = useRouter()
 
 definePageMeta({ auth: true })
 
-const reports = ref<any[]>([])
+const reports = ref<ReportListItem[]>([])
 const activeFilter = ref<'my' | 'published'>('my')
 const currentPage = ref(1)
 const isLoading = ref(true)
-const pagination = ref({
+const pagination = ref<PaginationMeta>({
     total: 0,
     page: 1,
     limit: 10,
@@ -399,7 +400,7 @@ const statusFilterOptions = [
     { value: 'published', label: 'Published' },
 ]
 
-const scheduleFilterOptions = [
+const scheduleFilterOptions: { value: boolean | null; label: string }[] = [
     { value: null, label: 'All Schedules' },
     { value: true, label: 'Scheduled' },
     { value: false, label: 'Not Scheduled' },
@@ -451,8 +452,9 @@ const allVisibleSelected = computed(() => {
     return visibleReports.value.length > 0 && visibleReports.value.every(r => selectedIds.value.has(r.id))
 })
 
-const canDeleteReport = (report: any) => {
-    return currentUser.value && (report.user.id === currentUser.value.id || report.user.email === currentUser.value.email)
+const canDeleteReport = (report: ReportListItem) => {
+    const user = currentUser.value as Record<string, unknown> | null
+    return user && (report.user.id === user.id || report.user.email === user.email)
 }
 
 const changePage = async (page: number) => {
@@ -509,8 +511,9 @@ const fetchReports = async (page: number = 1, filter: 'my' | 'published' = 'my',
         })
 
         if (response.status.value === 'success' && response.data.value) {
-            reports.value = response.data.value.reports
-            pagination.value = response.data.value.meta
+            const data = response.data.value as ReportListResponse
+            reports.value = data.reports
+            pagination.value = data.meta
             selectedIds.value = new Set()
         } else {
             throw new Error('Could not fetch reports')

@@ -131,7 +131,7 @@ function selectProvider(ds: any) {
   handleTypeChange()
 }
 const props = defineProps<{
-  mode?: 'onboarding'|'create'|'edit',
+  mode?: 'onboarding'|'create'|'edit'|'create_connection_only',
   initialType?: string,
   initialName?: string,
   dataSourceId?: string,

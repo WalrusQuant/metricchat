@@ -11,7 +11,7 @@
             </div>
             <div class="w-full ml-4">
                 <!-- User messages -->
-                <div v-if="localCompletion.prompt?.content.length > 0" class="pt-1">
+                <div v-if="(localCompletion.prompt?.content?.length ?? 0) > 0" class="pt-1">
                     <div class="inline float-right" v-if="useCan('view_completion_plan')">
                         <button @click="showPlan(localCompletion)"
                                 class="text-xs px-2 py-1 bg-gray-100 hover:bg-gray-200 rounded flex items-center">
@@ -20,7 +20,7 @@
                     </div>
                     <div class="markdown-wrapper">
 
-                        <MDC :value="localCompletion.prompt?.content" class="markdown-content" />
+                        <MDC :value="localCompletion.prompt?.content ?? ''" class="markdown-content" />
 
                     </div>
                     <!-- Attached images -->
@@ -91,7 +91,7 @@
                                 </h3>
                                 <div class="flex items-center">
                                     <UTooltip text="Download CSV" v-if="localCompletion.step?.id && localCompletion.step?.status === 'success'">
-                                    <button @click="downloadStepCSV(localCompletion.step?.id, localCompletion.widget?.title, localCompletion.step?.slug)"
+                                    <button @click="downloadStepCSV(localCompletion.step!.id, localCompletion.widget?.title, localCompletion.step?.slug)"
                                         v-if="localCompletion.step?.id && localCompletion.step?.status === 'success'"
                                         class="cursor-pointer text-xs text-gray-400 hover:text-gray-600 mr-2"
                                         title="Download CSV">
@@ -150,9 +150,9 @@
 
                     </div>
                         <div class="flex mt-3">
-                                <CompletionItemFeedback 
+                                <CompletionItemFeedback
                                     v-if="localCompletion.status === 'success' || localCompletion.status === 'error'"
-                                    :completion="localCompletion" 
+                                    :completion="(localCompletion as any)"
                                     :feedbackScore="localCompletion.feedback_score || 0" 
                                 />
                         </div>
@@ -214,8 +214,8 @@
                         <h3 class="text-md font-bold mb-2">Prompt</h3>
                         <Icon :name="promptCollapsed ? 'heroicons-chevron-right' : 'heroicons-chevron-down'" class="w-5 h-5" />
                     </div>
-                    <pre v-if="!promptCollapsed" class="text-xs">{{ plan_content.text }}</pre>
-                    
+                    <pre v-if="!promptCollapsed" class="text-xs">{{ plan_content?.text }}</pre>
+
                     <div class="flex justify-between items-center cursor-pointer mt-4" @click="togglePlanCollapsed">
                         <h3 class="text-md font-bold mb-2">Plan</h3>
                         <Icon :name="planCollapsed ? 'heroicons-chevron-right' : 'heroicons-chevron-down'" class="w-5 h-5" />
@@ -223,7 +223,7 @@
                     <pre v-if="!planCollapsed" class="text-xs">
                         <div class="text-xs">Analysis Complete: {{ plan_analysis_complete }}</div>
                         <div class="text-xs">Reasoning: {{ plan_reasoning }}</div>
-                        <div class="text-xs">{{ plan_content.plan }}</div>
+                        <div class="text-xs">{{ plan_content?.plan }}</div>
                     </pre>
 
                     <!-- Add token usage section -->
@@ -232,7 +232,7 @@
                         <Icon :name="tokensCollapsed ? 'heroicons-chevron-right' : 'heroicons-chevron-down'" class="w-5 h-5" />
                     </div>
                     <div v-if="!tokensCollapsed" class="text-xs bg-gray-50 p-3 rounded">
-                        <div v-if="plan_content.token_usage">
+                        <div v-if="plan_content?.token_usage">
                             <div class="grid grid-cols-2 gap-2">
                                 <div>Prompt Tokens:</div>
                                 <div class="font-mono">{{ plan_content.token_usage.prompt_tokens }}</div>
@@ -267,19 +267,20 @@
 import { ref, watch, computed } from 'vue';
 import { useCan } from '~/composables/usePermissions';
 import InstructionModalComponent from '~/components/InstructionModalComponent.vue';
+import type { CompletionMessage, SelectedWidgetId } from '~/types/completion';
 
 const props = defineProps<{
-    completion: Object,
-    excel: Boolean,
+    completion: CompletionMessage,
+    excel: boolean,
     reportId: string,
-    selectedWidgetId: Object
+    selectedWidgetId: SelectedWidgetId | null
 }>()
 
 const emit = defineEmits(['update:selectedWidgetId', 'addWidget']);
 
-function selectWidget(widgetId: string, stepId: string, widgetTitle: string) {
+function selectWidget(widgetId: string, stepId: string | undefined, widgetTitle: string | undefined) {
     // If clicking the already selected widget, deselect it
-    if (props.selectedWidgetId.widgetId === widgetId && props.selectedWidgetId.stepId === stepId) {
+    if (props.selectedWidgetId?.widgetId === widgetId && props.selectedWidgetId?.stepId === stepId) {
         emit('update:selectedWidgetId', null, null, null);
     } else {
         // Otherwise, select the new widget
@@ -287,14 +288,31 @@ function selectWidget(widgetId: string, stepId: string, widgetTitle: string) {
     }
 }
 
-function isSelected(widgetId: string, stepId: string) {
-    return props.selectedWidgetId.widgetId === widgetId && props.selectedWidgetId.stepId === stepId;
+function isSelected(widgetId: string, stepId: string | undefined) {
+    return props.selectedWidgetId?.widgetId === widgetId && props.selectedWidgetId?.stepId === stepId;
 }
 
-const plan = ref(null);
-const plan_content = ref(null);
-const plan_reasoning = ref(null);
-const plan_analysis_complete = ref(null);
+interface PlanContent {
+    text?: string
+    plan?: string
+    reasoning?: string
+    analysis_complete?: boolean
+    token_usage?: {
+        prompt_tokens: number
+        completion_tokens: number
+        total_tokens: number
+    }
+}
+
+interface PlanItem {
+    content: string
+    [key: string]: unknown
+}
+
+const plan = ref<PlanItem | null>(null);
+const plan_content = ref<PlanContent | null>(null);
+const plan_reasoning = ref<string | null>(null);
+const plan_analysis_complete = ref<boolean | null>(null);
 
 const localCompletion = computed(() => ({
     ...props.completion,
@@ -318,7 +336,7 @@ watch(() => localCompletion.value?.completion?.content, (newContent) => {
     }
 }, { immediate: true });
 
-const downloadStepCSV = async (stepId, widgetTitle, stepSlug) => {
+const downloadStepCSV = async (stepId: string, widgetTitle: string | undefined, stepSlug: string | undefined) => {
     if (!stepId) return;
     try {
         // Use `useMyFetch` with the correct `responseType` option
@@ -333,7 +351,7 @@ const downloadStepCSV = async (stepId, widgetTitle, stepSlug) => {
         }
 
         // The data ref will now correctly hold the Blob object
-        const blob = data.value;
+        const blob = data.value as Blob | null;
         if (!blob) {
             throw new Error('No data received from server.');
         }
@@ -377,10 +395,10 @@ const toggleTokensCollapsed = () => {
     tokensCollapsed.value = !tokensCollapsed.value;
 }
 
-const showPlan = async (completion: any) => {
+const showPlan = async (completion: CompletionMessage) => {
     showPlanModal.value = true;
     planLoading.value = true;
-    
+
     try {
         if (completion.id) {
             await getPlan(completion.id);
@@ -402,14 +420,14 @@ const isStoppingGeneration = ref(false);
 const getPlan = async (completionId: string) => {
     try {
         const response = await useMyFetch(`/api/completions/${completionId}/plans`);
-        plans.value = response.data.value || [];
-        
+        plans.value = (response.data.value as PlanItem[] | null) || [];
+
         // If there are plans, set the first one as active
         if (plans.value.length > 0) {
             plan.value = plans.value[0];
-            plan_content.value = JSON.parse(plans.value[0].content);
-            plan_reasoning.value = plan_content.value.reasoning;
-            plan_analysis_complete.value = plan_content.value.analysis_complete;
+            plan_content.value = JSON.parse(plans.value[0].content) as PlanContent;
+            plan_reasoning.value = plan_content.value?.reasoning ?? null;
+            plan_analysis_complete.value = plan_content.value?.analysis_complete ?? null;
         }
     } catch (error) {
         console.error('Error fetching plans:', error);
@@ -417,7 +435,7 @@ const getPlan = async (completionId: string) => {
     }
 }
 
-const handleAddClick = (completion: any) => {
+const handleAddClick = (completion: CompletionMessage) => {
     if (props.excel) {
         // Existing Excel functionality
         const serializedData = JSON.stringify(completion);
@@ -425,19 +443,19 @@ const handleAddClick = (completion: any) => {
             type: 'applyToExcel',
             data: serializedData
         }, '*');
-    } else {
+    } else if (completion.widget) {
         // First update the widget status to published
         emit('addWidget', {
             ...completion.widget,
             step: completion.step  // Include the step data
         });
         // Then select the widget
-        selectWidget(completion.widget.id, completion.step_id, completion.widget.title);
+        selectWidget(completion.widget.id, completion.step?.id ?? '', completion.widget.title ?? '');
     }
 }
 
 // Watch for changes in selectedWidgetId to debug
-watch(props.selectedWidgetId, (newVal) => {
+watch(() => props.selectedWidgetId, (newVal) => {
     //console.log('selectedWidgetId changed:', newVal);
 });
 
@@ -457,16 +475,16 @@ watch(() => localCompletion.value?.completion?.content, (newContent) => {
     reasoningCollapsed.value = !!(newContent && newContent.length > 0);
 }, { immediate: true });
 
-const plans = ref([]);
+const plans = ref<PlanItem[]>([]);
 const activePlanIndex = ref(0);
 
-const switchPlan = (index) => {
+const switchPlan = (index: number) => {
     if (index >= 0 && index < plans.value.length) {
         activePlanIndex.value = index;
         plan.value = plans.value[index];
-        plan_content.value = JSON.parse(plans.value[index].content);
-        plan_reasoning.value = plan_content.value.reasoning;
-        plan_analysis_complete.value = plan_content.value.analysis_complete;
+        plan_content.value = JSON.parse(plans.value[index].content) as PlanContent;
+        plan_reasoning.value = plan_content.value?.reasoning ?? null;
+        plan_analysis_complete.value = plan_content.value?.analysis_complete ?? null;
     }
 }
 
@@ -478,7 +496,7 @@ const openInstructionModal = () => {
     showInstructionModal.value = true;
 }
 
-const handleInstructionSaved = (savedInstruction: any) => {
+const handleInstructionSaved = (savedInstruction: unknown) => {
     // Handle the saved instruction - you can add any logic here
     console.log('Instruction saved:', savedInstruction);
     showInstructionModal.value = false;
